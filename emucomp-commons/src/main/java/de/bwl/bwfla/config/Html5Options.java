@@ -17,26 +17,28 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.bwl.bwfla.exceptions;
+package de.bwl.bwfla.config;
 
 
-import de.bwl.bwfla.enums.EmuCompState;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlType;
+import lombok.Getter;
+import lombok.Setter;
 
-public class IllegalEmulatorStateException extends BWFLAException
-{
-	private static final long serialVersionUID = -965446023541148755L;
 
-	private final EmuCompState state;
-	
-	
-	public IllegalEmulatorStateException(String message, EmuCompState curstate)
-	{
-		super(message + " Current state: " + curstate.value());
-		this.state = curstate;
-	}
-	
-	public EmuCompState getEmuCompState()
-	{
-		return state;
-	}
+@Getter
+@Setter
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "html5Options", namespace = "http://bwfla.bwl.de/common/datatypes", propOrder = {
+    "pointerLock",
+    "crt"
+})
+public class Html5Options {
+
+    @XmlElement(name = "pointer_lock", defaultValue="false", namespace = "http://bwfla.bwl.de/common/datatypes")
+    protected boolean pointerLock;
+    @XmlElement(namespace = "http://bwfla.bwl.de/common/datatypes", required = true)
+    protected String crt;
 }

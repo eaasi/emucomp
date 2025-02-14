@@ -20,14 +20,17 @@
 package de.bwl.bwfla.exceptions;
 
 
+import de.bwl.bwfla.config.EaasBuildInfo;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
+import java.io.Serial;
 import java.util.TreeMap;
 
 
 @XmlRootElement
-@ApplicationException
+//TODO make transactional catches and logic for handling for application level instead of ApplicationException
 public class BWFLAException extends Exception {
+    @Serial
     private static final long serialVersionUID = 1988575155200056202L;
 
     private final TreeMap<String, String> properties;

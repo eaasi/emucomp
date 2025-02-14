@@ -3,7 +3,11 @@ package de.bwl.bwfla.config;
 
 import de.bwl.bwfla.models.NetworkUtils;
 import jakarta.xml.bind.annotation.*;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(namespace = "http://bwfla.bwl.de/common/datatypes")
 @XmlRootElement(name="vdeslirp", namespace = "http://bwfla.bwl.de/common/datatypes")
@@ -25,45 +29,5 @@ public class VdeSlirpConfiguration extends ComponentConfiguration {
 
     public VdeSlirpConfiguration() {
         this.hwAddress = NetworkUtils.getRandomHWAddress();
-    }
-    
-    public String getHwAddress() {
-        return hwAddress;
-    }
-
-    public void setHwAddress(String hwAddress) {
-        this.hwAddress = hwAddress;
-    }
-
-    public void setIp4Address(String ip4Address) {
-        this.ip4Address = ip4Address;
-    }
-
-    public String getIp4Address() {
-        return ip4Address;
-    }
-    
-    public void setNetmask(int netmask) {
-        this.netmask = netmask;
-    }
-
-    public int getNetmask() {
-        return netmask;
-    }
-
-    public boolean isDhcpEnabled() {
-        return dhcp;
-    }
-
-    public void setDhcpEnabled(boolean dhcpEnabled) {
-        this.dhcp = dhcpEnabled;
-    }
-
-    public String getDnsServer() {
-        return dnsServer;
-    }
-
-    public void setDnsServer(String dnsAddress) {
-        this.dnsServer = dnsAddress;
     }
 }

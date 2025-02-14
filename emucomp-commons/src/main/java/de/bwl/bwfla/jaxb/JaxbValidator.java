@@ -19,8 +19,10 @@
 
 package de.bwl.bwfla.jaxb;
 
-import javax.xml.bind.ValidationException;
-import javax.xml.bind.annotation.XmlElement;
+
+import jakarta.xml.bind.ValidationException;
+import jakarta.xml.bind.annotation.XmlElement;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;

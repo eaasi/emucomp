@@ -18,14 +18,16 @@
  */
 
 /**
- * 
+ *
  */
 package de.bwl.bwfla.services.container.helpers;
 
-import de.bwl.bwfla.common.services.container.types.Container;
-import de.bwl.bwfla.common.services.container.types.FloppyContainer;
-import de.bwl.bwfla.common.utils.DeprecatedProcessRunner;
-import de.bwl.bwfla.conf.CommonSingleton;
+
+import de.bwl.bwfla.config.app.HelpersConfiguration;
+import de.bwl.bwfla.runner.DeprecatedProcessRunner;
+import de.bwl.bwfla.services.container.types.Container;
+import de.bwl.bwfla.services.container.types.FloppyContainer;
+import jakarta.inject.Inject;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -36,135 +38,113 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-
 /**
  * @author iv1004
- *
  */
-public class FloppyFat12Helper extends ContainerHelper
-{
-	Logger LOG = Logger.getLogger(this.getClass().getName());
+public class FloppyFat12Helper extends ContainerHelper {
+    @Inject
+    protected HelpersConfiguration helpersConfiguration;
+    Logger LOG = Logger.getLogger(this.getClass().getName());
 
-	@Override
-	public Container createEmptyContainer()
-	{
-		// acquire floppy_create.sh script location
-		File floppyCreateScript = new File(CommonSingleton.helpersConf.floppyFat12Create); 
+    @Override
+    public Container createEmptyContainer() {
+        // acquire floppy_create.sh script location
+        File floppyCreateScript = new File(helpersConfiguration.getFloppyfat12create());
 
-		File floppy = null;
-		FloppyContainer floppyContainer = null;
-		try
-		{
-			floppy = File.createTempFile("floppy_", ".img");
-			
-			DeprecatedProcessRunner runner = new DeprecatedProcessRunner();
-			runner.setCommand(floppyCreateScript.getAbsolutePath());
-			runner.addArgument(floppy.toString());
-	
-			if(runner.execute() && floppy.isFile())
-			{
-				floppyContainer = new FloppyContainer();
-				floppyContainer.setFile(floppy);
-			}
-		}
-		catch(IOException e)
-		{
-			LOG.log(Level.SEVERE, e.getMessage(), e);
-		}
-		finally
-		{
-			if(floppyContainer == null && floppy != null && floppy.isFile())
-			{
-				floppy.delete();
-				return null;
-			}
-		}
-		
-		return floppyContainer;
-	}
+        File floppy = null;
+        FloppyContainer floppyContainer = null;
+        try {
+            floppy = File.createTempFile("floppy_", ".img");
 
-	@Override
-	public Container createEmptyContainer(int size)
-	{
-		return createEmptyContainer();
-	}
+            DeprecatedProcessRunner runner = new DeprecatedProcessRunner();
+            runner.setCommand(floppyCreateScript.getAbsolutePath());
+            runner.addArgument(floppy.toString());
 
-	@Override
-	public boolean insertIntoContainer(Container container, List<File> files)
-	{
-		// validating input
-		if(!(container instanceof FloppyContainer))
-			return false;
+            if (runner.execute() && floppy.isFile()) {
+                floppyContainer = new FloppyContainer();
+                floppyContainer.setFile(floppy);
+            }
+        } catch (IOException e) {
+            LOG.log(Level.SEVERE, e.getMessage(), e);
+        } finally {
+            if (floppyContainer == null && floppy != null && floppy.isFile()) {
+                floppy.delete();
+                return null;
+            }
+        }
 
-		File floppyFile = container.getFile();
-		if(!floppyFile.exists())
-			return false;
+        return floppyContainer;
+    }
 
-		// acquire floppy_io.sh script location
-		File floppyIoScript = new File(CommonSingleton.helpersConf.floppyFat12Io);
-		DeprecatedProcessRunner runner = new DeprecatedProcessRunner();
+    @Override
+    public Container createEmptyContainer(int size) {
+        return createEmptyContainer();
+    }
 
-		// iteratively inject files into floppy
-		for(File file : files)
-		{
-			runner.setCommand(floppyIoScript.getAbsolutePath());
-			runner.addArgument("i");
-			runner.addArgument(floppyFile.getAbsolutePath());
-			runner.addArgument(file.getAbsolutePath());
-			if(!runner.execute())
-				return false;
-		}
+    @Override
+    public boolean insertIntoContainer(Container container, List<File> files) {
+        // validating input
+        if (!(container instanceof FloppyContainer))
+            return false;
 
-		return true;
-	}
+        File floppyFile = container.getFile();
+        if (!floppyFile.exists())
+            return false;
 
-	@Override
-	public File extractFromContainer(Container container)
-	{
-		if(!(container instanceof FloppyContainer))
-			return null;
+        // acquire floppy_io.sh script location
+        File floppyIoScript = new File(helpersConfiguration.getFloppyFat12Io());
+        DeprecatedProcessRunner runner = new DeprecatedProcessRunner();
 
-		File floppyFile = container.getFile();
-		if(!floppyFile.exists())
-			return null;
+        // iteratively inject files into floppy
+        for (File file : files) {
+            runner.setCommand(floppyIoScript.getAbsolutePath());
+            runner.addArgument("i");
+            runner.addArgument(floppyFile.getAbsolutePath());
+            runner.addArgument(file.getAbsolutePath());
+            if (!runner.execute())
+                return false;
+        }
 
-		File floppyIoScript = new File(CommonSingleton.helpersConf.floppyFat12Io);
-		File result = null;
-		
-		boolean success = false;
-		try
-		{
+        return true;
+    }
+
+    @Override
+    public File extractFromContainer(Container container) {
+        if (!(container instanceof FloppyContainer))
+            return null;
+
+        File floppyFile = container.getFile();
+        if (!floppyFile.exists())
+            return null;
+
+        File floppyIoScript = new File(helpersConfiguration.getFloppyFat12Io());
+        File result = null;
+
+        boolean success = false;
+        try {
             result = Files.createTempDirectory("").toFile();
-			
-			DeprecatedProcessRunner runner = new DeprecatedProcessRunner();
-			runner.setCommand(floppyIoScript.getAbsolutePath());
-			runner.addArgument("e");
-			runner.addArgument(floppyFile.getAbsolutePath());
-			runner.addArgument(result.getAbsolutePath());
-			success = runner.execute();
-		}
-	    catch (IOException e)
-        {
+
+            DeprecatedProcessRunner runner = new DeprecatedProcessRunner();
+            runner.setCommand(floppyIoScript.getAbsolutePath());
+            runner.addArgument("e");
+            runner.addArgument(floppyFile.getAbsolutePath());
+            runner.addArgument(result.getAbsolutePath());
+            success = runner.execute();
+        } catch (IOException e) {
             // Cannot create temporary directory
             return null;
+        } finally {
+            if (!success && result != null && result.isDirectory()) {
+                try {
+                    FileUtils.deleteDirectory(result);
+                } catch (IOException e) {
+                    LOG.log(Level.SEVERE, e.getMessage(), e);
+                }
+
+                return null;
+            }
         }
-		finally
-		{
-			if(!success && result != null && result.isDirectory())
-			{
-				try
-				{
-					FileUtils.deleteDirectory(result);
-				}
-				catch(IOException e)
-				{
-					LOG.log(Level.SEVERE, e.getMessage(), e);
-				}
-				
-				return null;
-			}
-		}
-		
-		return result;
-	}
+
+        return result;
+    }
 }

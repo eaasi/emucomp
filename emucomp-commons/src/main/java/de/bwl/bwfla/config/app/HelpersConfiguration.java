@@ -25,13 +25,16 @@ public class HelpersConfiguration {
         @ConfigItem(defaultValue = "/usr/bin/floppy_create.sh")
         public String floppyfat12create;
 
+        @ConfigItem(defaultValue = "/usr/bin/floppy_io.sh")
+        public String floppyFat12Io;
+
 
         @ConfigItem
-        public CommonConfig commonconf;
+        public CommonConfiguration commonconf;
 
         @ConfigItem
-        public HttpExportServletConfig httpExportServlet;
+        public FileCacheConfig fileCache;
 
         @ConfigItem
-        public HandleConfig handle;
+        public HandleConfiguration handle;
 }

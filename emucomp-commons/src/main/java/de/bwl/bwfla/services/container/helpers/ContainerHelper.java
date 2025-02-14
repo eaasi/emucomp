@@ -22,7 +22,8 @@
  */
 package de.bwl.bwfla.services.container.helpers;
 
-import de.bwl.bwfla.common.services.container.types.Container;
+
+import de.bwl.bwfla.services.container.types.Container;
 
 import java.io.File;
 import java.util.List;
@@ -33,7 +34,7 @@ import java.util.List;
  */
 public abstract class ContainerHelper
 {	
-	public abstract	Container  createEmptyContainer();
+	public abstract Container createEmptyContainer();
 	public abstract	Container  createEmptyContainer(int size);
 	public abstract boolean	   insertIntoContainer(Container container, List<File> files);
 	public abstract File       extractFromContainer(Container container);

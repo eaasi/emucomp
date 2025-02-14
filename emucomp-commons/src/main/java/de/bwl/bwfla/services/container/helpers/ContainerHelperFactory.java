@@ -22,8 +22,8 @@
  */
 package de.bwl.bwfla.services.container.helpers;
 
-import de.bwl.bwfla.common.services.container.types.*;
-import de.bwl.bwfla.common.services.container.types.Container.Filesystem;
+import de.bwl.bwfla.services.container.types.*;
+import de.bwl.bwfla.services.container.types.Container.Filesystem;
 
 /**
  * @author iv1004
