@@ -19,40 +19,39 @@
 
 package de.bwl.bwfla.services.guacplay.protocol.handler;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.OpCode;
-import de.bwl.bwfla.common.services.guacplay.graphics.OffscreenCanvas;
-import de.bwl.bwfla.common.services.guacplay.protocol.Instruction;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionDescription;
 
+import de.bwl.bwfla.services.guacplay.GuacDefs;
+import de.bwl.bwfla.services.guacplay.graphics.OffscreenCanvas;
+import de.bwl.bwfla.services.guacplay.protocol.Instruction;
+import de.bwl.bwfla.services.guacplay.protocol.InstructionDescription;
 
 /**
  * Handler for Guacamole's <i>cfill-</i> instruction.
- * 
+ *
  * @see <a href="http://guac-dev.org/doc/gug/protocol-reference.html#cfill-instruction">
- *          Guacamole's protocol reference
- *      </a>
+ * Guacamole's protocol reference
+ * </a>
  */
-public class CFillInstrHandler extends DrawingInstrHandler
-{
-	/** Constructor */
-	public CFillInstrHandler(OffscreenCanvas canvas)
-	{
-		super(OpCode.CFILL, canvas);
-	}
+public class CFillInstrHandler extends DrawingInstrHandler {
+    /**
+     * Constructor
+     */
+    public CFillInstrHandler(OffscreenCanvas canvas) {
+        super(GuacDefs.OpCode.CFILL, canvas);
+    }
 
-	@Override
-	public void execute(InstructionDescription desc, Instruction instr) throws Exception
-	{
-		// Parse cfill's arguments
-		final int mask = instr.argAsInt(0);
-		final int layer = instr.argAsInt(1);
-		final int r = instr.argAsInt(2);
-		final int g = instr.argAsInt(3);
-		final int b = instr.argAsInt(4);
-		final int a = instr.argAsInt(5);
-		
-		synchronized (canvas) {
-			canvas.fillCurrentPath(layer, mask, r, g, b, a);
-		}
-	}
+    @Override
+    public void execute(InstructionDescription desc, Instruction instr) throws Exception {
+        // Parse cfill's arguments
+        final int mask = instr.argAsInt(0);
+        final int layer = instr.argAsInt(1);
+        final int r = instr.argAsInt(2);
+        final int g = instr.argAsInt(3);
+        final int b = instr.argAsInt(4);
+        final int a = instr.argAsInt(5);
+
+        synchronized (canvas) {
+            canvas.fillCurrentPath(layer, mask, r, g, b, a);
+        }
+    }
 }

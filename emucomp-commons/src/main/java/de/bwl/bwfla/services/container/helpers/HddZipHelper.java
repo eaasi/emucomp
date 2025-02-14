@@ -19,9 +19,9 @@
 
 package de.bwl.bwfla.services.container.helpers;
 
-import de.bwl.bwfla.common.services.container.types.Container;
-import de.bwl.bwfla.common.services.container.types.HddZipContainer;
-import de.bwl.bwfla.common.utils.Zip32Utils;
+import de.bwl.bwfla.services.container.types.Container;
+import de.bwl.bwfla.services.container.types.HddZipContainer;
+import de.bwl.bwfla.util.Zip32Utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,58 +30,47 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
+public class HddZipHelper extends ContainerHelper {
 
-public class HddZipHelper extends ContainerHelper
-{
+    Logger log = Logger.getLogger(this.getClass().getName());
 
-	Logger log = Logger.getLogger(this.getClass().getName());
+    @Override
+    public Container createEmptyContainer() {
+        return new HddZipContainer();
+    }
 
-	@Override
-	public Container createEmptyContainer()
-	{
-		return new HddZipContainer();
-	}
+    @Override
+    public Container createEmptyContainer(int size) {
+        return this.createEmptyContainer();
+    }
 
-	@Override
-	public Container createEmptyContainer(int size)
-	{
-		return this.createEmptyContainer();
-	}
+    @Override
+    public boolean insertIntoContainer(Container container, List<File> files) {
+        File zipFile = null;
+        boolean success = false;
 
-	@Override
-	public boolean insertIntoContainer(Container container, List<File> files)
-	{
-		File zipFile = null;
-		boolean success = false;
-		
-		try
-		{
-			zipFile = File.createTempFile("/hdd_", ".img");
-			zipFile.delete();
-			
-			for(File file: files)
-				Zip32Utils.zip(zipFile, file);
-			
-			container.setFile(zipFile);
-			success = true;
-		}
-		catch(IOException e)
-		{
-			log.log(Level.SEVERE, e.getMessage(), e);
-		}
-		finally
-		{
-			if(!success && zipFile != null)
-				zipFile.delete();
-		}
-		
-		return success;
-	}
+        try {
+            zipFile = File.createTempFile("/hdd_", ".img");
+            zipFile.delete();
 
-	@Override
-	public File extractFromContainer(Container container)
-	{
-		// TODO: currently unsupported
-		return null;
-	}
+            for (File file : files)
+                Zip32Utils.zip(zipFile, file);
+
+            container.setFile(zipFile);
+            success = true;
+        } catch (IOException e) {
+            log.log(Level.SEVERE, e.getMessage(), e);
+        } finally {
+            if (!success && zipFile != null)
+                zipFile.delete();
+        }
+
+        return success;
+    }
+
+    @Override
+    public File extractFromContainer(Container container) {
+        // TODO: currently unsupported
+        return null;
+    }
 }

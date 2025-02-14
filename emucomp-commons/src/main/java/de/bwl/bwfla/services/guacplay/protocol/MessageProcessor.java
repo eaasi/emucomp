@@ -48,7 +48,7 @@ public class MessageProcessor
 	/** Constructor */
 	public MessageProcessor(String name)
 	{
-		this.handlers = new HashMap<String, InstructionHandler>();
+		this.handlers = new HashMap<>();
 		this.description = new InstructionDescription();
 		this.parser = new InstructionParser();
 		this.instruction = new Instruction(8);

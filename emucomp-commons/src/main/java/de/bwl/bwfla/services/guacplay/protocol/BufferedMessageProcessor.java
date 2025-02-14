@@ -19,11 +19,10 @@
 
 package de.bwl.bwfla.services.guacplay.protocol;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.SourceType;
-import de.bwl.bwfla.common.services.guacplay.protocol.Message;
-import de.bwl.bwfla.common.services.guacplay.util.CharArrayWrapper;
-import de.bwl.bwfla.common.services.guacplay.util.RingBufferSPSC;
 
+import de.bwl.bwfla.services.guacplay.GuacDefs;
+import de.bwl.bwfla.services.guacplay.util.CharArrayWrapper;
+import de.bwl.bwfla.services.guacplay.util.RingBufferSPSC;
 
 /** A {@link MessageProcessor} for buffered messages. */
 public class BufferedMessageProcessor extends MessageProcessor
@@ -50,7 +49,7 @@ public class BufferedMessageProcessor extends MessageProcessor
 	 * @param message The message's data.
 	 * @return The current number of unprocessed messages.
 	 */
-	public int postMessage(SourceType source, long timestamp, CharArrayWrapper message)
+	public int postMessage(GuacDefs.SourceType source, long timestamp, CharArrayWrapper message)
 	{
 		return this.postMessage(source, timestamp, message.array(), message.offset(), message.length());
 	}
@@ -62,7 +61,7 @@ public class BufferedMessageProcessor extends MessageProcessor
 	 * @param data The array containing the message's data.
 	 * @return The current number of unprocessed messages.
 	 */
-	public int postMessage(SourceType source, long timestamp, char[] data)
+	public int postMessage(GuacDefs.SourceType source, long timestamp, char[] data)
 	{
 		return this.postMessage(source, timestamp, data, 0, data.length);
 	}
@@ -76,7 +75,7 @@ public class BufferedMessageProcessor extends MessageProcessor
 	 * @param length The length of valid data.
 	 * @return The current number of unprocessed messages.
 	 */
-	public int postMessage(SourceType source, long timestamp, char[] data, int offset, int length)
+	public int postMessage(GuacDefs.SourceType source, long timestamp, char[] data, int offset, int length)
 	{
 		// Put the new message into the buffer
 		final Message message = messages.beginBlockingPutOp();

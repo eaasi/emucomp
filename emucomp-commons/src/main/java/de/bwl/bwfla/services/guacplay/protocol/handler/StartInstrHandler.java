@@ -19,37 +19,36 @@
 
 package de.bwl.bwfla.services.guacplay.protocol.handler;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.OpCode;
-import de.bwl.bwfla.common.services.guacplay.graphics.OffscreenCanvas;
-import de.bwl.bwfla.common.services.guacplay.protocol.Instruction;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionDescription;
 
+import de.bwl.bwfla.services.guacplay.GuacDefs;
+import de.bwl.bwfla.services.guacplay.graphics.OffscreenCanvas;
+import de.bwl.bwfla.services.guacplay.protocol.Instruction;
+import de.bwl.bwfla.services.guacplay.protocol.InstructionDescription;
 
 /**
  * Handler for Guacamole's <i>start-</i> instruction.
- * 
+ *
  * @see <a href="http://guac-dev.org/doc/gug/protocol-reference.html#start-instruction">
- *          Guacamole's protocol reference
- *      </a>
+ * Guacamole's protocol reference
+ * </a>
  */
-public class StartInstrHandler extends DrawingInstrHandler
-{
-	/** Constructor */
-	public StartInstrHandler(OffscreenCanvas canvas)
-	{
-		super(OpCode.START, canvas);
-	}
+public class StartInstrHandler extends DrawingInstrHandler {
+    /**
+     * Constructor
+     */
+    public StartInstrHandler(OffscreenCanvas canvas) {
+        super(GuacDefs.OpCode.START, canvas);
+    }
 
-	@Override
-	public void execute(InstructionDescription desc, Instruction instr) throws Exception
-	{
-		// Parse start's arguments
-		final int layer = instr.argAsInt(0);
-		final int x = instr.argAsInt(1);
-		final int y = instr.argAsInt(2);
-		
-		synchronized (canvas) {
-			canvas.startNewPath(layer, x, y);
-		}
-	}
+    @Override
+    public void execute(InstructionDescription desc, Instruction instr) throws Exception {
+        // Parse start's arguments
+        final int layer = instr.argAsInt(0);
+        final int x = instr.argAsInt(1);
+        final int y = instr.argAsInt(2);
+
+        synchronized (canvas) {
+            canvas.startNewPath(layer, x, y);
+        }
+    }
 }

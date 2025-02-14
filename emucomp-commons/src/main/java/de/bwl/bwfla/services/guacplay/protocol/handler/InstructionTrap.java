@@ -19,27 +19,28 @@
 
 package de.bwl.bwfla.services.guacplay.protocol.handler;
 
-import de.bwl.bwfla.common.services.guacplay.protocol.Instruction;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionDescription;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionHandler;
-import de.bwl.bwfla.common.services.guacplay.util.NotImplementedException;
 
+import de.bwl.bwfla.services.guacplay.protocol.Instruction;
+import de.bwl.bwfla.services.guacplay.protocol.InstructionDescription;
+import de.bwl.bwfla.services.guacplay.protocol.InstructionHandler;
+import de.bwl.bwfla.services.guacplay.util.NotImplementedException;
 
-/** Handler for important, but not yet implemented, instructions. */
-public class InstructionTrap extends InstructionHandler
-{
-	/** Constructor */
-	public InstructionTrap()
-	{
-		super("trap");
-	}
+/**
+ * Handler for important, but not yet implemented, instructions.
+ */
+public class InstructionTrap extends InstructionHandler {
+    /**
+     * Constructor
+     */
+    public InstructionTrap() {
+        super("trap");
+    }
 
-	@Override
-	public void execute(InstructionDescription desc, Instruction instr) throws Exception
-	{
-		String message = "Handler for " + instr.getOpcode()
-				+ " instructions is not yet implemented!";
-		
-		throw new NotImplementedException(message);
-	}
+    @Override
+    public void execute(InstructionDescription desc, Instruction instr) throws Exception {
+        String message = "Handler for " + instr.getOpcode()
+                         + " instructions is not yet implemented!";
+
+        throw new NotImplementedException(message);
+    }
 }

@@ -20,23 +20,28 @@
 package de.bwl.bwfla.services.guacplay.protocol;
 
 
-/** An abstract base class for Guacamole's instruction handlers. */
-public abstract class InstructionHandler
-{
-	private String opcode;
-	
-	/** Constructor */
-	protected InstructionHandler(String opcode)
-	{
-		this.opcode = opcode;
-	}
-	
-	/** Returns the instructions opcode. */
-	public String getOpcode()
-	{
-		return opcode;
-	}
-	
-	/** Handler for the Guacamole's instruction. */
-	public abstract void execute(InstructionDescription desc, Instruction instruction) throws Exception;
+import lombok.Getter;
+
+/**
+ * An abstract base class for Guacamole's instruction handlers.
+ */
+@Getter
+public abstract class InstructionHandler {
+    /**
+     * -- GETTER --
+     *  Returns the instructions opcode.
+     */
+    private final String opcode;
+
+    /**
+     * Constructor
+     */
+    protected InstructionHandler(String opcode) {
+        this.opcode = opcode;
+    }
+
+    /**
+     * Handler for the Guacamole's instruction.
+     */
+    public abstract void execute(InstructionDescription desc, Instruction instruction) throws Exception;
 }

@@ -19,39 +19,38 @@
 
 package de.bwl.bwfla.services.guacplay.protocol.handler;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.OpCode;
-import de.bwl.bwfla.common.services.guacplay.graphics.OffscreenCanvas;
-import de.bwl.bwfla.common.services.guacplay.protocol.Instruction;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionDescription;
 
+import de.bwl.bwfla.services.guacplay.GuacDefs;
+import de.bwl.bwfla.services.guacplay.graphics.OffscreenCanvas;
+import de.bwl.bwfla.services.guacplay.protocol.Instruction;
+import de.bwl.bwfla.services.guacplay.protocol.InstructionDescription;
 
 /**
  * Handler for Guacamole's <i>rect-</i> instruction.
- * 
+ *
  * @see <a href="http://guac-dev.org/doc/gug/protocol-reference.html#rect-instruction">
- *          Guacamole's protocol reference
- *      </a>
+ * Guacamole's protocol reference
+ * </a>
  */
-public class RectInstrHandler extends DrawingInstrHandler
-{
-	/** Constructor */
-	public RectInstrHandler(OffscreenCanvas canvas)
-	{
-		super(OpCode.RECT, canvas);
-	}
+public class RectInstrHandler extends DrawingInstrHandler {
+    /**
+     * Constructor
+     */
+    public RectInstrHandler(OffscreenCanvas canvas) {
+        super(GuacDefs.OpCode.RECT, canvas);
+    }
 
-	@Override
-	public void execute(InstructionDescription desc, Instruction instr) throws Exception
-	{
-		// Parse rect's arguments
-		final int layer = instr.argAsInt(0);
-		final int x = instr.argAsInt(1);
-		final int y = instr.argAsInt(2);
-		final int width = instr.argAsInt(3);
-		final int height = instr.argAsInt(4);
-		
-		synchronized (canvas) {
-			canvas.addRectPath(layer, x, y, width, height);
-		}
-	}
+    @Override
+    public void execute(InstructionDescription desc, Instruction instr) throws Exception {
+        // Parse rect's arguments
+        final int layer = instr.argAsInt(0);
+        final int x = instr.argAsInt(1);
+        final int y = instr.argAsInt(2);
+        final int width = instr.argAsInt(3);
+        final int height = instr.argAsInt(4);
+
+        synchronized (canvas) {
+            canvas.addRectPath(layer, x, y, width, height);
+        }
+    }
 }

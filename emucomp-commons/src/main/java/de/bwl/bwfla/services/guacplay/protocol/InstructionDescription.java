@@ -19,50 +19,33 @@
 
 package de.bwl.bwfla.services.guacplay.protocol;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.SourceType;
 
+import lombok.Getter;
+import lombok.Setter;
 
-/** A helper class, containing instruction-specific data. */
-public class InstructionDescription
-{
-	private long timestamp;
-	private SourceType source;
+import static de.bwl.bwfla.services.guacplay.GuacDefs.SourceType;
 
-	
-	/** Constructor */
-	public InstructionDescription()
-	{
-		this(SourceType.UNKNOWN);
-	}
-	
-	/** Constructor */
-	public InstructionDescription(SourceType source)
-	{
-		this.timestamp = 0L;
-		this.source = source;
-	}
-	
-	/** Returns the instruction's timestamp. */
-	public long getTimestamp()
-	{
-		return timestamp;
-	}
-	
-	/** Set a new instruction's timestamp. */
-	public void setTimestamp(long timestamp)
-	{
-		this.timestamp = timestamp;
-	}
-	
-	/** Returns the instruction's origin type. */
-	public SourceType getSourceType()
-	{
-		return source;
-	}
-	
-	/** Set instruction's origin type. */
-	public void setSourceType(SourceType source)
-	{
-		this.source = source;
-	}
+/**
+ * A helper class, containing instruction-specific data.
+ */
+@Getter
+@Setter
+public class InstructionDescription {
+    private long timestamp;
+    private SourceType source;
+
+    /**
+     * Constructor
+     */
+    public InstructionDescription() {
+        this(SourceType.UNKNOWN);
+    }
+
+    /**
+     * Constructor
+     */
+    public InstructionDescription(SourceType source) {
+        this.timestamp = 0L;
+        this.source = source;
+    }
 }

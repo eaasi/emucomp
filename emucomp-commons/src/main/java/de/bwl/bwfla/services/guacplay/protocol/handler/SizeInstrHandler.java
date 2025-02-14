@@ -19,15 +19,14 @@
 
 package de.bwl.bwfla.services.guacplay.protocol.handler;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.OpCode;
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.SourceType;
-import de.bwl.bwfla.common.services.guacplay.protocol.Instruction;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionDescription;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionHandler;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionParserException;
+
+import de.bwl.bwfla.services.guacplay.GuacDefs;
+import de.bwl.bwfla.services.guacplay.protocol.Instruction;
+import de.bwl.bwfla.services.guacplay.protocol.InstructionDescription;
+import de.bwl.bwfla.services.guacplay.protocol.InstructionHandler;
+import de.bwl.bwfla.services.guacplay.protocol.InstructionParserException;
 
 import java.util.ArrayList;
-
 
 /**
  * Handler for Guacamole's <i>size-</i> instruction (server-side).
@@ -50,7 +49,7 @@ public class SizeInstrHandler extends InstructionHandler
 	/** Constructor */
 	public SizeInstrHandler(int numListeners)
 	{
-		super(OpCode.SIZE);
+		super(GuacDefs.OpCode.SIZE);
 		this.listeners = new ArrayList<ISizeInstrListener>(numListeners);
 	}
 	
@@ -65,7 +64,7 @@ public class SizeInstrHandler extends InstructionHandler
 	{
 		// The Guacamole protocol contains two different size instructions!
 		// But we care only for the server-side one!
-		if (desc.getSourceType() != SourceType.SERVER)
+		if (desc.getSource() != GuacDefs.SourceType.SERVER)
 			return;
 		
 		// Get the arguments

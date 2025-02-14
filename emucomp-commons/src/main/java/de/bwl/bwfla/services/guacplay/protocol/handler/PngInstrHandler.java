@@ -19,14 +19,16 @@
 
 package de.bwl.bwfla.services.guacplay.protocol.handler;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.OpCode;
-import de.bwl.bwfla.common.services.guacplay.graphics.OffscreenCanvas;
-import de.bwl.bwfla.common.services.guacplay.png.PngDecoder;
-import de.bwl.bwfla.common.services.guacplay.protocol.Instruction;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionDescription;
-import de.bwl.bwfla.common.services.guacplay.util.Base64;
-import de.bwl.bwfla.common.services.guacplay.util.CharArrayBuffer;
-import de.bwl.bwfla.common.services.guacplay.util.ImageSize;
+
+
+import de.bwl.bwfla.services.guacplay.GuacDefs;
+import de.bwl.bwfla.services.guacplay.graphics.OffscreenCanvas;
+import de.bwl.bwfla.services.guacplay.png.PngDecoder;
+import de.bwl.bwfla.services.guacplay.protocol.Instruction;
+import de.bwl.bwfla.services.guacplay.protocol.InstructionDescription;
+import de.bwl.bwfla.services.guacplay.util.Base64;
+import de.bwl.bwfla.services.guacplay.util.CharArrayBuffer;
+import de.bwl.bwfla.services.guacplay.util.ImageSize;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -61,7 +63,7 @@ public class PngInstrHandler extends DrawingInstrHandler implements ISizeInstrLi
 	/** Constructor */
 	public PngInstrHandler(OffscreenCanvas canvas)
 	{
-		super(OpCode.PNG, canvas);
+		super(GuacDefs.OpCode.PNG, canvas);
 		
 		this.decoder = new PngDecoder();
 		this.charbuf = new CharArrayBuffer();

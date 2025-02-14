@@ -19,35 +19,34 @@
 
 package de.bwl.bwfla.services.guacplay.protocol.handler;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.OpCode;
-import de.bwl.bwfla.common.services.guacplay.graphics.OffscreenCanvas;
-import de.bwl.bwfla.common.services.guacplay.protocol.Instruction;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionDescription;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionParserException;
 
+import de.bwl.bwfla.services.guacplay.GuacDefs;
+import de.bwl.bwfla.services.guacplay.graphics.OffscreenCanvas;
+import de.bwl.bwfla.services.guacplay.protocol.Instruction;
+import de.bwl.bwfla.services.guacplay.protocol.InstructionDescription;
+import de.bwl.bwfla.services.guacplay.protocol.InstructionParserException;
 
 /**
  * Handler for Guacamole's <i>dispose-</i> instruction.
- * 
+ *
  * @see <a href="http://guac-dev.org/doc/gug/protocol-reference.html#dispose-instruction">
- *          Guacamole's protocol reference
- *      </a>
+ * Guacamole's protocol reference
+ * </a>
  */
-public class DisposeInstrHandler extends DrawingInstrHandler
-{
-	/** Constructor */
-	public DisposeInstrHandler(OffscreenCanvas canvas)
-	{
-		super(OpCode.DISPOSE, canvas);
-	}
+public class DisposeInstrHandler extends DrawingInstrHandler {
+    /**
+     * Constructor
+     */
+    public DisposeInstrHandler(OffscreenCanvas canvas) {
+        super(GuacDefs.OpCode.DISPOSE, canvas);
+    }
 
-	@Override
-	public void execute(InstructionDescription desc, Instruction instruction) throws InstructionParserException
-	{
-		final int layer = instruction.argAsInt(0);
-		
-		synchronized (canvas) {
-			canvas.remove(layer);
-		}
-	}
+    @Override
+    public void execute(InstructionDescription desc, Instruction instruction) throws InstructionParserException {
+        final int layer = instruction.argAsInt(0);
+
+        synchronized (canvas) {
+            canvas.remove(layer);
+        }
+    }
 }

@@ -19,34 +19,33 @@
 
 package de.bwl.bwfla.services.guacplay.protocol.handler;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.OpCode;
-import de.bwl.bwfla.common.services.guacplay.graphics.OffscreenCanvas;
-import de.bwl.bwfla.common.services.guacplay.protocol.Instruction;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionDescription;
 
+import de.bwl.bwfla.services.guacplay.GuacDefs;
+import de.bwl.bwfla.services.guacplay.graphics.OffscreenCanvas;
+import de.bwl.bwfla.services.guacplay.protocol.Instruction;
+import de.bwl.bwfla.services.guacplay.protocol.InstructionDescription;
 
 /**
  * Handler for Guacamole's <i>close-</i> instruction.
- * 
+ *
  * @see <a href="http://guac-dev.org/doc/gug/protocol-reference.html#close-instruction">
- *          Guacamole's protocol reference
- *      </a>
+ * Guacamole's protocol reference
+ * </a>
  */
-public class CloseInstrHandler extends DrawingInstrHandler
-{
-	/** Constructor */
-	public CloseInstrHandler(OffscreenCanvas canvas)
-	{
-		super(OpCode.CLOSE, canvas);
-	}
+public class CloseInstrHandler extends DrawingInstrHandler {
+    /**
+     * Constructor
+     */
+    public CloseInstrHandler(OffscreenCanvas canvas) {
+        super(GuacDefs.OpCode.CLOSE, canvas);
+    }
 
-	@Override
-	public void execute(InstructionDescription desc, Instruction instruction) throws Exception
-	{
-		final int layer = instruction.argAsInt(0);
-		
-		synchronized (canvas) {
-			canvas.closeCurrentPath(layer);
-		}
-	}
+    @Override
+    public void execute(InstructionDescription desc, Instruction instruction) throws Exception {
+        final int layer = instruction.argAsInt(0);
+
+        synchronized (canvas) {
+            canvas.closeCurrentPath(layer);
+        }
+    }
 }

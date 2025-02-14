@@ -22,8 +22,9 @@
  */
 package de.bwl.bwfla.services.container.helpers;
 
-import de.bwl.bwfla.common.services.container.types.Container;
-import de.bwl.bwfla.common.services.container.types.ImageFileContainer;
+
+import de.bwl.bwfla.services.container.types.Container;
+import de.bwl.bwfla.services.container.types.ImageFileContainer;
 
 import java.io.File;
 import java.util.List;
@@ -38,7 +39,7 @@ public class ImageFileHelper extends ContainerHelper
 	 * @see de.bwl.bwfla.common.services.container.helpers.ContainerHelper#createEmptyContainer()
 	 */
 	@Override
-	public Container createEmptyContainer() 
+	public Container createEmptyContainer()
 	{
 		return new ImageFileContainer();
 	}

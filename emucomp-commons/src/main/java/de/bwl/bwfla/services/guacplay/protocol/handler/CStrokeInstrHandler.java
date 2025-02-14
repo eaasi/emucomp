@@ -19,11 +19,10 @@
 
 package de.bwl.bwfla.services.guacplay.protocol.handler;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.OpCode;
-import de.bwl.bwfla.common.services.guacplay.graphics.OffscreenCanvas;
-import de.bwl.bwfla.common.services.guacplay.protocol.Instruction;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionDescription;
-
+import de.bwl.bwfla.services.guacplay.GuacDefs;
+import de.bwl.bwfla.services.guacplay.graphics.OffscreenCanvas;
+import de.bwl.bwfla.services.guacplay.protocol.Instruction;
+import de.bwl.bwfla.services.guacplay.protocol.InstructionDescription;
 
 /**
  * Handler for Guacamole's <i>cstroke-</i> instruction.
@@ -37,7 +36,7 @@ public class CStrokeInstrHandler extends DrawingInstrHandler
 	/** Constructor */
 	public CStrokeInstrHandler(OffscreenCanvas canvas)
 	{
-		super(OpCode.CSTROKE, canvas);
+		super(GuacDefs.OpCode.CSTROKE, canvas);
 	}
 
 	@Override

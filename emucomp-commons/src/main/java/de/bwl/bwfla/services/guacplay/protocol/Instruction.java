@@ -19,10 +19,12 @@
 
 package de.bwl.bwfla.services.guacplay.protocol;
 
-import de.bwl.bwfla.common.services.guacplay.util.CharArrayBuffer;
-import de.bwl.bwfla.common.services.guacplay.util.FlagSet;
-import de.bwl.bwfla.common.services.guacplay.util.IntegerUtils;
-import de.bwl.bwfla.common.services.guacplay.util.LongUtils;
+
+
+import de.bwl.bwfla.services.guacplay.util.CharArrayBuffer;
+import de.bwl.bwfla.services.guacplay.util.FlagSet;
+import de.bwl.bwfla.services.guacplay.util.IntegerUtils;
+import de.bwl.bwfla.services.guacplay.util.LongUtils;
 
 import java.nio.CharBuffer;
 
