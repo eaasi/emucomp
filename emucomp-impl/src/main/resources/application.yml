@@ -1,0 +1,7 @@
+quarkus:
+  application:
+    name: emucomp-impl
+  config:
+    locations:
+      - default.yml
+      - blob-default.yml
