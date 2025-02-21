@@ -19,6 +19,7 @@
 
 package de.bwl.bwfla.emucomp.components.emulators;
 import de.bwl.bwfla.emucomp.Drive;
+import de.bwl.bwfla.emucomp.EmulatorUtils;
 import de.bwl.bwfla.emucomp.MachineConfiguration;
 import de.bwl.bwfla.emucomp.Nic;
 

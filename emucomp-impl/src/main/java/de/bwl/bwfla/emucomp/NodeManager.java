@@ -121,7 +121,7 @@ public class NodeManager {
             } else {
                 throw new BWFLAException("A runtime error occurred while allocating the component: " + e.getMessage(), e);
             }
-        } catch (BWFLAException e) {
+        } catch (BWFLAException | JAXBException e) {
             throw new RuntimeException(e);
         }
     }

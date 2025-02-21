@@ -23,6 +23,7 @@ import de.bwl.bwfla.common.datatypes.ProcessMonitorVID;
 import de.bwl.bwfla.common.exceptions.BWFLAException;
 import de.bwl.bwfla.emucomp.BindingDataHandler;
 import de.bwl.bwfla.emucomp.NodeManager;
+import de.bwl.bwfla.emucomp.PrintJob;
 import de.bwl.bwfla.emucomp.api.EmulatorComponent;
 
 import javax.activation.DataHandler;
@@ -31,7 +32,7 @@ import javax.jws.WebService;
 import javax.servlet.annotation.WebServlet;
 import javax.xml.bind.annotation.XmlMimeType;
 import javax.xml.ws.soap.MTOM;
-import java.awt.*;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;

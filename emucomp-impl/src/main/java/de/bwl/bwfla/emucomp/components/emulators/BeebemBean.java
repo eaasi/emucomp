@@ -21,6 +21,7 @@ package de.bwl.bwfla.emucomp.components.emulators;
 
 import de.bwl.bwfla.common.exceptions.BWFLAException;
 import de.bwl.bwfla.emucomp.Drive;
+import de.bwl.bwfla.emucomp.EmulatorUtils;
 import de.bwl.bwfla.emucomp.MachineConfiguration;
 import de.bwl.bwfla.emucomp.Nic;
 import org.apache.tamaya.inject.api.Config;
@@ -63,7 +64,7 @@ public class BeebemBean extends EmulatorBean
 		{
 			LOG.info("mounting: " + b);
 			try {
-				Path imagePath = Paths.get(lookupResource("binding://" + b, XmountOutputFormat.RAW));
+				Path imagePath = Paths.get(lookupResource("binding://" + b, EmulatorUtils.XmountOutputFormat.RAW));
 				Path link = discsDir.resolve(imagePath.getFileName().toString() + ".ssd");
 				Path link2 = discsDir.resolve(imagePath.getFileName().toString() + ".dsd");
 				Files.createSymbolicLink(link, imagePath);
