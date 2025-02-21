@@ -19,7 +19,6 @@
 
 package de.bwl.bwfla.emucomp.api;
 
-import de.bwl.bwfla.emucomp.api.Drive;
 
 public class VolatileDrive extends Drive
 {

@@ -3,10 +3,9 @@ package de.bwl.bwfla.emucomp.components.emulators;
 import de.bwl.bwfla.common.exceptions.BWFLAException;
 import de.bwl.bwfla.common.utils.DeprecatedProcessRunner;
 import de.bwl.bwfla.common.utils.NetworkUtils;
-import de.bwl.bwfla.emucomp.api.Drive;
-import de.bwl.bwfla.emucomp.api.Drive.DriveType;
-import de.bwl.bwfla.emucomp.api.MachineConfiguration;
-import de.bwl.bwfla.emucomp.api.Nic;
+import de.bwl.bwfla.emucomp.Drive;
+import de.bwl.bwfla.emucomp.MachineConfiguration;
+import de.bwl.bwfla.emucomp.Nic;
 import org.apache.tamaya.ConfigurationProvider;
 import org.apache.tamaya.inject.api.Config;
 
@@ -20,6 +19,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
+import static de.bwl.bwfla.emucomp.Drive.DriveType.*;
 
 /**
  * @author iv1004
@@ -145,9 +146,9 @@ public class QemuBean extends EmulatorBean
 	public Set<String> getHotplugableDrives()
 	{
 		HashSet<String> set = new HashSet<String>();
-		set.add(DriveType.CDROM.name());
-		set.add(DriveType.DISK.name());
-		set.add(DriveType.FLOPPY.name());
+		set.add(CDROM.name());
+		set.add(DISK.name());
+		set.add(FLOPPY.name());
 		return set;
 	}
 

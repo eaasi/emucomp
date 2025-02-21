@@ -20,9 +20,8 @@
 package de.bwl.bwfla.emucomp.components.emulators;
 
 import de.bwl.bwfla.common.exceptions.BWFLAException;
-import de.bwl.bwfla.emucomp.api.Drive;
-import de.bwl.bwfla.emucomp.api.Drive.DriveType;
-import de.bwl.bwfla.emucomp.api.Nic;
+import de.bwl.bwfla.emucomp.Drive;
+import de.bwl.bwfla.emucomp.Nic;
 import de.bwl.bwfla.emucomp.components.emulators.IpcDefs.MessageType;
 
 import java.io.*;
@@ -31,296 +30,279 @@ import java.util.function.Function;
 import java.util.logging.Level;
 
 
-public abstract class PceBean extends EmulatorBean
-{
-	// Member fields
-	private final Map<String, Drive> deviceToDriveMapping = new TreeMap<String, Drive>();
-	private final Map<Drive, String> driveToDeviceMapping = new TreeMap<Drive, String>(new DriveComparator());
-	
-	@SuppressWarnings("unchecked")
-	private final Deque<String>[] freeDeviceIds = (Deque<String>[]) new Deque[3];
-	
-	
-	public PceBean()
-	{
-		super();
+public abstract class PceBean extends EmulatorBean {
+    // Member fields
+    private final Map<String, Drive> deviceToDriveMapping = new TreeMap<String, Drive>();
+    private final Map<Drive, String> driveToDeviceMapping = new TreeMap<Drive, String>(new DriveComparator());
+
+    @SuppressWarnings("unchecked")
+    private final Deque<String>[] freeDeviceIds = (Deque<String>[]) new Deque[3];
 
 
-		final int[] drivesNumber = this.getDrivesNumber();
-		final int[] drivesBaseIds = this.getDrivesBaseIds();
-		
-		// Initialize the device IDs
-		for (int i = 0; i < 2; ++i) {
-			final int baseid = drivesBaseIds[i];
-			final int numDrives = drivesNumber[i];
-			freeDeviceIds[i] = new ArrayDeque<String>(numDrives);
+    public PceBean() {
+        super();
 
-			for (int drive = 0; drive < numDrives; ++drive)
-				freeDeviceIds[i].add(Integer.toString(baseid + drive));
-		}
-	}
 
-	@Override
-	public void prepareEmulatorRunner() throws BWFLAException
-	{
-		emuRunner.setCommand(getExecPath());
-		emuRunner.setWorkingDirectory(this.getDataDir());
-		String config = this.getNativeConfig();
-		if (config != null && !config.isEmpty())
-			LOG.warning("PCE emulators currently do not support native configuration!");
+        final int[] drivesNumber = this.getDrivesNumber();
+        final int[] drivesBaseIds = this.getDrivesBaseIds();
 
-		// Use SDL devices
-		emuRunner.addArguments("--terminal" , "sdl");
-		emuRunner.addArgument("--no-monitor");
-		emuRunner.addArgument("--verbose");
-		emuRunner.addArgument("--run");
+        // Initialize the device IDs
+        for (int i = 0; i < 2; ++i) {
+            final int baseid = drivesBaseIds[i];
+            final int numDrives = drivesNumber[i];
+            freeDeviceIds[i] = new ArrayDeque<String>(numDrives);
 
-		if (this.isLocalModeEnabled())
-			LOG.warning("Local-mode is currently not supported for PCE!");;
+            for (int drive = 0; drive < numDrives; ++drive)
+                freeDeviceIds[i].add(Integer.toString(baseid + drive));
+        }
+    }
 
-		deviceToDriveMapping.clear();
-		driveToDeviceMapping.clear();
-	}
+    @Override
+    public void prepareEmulatorRunner() throws BWFLAException {
+        emuRunner.setCommand(getExecPath());
+        emuRunner.setWorkingDirectory(this.getDataDir());
+        String config = this.getNativeConfig();
+        if (config != null && !config.isEmpty())
+            LOG.warning("PCE emulators currently do not support native configuration!");
 
-	@Override
-	public void finishRuntimeConfiguration() throws BWFLAException
-	{
-		final Function<String, String> hostPathReplacer = this.getContainerHostPathReplacer();
+        // Use SDL devices
+        emuRunner.addArguments("--terminal", "sdl");
+        emuRunner.addArgument("--no-monitor");
+        emuRunner.addArgument("--verbose");
+        emuRunner.addArgument("--run");
 
-		// At this point we should have all runtime information
-		
-		try {
-			// Write the local config file
-			final File configFile = new File(this.getDataDir().toFile(), "pce.cfg");
-			List<String> configTemplate = this.getConfigTemplate();
-			try (BufferedWriter writer = new BufferedWriter(new FileWriter(configFile))) {
-				for (String line : configTemplate)
-					this.writeln(writer, line);
+        if (this.isLocalModeEnabled())
+            LOG.warning("Local-mode is currently not supported for PCE!");
+        ;
 
-				// Write the disk blocks
-				
-				this.writeln(writer, 1);
-				this.writeln(writer, "# Disk blocks added by PceBean");
-				this.writeln(writer, 1);
-				
-				for (Map.Entry<String, Drive> entry : deviceToDriveMapping.entrySet()) {
-					String image = this.getImagePath(entry.getValue());
-					if (this.isContainerModeEnabled())
-						image = hostPathReplacer.apply(image);
+        deviceToDriveMapping.clear();
+        driveToDeviceMapping.clear();
+    }
 
-					this.writeln(writer, "disk {");
-					this.writeln(writer, "drive", entry.getKey(), false);
-					this.writeln(writer, "optional", "1", false);
-					this.writeln(writer, "type", "auto");
-					this.writeln(writer, "file", image);
-					this.writeln(writer, "}");
-					this.writeln(writer, 1);
-				}
-				
-				writer.flush();
-			}
-			
-			emuRunner.addArguments("--config", configFile.getAbsolutePath());
-		}
-		catch (IOException exception) {
-			throw new BWFLAException("Writing pce.cfg file failed!", exception);
-		}
-	}
+    @Override
+    public void finishRuntimeConfiguration() throws BWFLAException {
+        final Function<String, String> hostPathReplacer = this.getContainerHostPathReplacer();
 
-	@Override
-	public boolean addDrive(Drive drive)
-	{
-		if (drive == null || (drive.getData() == null)) {
-			LOG.warning("Drive doesn't contain an image, attach canceled.");
-			return false;
-		}
+        // At this point we should have all runtime information
 
-		final String image = this.getImagePath(drive);
-		if (image == null)
-			return false;
+        try {
+            // Write the local config file
+            final File configFile = new File(this.getDataDir().toFile(), "pce.cfg");
+            List<String> configTemplate = this.getConfigTemplate();
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(configFile))) {
+                for (String line : configTemplate)
+                    this.writeln(writer, line);
 
-		switch (drive.getType())
-		{
-			case FLOPPY:
-				this.attachDrive(0, drive);
-				break;
-				
-			case DISK:
-				this.attachDrive(1, drive);
-				break;
-				
-			default:
-				LOG.warning("PCE does not support " + drive.getType() + " drives!");
-		}
+                // Write the disk blocks
 
-		return false;
-	}
-	
-	@Override
-	public boolean connectDrive(Drive drive, boolean connect)
-	{
-		if (this.isXpraBackendEnabled()) {
-			LOG.warning("Media-change in XPRA-mode is currently not supported!");
-			return false;
-		}
+                this.writeln(writer, 1);
+                this.writeln(writer, "# Disk blocks added by PceBean");
+                this.writeln(writer, 1);
 
-		final int tid = (drive.getType() == DriveType.FLOPPY) ? 0 : 1;
-		String device = driveToDeviceMapping.get(drive);
-		if (device != null) {
-			// Detach this drive
-			deviceToDriveMapping.remove(device);
-			driveToDeviceMapping.remove(drive);
-			
-			// Mark device ID as free
-			freeDeviceIds[tid].push(device);
-			
-			try {
-				// Eject this drive from PCE emulator
-				ctlMsgWriter.begin(MessageType.EMULATOR_COMMAND);
-				ctlMsgWriter.write("m emu.disk.eject " + device, false);
-				ctlMsgWriter.send(emuCtlSocketName, true);
-			}
-			catch (IOException exception) {
-				LOG.warning("Sending eject-message to emulator failed!");
-				LOG.log(Level.WARNING, exception.getMessage(), exception);
-			}
-		}
-		
-		if (!connect)
-			return true;  // Drive detached!
-		
-		this.attachDrive(tid, drive);
-		
-		try {
-			device = driveToDeviceMapping.get(drive);
-			String path = this.getImagePath(drive);
-			if (this.isContainerModeEnabled()) {
-				path = this.getContainerHostPathReplacer()
-						.apply(path);
-			}
-			
-			// Insert this drive to PCE emulator
-			ctlMsgWriter.begin(MessageType.EMULATOR_COMMAND);
-			ctlMsgWriter.write("m emu.disk.insert " + device + ":" + path, false);
-			ctlMsgWriter.send(emuCtlSocketName, true);
-		}
-		catch (IOException exception) {
-			LOG.warning("Sending insert-message to emulator failed!");
-			exception.printStackTrace();
-		}
-		
-		return true;
-	}
+                for (Map.Entry<String, Drive> entry : deviceToDriveMapping.entrySet()) {
+                    String image = this.getImagePath(entry.getValue());
+                    if (this.isContainerModeEnabled())
+                        image = hostPathReplacer.apply(image);
 
-	protected boolean addNic(Nic nic)
-	{
-		LOG.severe("operation unsupported yet: " + this.getClass().getEnclosingMethod().getName());
-		return false;
-	}
+                    this.writeln(writer, "disk {");
+                    this.writeln(writer, "drive", entry.getKey(), false);
+                    this.writeln(writer, "optional", "1", false);
+                    this.writeln(writer, "type", "auto");
+                    this.writeln(writer, "file", image);
+                    this.writeln(writer, "}");
+                    this.writeln(writer, 1);
+                }
 
-	
-	protected abstract int[] getDrivesNumber();
-	protected abstract int[] getDrivesBaseIds();
-	protected abstract String getConfigTemplatePath();
+                writer.flush();
+            }
 
-	
-	/* =============== Internal Helpers =============== */
-	
-	private String getImagePath(Drive drive)
-	{
-		try {
-			return this.lookupResource(drive.getData(), this.getImageFormatForDriveType(drive.getType()));
-		} catch (Exception exception) {
-			LOG.warning("Drive doesn't reference a valid binding, attach canceled.");
-			exception.printStackTrace();
-			return null;
-		}
-	}
+            emuRunner.addArguments("--config", configFile.getAbsolutePath());
+        } catch (IOException exception) {
+            throw new BWFLAException("Writing pce.cfg file failed!", exception);
+        }
+    }
 
-	private List<String> getConfigTemplate() throws IOException
-	{
-		ClassLoader cloader = this.getClass().getClassLoader();
-		String name = this.getConfigTemplatePath();
-		
-		LOG.info("Using config template: " + name);
-		
-		// Read the contents of the template file
-		try (final InputStream instream = cloader.getResourceAsStream(name);
-			 final BufferedReader reader = new BufferedReader(new InputStreamReader(instream)))
-		{
-			List<String> template = new ArrayList<String>(512);
-			while (reader.ready())
-				template.add(reader.readLine());
+    @Override
+    public boolean addDrive(Drive drive) {
+        if (drive == null || (drive.getData() == null)) {
+            LOG.warning("Drive doesn't contain an image, attach canceled.");
+            return false;
+        }
 
-			return template;
-		}
-	}
+        final String image = this.getImagePath(drive);
+        if (image == null)
+            return false;
 
-	private boolean attachDrive(int tid, Drive drive)
-	{
-		final String device = freeDeviceIds[tid].poll();
-		if (device == null) {
-			LOG.warning("Attempt to attach more than " + this.getDrivesNumber()[tid] + " drives! Aborting.");
-			return false;
-		}
+        switch (drive.getType()) {
+            case FLOPPY:
+                this.attachDrive(0, drive);
+                break;
 
-		// Update drive configuration
-		deviceToDriveMapping.put(device, drive);
-		driveToDeviceMapping.put(drive, device);
-		
-		return true;
-	}
-	
-	private void writeln(BufferedWriter writer, int numNewLines) throws IOException
-	{
-		while (numNewLines > 0) {
-			writer.newLine();
-			--numNewLines;
-		}
-	}
-	
-	private void writeln(BufferedWriter writer, String value) throws IOException
-	{
-		writer.write(value);
-		writer.newLine();
-	}
-	
-	private void writeln(BufferedWriter writer, String key, String value) throws IOException
-	{
-		this.writeln(writer, key, value, true);
-	}
-	
-	private void writeln(BufferedWriter writer, String key, String value, boolean quote) throws IOException
-	{
-		writer.write("    ");
-		writer.write(key);
-		writer.write(" = ");
-		
-		if (quote)
-			writer.write("\"");
-		
-		writer.write(value);
-		
-		if (quote)
-			writer.write("\"");
-		
-		writer.newLine();
-	}
-	
-	
-	private static class DriveComparator implements Comparator<Drive>
-	{
-		@Override
-		public int compare(Drive d1, Drive d2)
-		{
-			if (d1 == d2)
-				return 0;
-			
-			if (d1.hashCode() < d2.hashCode())
-				return -1;
-			
-			return 1;
-		}
-	}
-	 abstract protected String getExecPath();
+            case DISK:
+                this.attachDrive(1, drive);
+                break;
+
+            default:
+                LOG.warning("PCE does not support " + drive.getType() + " drives!");
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean connectDrive(Drive drive, boolean connect) {
+        if (this.isXpraBackendEnabled()) {
+            LOG.warning("Media-change in XPRA-mode is currently not supported!");
+            return false;
+        }
+
+        final int tid = (drive.getType() == Drive.DriveType.FLOPPY) ? 0 : 1;
+        String device = driveToDeviceMapping.get(drive);
+        if (device != null) {
+            // Detach this drive
+            deviceToDriveMapping.remove(device);
+            driveToDeviceMapping.remove(drive);
+
+            // Mark device ID as free
+            freeDeviceIds[tid].push(device);
+
+            try {
+                // Eject this drive from PCE emulator
+                ctlMsgWriter.begin(MessageType.EMULATOR_COMMAND);
+                ctlMsgWriter.write("m emu.disk.eject " + device, false);
+                ctlMsgWriter.send(emuCtlSocketName, true);
+            } catch (IOException exception) {
+                LOG.warning("Sending eject-message to emulator failed!");
+                LOG.log(Level.WARNING, exception.getMessage(), exception);
+            }
+        }
+
+        if (!connect)
+            return true;  // Drive detached!
+
+        this.attachDrive(tid, drive);
+
+        try {
+            device = driveToDeviceMapping.get(drive);
+            String path = this.getImagePath(drive);
+            if (this.isContainerModeEnabled()) {
+                path = this.getContainerHostPathReplacer()
+                        .apply(path);
+            }
+
+            // Insert this drive to PCE emulator
+            ctlMsgWriter.begin(MessageType.EMULATOR_COMMAND);
+            ctlMsgWriter.write("m emu.disk.insert " + device + ":" + path, false);
+            ctlMsgWriter.send(emuCtlSocketName, true);
+        } catch (IOException exception) {
+            LOG.warning("Sending insert-message to emulator failed!");
+            exception.printStackTrace();
+        }
+
+        return true;
+    }
+
+    protected boolean addNic(Nic nic) {
+        LOG.severe("operation unsupported yet: " + this.getClass().getEnclosingMethod().getName());
+        return false;
+    }
+
+
+    protected abstract int[] getDrivesNumber();
+
+    protected abstract int[] getDrivesBaseIds();
+
+    protected abstract String getConfigTemplatePath();
+
+
+    /* =============== Internal Helpers =============== */
+
+    private String getImagePath(Drive drive) {
+        try {
+            return this.lookupResource(drive.getData(), this.getImageFormatForDriveType(drive.getType()));
+        } catch (Exception exception) {
+            LOG.warning("Drive doesn't reference a valid binding, attach canceled.");
+            exception.printStackTrace();
+            return null;
+        }
+    }
+
+    private List<String> getConfigTemplate() throws IOException {
+        ClassLoader cloader = this.getClass().getClassLoader();
+        String name = this.getConfigTemplatePath();
+
+        LOG.info("Using config template: " + name);
+
+        // Read the contents of the template file
+        try (final InputStream instream = cloader.getResourceAsStream(name);
+             final BufferedReader reader = new BufferedReader(new InputStreamReader(instream))) {
+            List<String> template = new ArrayList<String>(512);
+            while (reader.ready())
+                template.add(reader.readLine());
+
+            return template;
+        }
+    }
+
+    private boolean attachDrive(int tid, Drive drive) {
+        final String device = freeDeviceIds[tid].poll();
+        if (device == null) {
+            LOG.warning("Attempt to attach more than " + this.getDrivesNumber()[tid] + " drives! Aborting.");
+            return false;
+        }
+
+        // Update drive configuration
+        deviceToDriveMapping.put(device, drive);
+        driveToDeviceMapping.put(drive, device);
+
+        return true;
+    }
+
+    private void writeln(BufferedWriter writer, int numNewLines) throws IOException {
+        while (numNewLines > 0) {
+            writer.newLine();
+            --numNewLines;
+        }
+    }
+
+    private void writeln(BufferedWriter writer, String value) throws IOException {
+        writer.write(value);
+        writer.newLine();
+    }
+
+    private void writeln(BufferedWriter writer, String key, String value) throws IOException {
+        this.writeln(writer, key, value, true);
+    }
+
+    private void writeln(BufferedWriter writer, String key, String value, boolean quote) throws IOException {
+        writer.write("    ");
+        writer.write(key);
+        writer.write(" = ");
+
+        if (quote)
+            writer.write("\"");
+
+        writer.write(value);
+
+        if (quote)
+            writer.write("\"");
+
+        writer.newLine();
+    }
+
+
+    private static class DriveComparator implements Comparator<Drive> {
+        @Override
+        public int compare(Drive d1, Drive d2) {
+            if (d1 == d2)
+                return 0;
+
+            if (d1.hashCode() < d2.hashCode())
+                return -1;
+
+            return 1;
+        }
+    }
+
+    abstract protected String getExecPath();
 }

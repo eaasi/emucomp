@@ -20,10 +20,9 @@
 package de.bwl.bwfla.emucomp.components.emulators;
 
 import de.bwl.bwfla.common.exceptions.BWFLAException;
-import de.bwl.bwfla.emucomp.api.Drive;
-import de.bwl.bwfla.emucomp.api.EmulatorUtils.XmountOutputFormat;
-import de.bwl.bwfla.emucomp.api.MachineConfiguration;
-import de.bwl.bwfla.emucomp.api.Nic;
+import de.bwl.bwfla.emucomp.Drive;
+import de.bwl.bwfla.emucomp.MachineConfiguration;
+import de.bwl.bwfla.emucomp.Nic;
 import org.apache.tamaya.inject.api.Config;
 
 import javax.inject.Inject;

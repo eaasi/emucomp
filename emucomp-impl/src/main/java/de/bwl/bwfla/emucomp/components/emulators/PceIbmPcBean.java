@@ -19,7 +19,7 @@
 
 package de.bwl.bwfla.emucomp.components.emulators;
 
-import de.bwl.bwfla.emucomp.api.MachineConfiguration;
+import de.bwl.bwfla.emucomp.MachineConfiguration;
 import org.apache.tamaya.inject.api.Config;
 
 import javax.inject.Inject;

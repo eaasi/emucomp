@@ -24,7 +24,7 @@ import de.bwl.bwfla.common.utils.DeprecatedProcessRunner;
 import de.bwl.bwfla.common.utils.NetworkUtils;
 import de.bwl.bwfla.common.utils.ProcessRunner;
 import de.bwl.bwfla.common.utils.WebsocketClient;
-import de.bwl.bwfla.emucomp.api.ComponentConfiguration;
+import de.bwl.bwfla.emucomp.ComponentConfiguration;
 import de.bwl.bwfla.emucomp.components.emulators.IpcSocket;
 import de.bwl.bwfla.emucomp.control.IPCWebsocketProxy;
 import de.bwl.bwfla.emucomp.control.connectors.EthernetConnector;
