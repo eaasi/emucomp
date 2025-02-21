@@ -8,6 +8,21 @@
     </remote-repository>
     <remote-repository>
       <option name="id" value="central" />
+      <option name="name" value="Central Repository" />
+      <option name="url" value="https://repo.maven.apache.org/maven2" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="bwfla" />
+      <option name="name" value="Repository" />
+      <option name="url" value="https://raw.githubusercontent.com/eaas-framework/external-libraries/handle" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="bwfla-internal" />
+      <option name="name" value="The bwFLA Internal Repository" />
+      <option name="url" value="http://eaas.uni-freiburg.de/maven-repository" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="central" />
       <option name="name" value="Maven Central repository" />
       <option name="url" value="https://repo1.maven.org/maven2" />
     </remote-repository>

@@ -33,9 +33,32 @@
     <dependencies>
         <!--        PROJECT LOCAL-->
         <dependency>
-            <groupId>de.bwl.bwfla</groupId>
-            <artifactId>emucomp-commons</artifactId>
+            <groupId>de.bwl.bwfla.emucomp</groupId>
+            <artifactId>commons</artifactId>
             <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>de.bwl.bwfla</groupId>
+            <artifactId>objectarchive-client</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>8.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>de.bwl.bwfla</groupId>
+            <artifactId>common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>de.bwl.bwfla</groupId>
+            <artifactId>blobstore-client</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -45,6 +68,17 @@
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-kubernetes</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-rest-client-jackson</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>de.bwl.bwfla</groupId>
+            <artifactId>imagearchive-client</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -72,39 +106,44 @@
             <artifactId>quarkus-narayana-jta</artifactId>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/jakarta.persistence/jakarta.persistence-api -->
         <dependency>
-            <groupId>jakarta.persistence</groupId>
-            <artifactId>jakarta.persistence-api</artifactId>
-            <version>3.2.0</version>
+            <groupId>org.freedesktop.gstreamer</groupId>
+            <artifactId>gst1-java-core</artifactId>
+            <version>1.0.0</version>
         </dependency>
-
-
-
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.36</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/jakarta.enterprise.concurrent/jakarta.enterprise.concurrent-api -->
         <dependency>
-            <groupId>jakarta.enterprise.concurrent</groupId>
-            <artifactId>jakarta.enterprise.concurrent-api</artifactId>
-            <version>3.1.1</version>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/jakarta.enterprise/jakarta.enterprise.cdi-api -->
         <dependency>
-            <groupId>jakarta.enterprise</groupId>
-            <artifactId>jakarta.enterprise.cdi-api</artifactId>
-            <version>4.0.0</version>
+            <groupId>javax.websocket</groupId>
+            <artifactId>javax.websocket-api</artifactId>
+            <version>1.1</version>
+            <scope>provided</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/jakarta.ws.rs/jakarta.ws.rs-api -->
+
         <dependency>
-            <groupId>jakarta.ws.rs</groupId>
-            <artifactId>jakarta.ws.rs-api</artifactId>
-            <version>4.0.0</version>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
         </dependency>
+        <dependency>
+            <groupId>javax.json.bind</groupId>
+            <artifactId>javax.json.bind-api</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.json</groupId>
+            <artifactId>javax.json-api</artifactId>
+            <version>1.1.4</version>
+        </dependency>
+
 
         <dependency>
             <groupId>io.quarkus</groupId>
@@ -115,6 +154,12 @@
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <version>2.1.1</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

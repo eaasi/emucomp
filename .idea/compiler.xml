@@ -7,12 +7,13 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="emucomp-impl" />
-        <module name="emucomp-commons" />
+        <module name="commons" />
         <module name="emucomp-api" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="emucomp-client" target="17" />
+      <module name="emucomp-commons" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

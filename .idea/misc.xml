@@ -8,11 +8,14 @@
         <option value="$PROJECT_DIR$/emucomp-impl/pom.xml" />
         <option value="$PROJECT_DIR$/emucomp-client/pom.xml" />
         <option value="$PROJECT_DIR$/emucomp-commons/pom.xml" />
+        <option value="$PROJECT_DIR$/commons/pom.xml" />
+        <option value="$PROJECT_DIR$/imagearchive-connector/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
         <option value="$PROJECT_DIR$/emucomp-client/pom.xml" />
+        <option value="$PROJECT_DIR$/emucomp-commons/pom.xml" />
       </set>
     </option>
   </component>
