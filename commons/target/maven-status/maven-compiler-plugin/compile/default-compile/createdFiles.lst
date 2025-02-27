@@ -8,7 +8,6 @@ de\bwl\bwfla\emucomp\EmulatorUtils$XmountInputFormat.class
 de\bwl\bwfla\emucomp\DockerContainerConfiguration.class
 de\bwl\bwfla\emucomp\FileSystemType.class
 de\bwl\bwfla\emucomp\LoopDeviceManager.class
-de\bwl\bwfla\emucomp\FileSystemBackend$CleanupCounterType.class
 de\bwl\bwfla\emucomp\BlobStoreBinding.class
 de\bwl\bwfla\emucomp\EmulatorSpec$Machine.class
 de\bwl\bwfla\emucomp\MachineConfiguration$NativeConfig.class
@@ -17,9 +16,7 @@ de\bwl\bwfla\emucomp\Drive$1.class
 de\bwl\bwfla\emucomp\NodeTcpConfiguration.class
 de\bwl\bwfla\emucomp\QcowOptions.class
 de\bwl\bwfla\emucomp\BindingDataHandler.class
-de\bwl\bwfla\emucomp\FileSystemBackend.class
 de\bwl\bwfla\emucomp\EmulatorSpec.class
-de\bwl\bwfla\emucomp\BlobStoreBackend.class
 de\bwl\bwfla\emucomp\VdeSlirpConfiguration.class
 de\bwl\bwfla\emucomp\Binding$ResourceType.class
 de\bwl\bwfla\emucomp\Binding$TransportType.class
@@ -29,8 +26,6 @@ de\bwl\bwfla\emucomp\UiOptions.class
 de\bwl\bwfla\emucomp\ComponentConfiguration.class
 de\bwl\bwfla\emucomp\Html5Options.class
 de\bwl\bwfla\emucomp\ImageGeneralization.class
-de\bwl\bwfla\emucomp\BlobStoreEntry.class
-de\bwl\bwfla\emucomp\FileSystemBackend$1.class
 de\bwl\bwfla\emucomp\FileCollectionEntry.class
 de\bwl\bwfla\emucomp\FileCollection.class
 de\bwl\bwfla\emucomp\EmulatorUtils$1.class
@@ -38,7 +33,6 @@ de\bwl\bwfla\emucomp\ImageGeneralizationUtils$FS_TYPE.class
 de\bwl\bwfla\emucomp\ImageMounter.class
 de\bwl\bwfla\emucomp\MediumType.class
 de\bwl\bwfla\emucomp\OciContainerConfiguration.class
-de\bwl\bwfla\emucomp\BlobStoreBackend$CleanupTask.class
 de\bwl\bwfla\emucomp\Environment.class
 de\bwl\bwfla\emucomp\ImageArchiveBinding.class
 de\bwl\bwfla\emucomp\MachineConfigurationTemplate.class
@@ -64,5 +58,4 @@ de\bwl\bwfla\emucomp\ComponentState.class
 de\bwl\bwfla\emucomp\MachineConfiguration.class
 de\bwl\bwfla\emucomp\Device.class
 de\bwl\bwfla\emucomp\PrintJob.class
-de\bwl\bwfla\emucomp\FileSystemBackend$CleanupCounters.class
 de\bwl\bwfla\emucomp\AbstractDataResource.class

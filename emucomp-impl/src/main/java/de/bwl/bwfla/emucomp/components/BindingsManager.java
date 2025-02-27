@@ -24,6 +24,7 @@ import de.bwl.bwfla.common.exceptions.BWFLAException;
 import de.bwl.bwfla.common.utils.DeprecatedProcessRunner;
 import de.bwl.bwfla.common.utils.Pair;
 import de.bwl.bwfla.emucomp.*;
+import de.bwl.bwfla.emucomp.client.ObjectArchiveClient;
 import de.bwl.bwfla.objectarchive.util.ObjectArchiveHelper;
 
 import java.io.File;
@@ -112,8 +113,13 @@ public class BindingsManager {
             // If the resource is an ArchiveBinding, query the archive
             // and add all entries from the file collection
             final ObjectArchiveBinding object = (ObjectArchiveBinding) resource;
-            final ObjectArchiveHelper helper = new ObjectArchiveHelper(object.getArchiveHost());
-            final FileCollection fc = helper.getObjectReference(object.getArchive(), object.getId());
+            ObjectArchiveClient client = new ObjectArchiveClient(object.getArchiveHost());
+            final FileCollection fc;
+            try {
+                fc = client.fetchObjectReference(object);
+            } catch (Exception e) {
+                throw new BWFLAException("Cannot retrieve FileCollection from archive: " + e.getMessage(), e);
+            }
             if (fc == null || fc.id == null || fc.id.isEmpty())
                 throw new BWFLAException("Retrieving object meta data failed!");
 

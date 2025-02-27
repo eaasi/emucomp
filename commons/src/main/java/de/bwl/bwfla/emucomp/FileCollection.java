@@ -7,15 +7,13 @@ import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "fileCollection", namespace="http://bwfla.bwl.de/common/datatypes")
-@XmlRootElement(namespace = "http://bwfla.bwl.de/common/datatypes")
-public class FileCollection extends JaxbType {
-	@XmlElement(name="file", namespace="http://bwfla.bwl.de/common/datatypes")
-	public List<FileCollectionEntry> files = new ArrayList<FileCollectionEntry>();
-
-	@XmlElement(namespace="http://bwfla.bwl.de/common/datatypes")
+@XmlRootElement
+public class FileCollection {
+	@JsonbProperty("id")
 	public String id;
+
+	@JsonbProperty("files")
+	public List<FileCollectionEntry> files;
 
 	@XmlElement
 	private String label;

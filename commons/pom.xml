@@ -9,7 +9,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <maven.compiler.release>17</maven.compiler.release>
+        <maven.compiler.release>11</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -24,14 +24,9 @@
         <!-- Local project dependencies -->
         <dependency>
             <groupId>de.bwl.bwfla</groupId>
-            <artifactId>blobstore-impl</artifactId>
+            <artifactId>blobstore-client</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-            <type>war</type>
-        </dependency>
-        <dependency>
-            <groupId>de.bwl.bwfla</groupId>
-            <artifactId>blobstore-api</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>de.bwl.bwfla</groupId>

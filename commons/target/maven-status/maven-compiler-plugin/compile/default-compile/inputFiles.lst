@@ -1,9 +1,7 @@
 C:\Users\lobac\IdeaProjects\unpleasant_duty\emucomp\commons\src\main\java\de\bwl\bwfla\emucomp\AbstractDataResource.java
 C:\Users\lobac\IdeaProjects\unpleasant_duty\emucomp\commons\src\main\java\de\bwl\bwfla\emucomp\Binding.java
 C:\Users\lobac\IdeaProjects\unpleasant_duty\emucomp\commons\src\main\java\de\bwl\bwfla\emucomp\BindingDataHandler.java
-C:\Users\lobac\IdeaProjects\unpleasant_duty\emucomp\commons\src\main\java\de\bwl\bwfla\emucomp\BlobStoreBackend.java
 C:\Users\lobac\IdeaProjects\unpleasant_duty\emucomp\commons\src\main\java\de\bwl\bwfla\emucomp\BlobStoreBinding.java
-C:\Users\lobac\IdeaProjects\unpleasant_duty\emucomp\commons\src\main\java\de\bwl\bwfla\emucomp\BlobStoreEntry.java
 C:\Users\lobac\IdeaProjects\unpleasant_duty\emucomp\commons\src\main\java\de\bwl\bwfla\emucomp\ComponentConfiguration.java
 C:\Users\lobac\IdeaProjects\unpleasant_duty\emucomp\commons\src\main\java\de\bwl\bwfla\emucomp\ComponentState.java
 C:\Users\lobac\IdeaProjects\unpleasant_duty\emucomp\commons\src\main\java\de\bwl\bwfla\emucomp\ContainerConfiguration.java
@@ -16,7 +14,6 @@ C:\Users\lobac\IdeaProjects\unpleasant_duty\emucomp\commons\src\main\java\de\bwl
 C:\Users\lobac\IdeaProjects\unpleasant_duty\emucomp\commons\src\main\java\de\bwl\bwfla\emucomp\Environment.java
 C:\Users\lobac\IdeaProjects\unpleasant_duty\emucomp\commons\src\main\java\de\bwl\bwfla\emucomp\FileCollection.java
 C:\Users\lobac\IdeaProjects\unpleasant_duty\emucomp\commons\src\main\java\de\bwl\bwfla\emucomp\FileCollectionEntry.java
-C:\Users\lobac\IdeaProjects\unpleasant_duty\emucomp\commons\src\main\java\de\bwl\bwfla\emucomp\FileSystemBackend.java
 C:\Users\lobac\IdeaProjects\unpleasant_duty\emucomp\commons\src\main\java\de\bwl\bwfla\emucomp\FileSystemType.java
 C:\Users\lobac\IdeaProjects\unpleasant_duty\emucomp\commons\src\main\java\de\bwl\bwfla\emucomp\GeneralizationPatch.java
 C:\Users\lobac\IdeaProjects\unpleasant_duty\emucomp\commons\src\main\java\de\bwl\bwfla\emucomp\Html5Options.java
