@@ -19,8 +19,6 @@
 
 package de.bwl.bwfla.emucomp.ws;
 
-import javax.jws.WebService;
-
 /**
  * This is a webservice endpoint implementation whose sole purpose is to
  * publish the custom WSDL file (see wsdlLocation parameter).
@@ -34,7 +32,7 @@ import javax.jws.WebService;
  * ports on the same webservice, this webservice endpoint class is required
  * to serve the WSDL file and have the application server rewrite the endpoints.
  */
-@WebService(serviceName = "ComponentService", portName = "DontUseDummyPort", targetNamespace = "http://bwfla.bwl.de/api/emucomp", wsdlLocation = "WEB-INF/wsdl/Combine.wsdl")
+//@WebService(serviceName = "ComponentService", portName = "DontUseDummyPort", targetNamespace = "http://bwfla.bwl.de/api/emucomp", wsdlLocation = "WEB-INF/wsdl/Combine.wsdl")
 public class EaasService {
 
 }

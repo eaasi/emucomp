@@ -19,41 +19,31 @@
 
 package de.bwl.bwfla.emucomp.ws;
 
-import de.bwl.bwfla.common.exceptions.BWFLAException;
-import de.bwl.bwfla.emucomp.NodeManager;
-import de.bwl.bwfla.emucomp.api.ContainerComponent;
-
-import javax.inject.Inject;
-import javax.jws.WebService;
-import javax.servlet.annotation.WebServlet;
-import javax.xml.ws.soap.MTOM;
-
-
-@MTOM
-@WebServlet("/ComponentService/Container")
-@WebService(targetNamespace="http://bwfla.bwl.de/api/emucomp")
+//@MTOM
+//@WebServlet("/ComponentService/Container")
+//@WebService(targetNamespace="http://bwfla.bwl.de/api/emucomp")
 public class Container
 {
-    @Inject
-    protected NodeManager nodeManager;
-    
-	public void startContainer(String componentId) throws BWFLAException
-	{
-		final ContainerComponent component = this.lookup(componentId);
-		component.start();
-	}
-	
-	public void stopContainer(String componentId) throws BWFLAException
-	{
-		final ContainerComponent component = this.lookup(componentId);
-		component.stop();
-	}
-
-
-	/* =============== Internal Helpers =============== */
-
-	private ContainerComponent lookup(String id) throws BWFLAException
-	{
-		return nodeManager.getComponentById(id, ContainerComponent.class);
-	}
+//    @Inject
+//	protected NodeManager nodeManager;
+//
+//	public void startContainer(String componentId) throws BWFLAException
+//	{
+//		final ContainerComponent component = this.lookup(componentId);
+//		component.start();
+//	}
+//
+//	public void stopContainer(String componentId) throws BWFLAException
+//	{
+//		final ContainerComponent component = this.lookup(componentId);
+//		component.stop();
+//	}
+//
+//
+//	/* =============== Internal Helpers =============== */
+//
+//	private ContainerComponent lookup(String id) throws BWFLAException
+//	{
+//		return nodeManager.getComponentById(id, ContainerComponent.class);
+//	}
 }

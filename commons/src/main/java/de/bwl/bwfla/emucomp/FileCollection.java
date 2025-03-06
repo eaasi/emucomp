@@ -1,18 +1,19 @@
 package de.bwl.bwfla.emucomp;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import de.bwl.bwfla.common.utils.jaxb.JaxbType;
 
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.annotation.*;
-import java.util.ArrayList;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
 @XmlRootElement
-public class FileCollection {
-	@JsonbProperty("id")
+public class FileCollection extends JaxbType {
+	@JsonProperty("id")
 	public String id;
 
-	@JsonbProperty("files")
+	@JsonProperty("files")
 	public List<FileCollectionEntry> files;
 
 	@XmlElement
