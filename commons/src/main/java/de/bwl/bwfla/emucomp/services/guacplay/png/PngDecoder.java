@@ -19,7 +19,8 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.png;
 
-import de.bwl.bwfla.common.services.guacplay.util.ImageSize;
+
+import de.bwl.bwfla.emucomp.services.guacplay.util.ImageSize;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -27,7 +28,7 @@ import java.nio.ByteBuffer;
 import java.util.zip.CRC32;
 import java.util.zip.Inflater;
 
-import static de.bwl.bwfla.common.services.guacplay.png.PngDefs.*;
+import static de.bwl.bwfla.emucomp.services.guacplay.png.PngDefs.*;
 
 
 /** A reusable decoder for PNG images. */

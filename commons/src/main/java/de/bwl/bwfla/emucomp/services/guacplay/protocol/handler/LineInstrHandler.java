@@ -19,37 +19,36 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.protocol.handler;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.OpCode;
-import de.bwl.bwfla.common.services.guacplay.graphics.OffscreenCanvas;
-import de.bwl.bwfla.common.services.guacplay.protocol.Instruction;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionDescription;
 
+import de.bwl.bwfla.emucomp.services.guacplay.GuacDefs;
+import de.bwl.bwfla.emucomp.services.guacplay.graphics.OffscreenCanvas;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.Instruction;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.InstructionDescription;
 
 /**
  * Handler for Guacamole's <i>line-</i> instruction.
- * 
+ *
  * @see <a href="http://guac-dev.org/doc/gug/protocol-reference.html#line-instruction">
- *          Guacamole's protocol reference
- *      </a>
+ * Guacamole's protocol reference
+ * </a>
  */
-public class LineInstrHandler extends DrawingInstrHandler
-{
-	/** Constructor */
-	public LineInstrHandler(OffscreenCanvas canvas)
-	{
-		super(OpCode.LINE, canvas);
-	}
+public class LineInstrHandler extends DrawingInstrHandler {
+    /**
+     * Constructor
+     */
+    public LineInstrHandler(OffscreenCanvas canvas) {
+        super(GuacDefs.OpCode.LINE, canvas);
+    }
 
-	@Override
-	public void execute(InstructionDescription desc, Instruction instr) throws Exception
-	{
-		// Parse line's arguments
-		final int layer = instr.argAsInt(0);
-		final int x = instr.argAsInt(1);
-		final int y = instr.argAsInt(2);
-		
-		synchronized (canvas) {
-			canvas.addLineSubpath(layer, x, y);
-		}
-	}
+    @Override
+    public void execute(InstructionDescription desc, Instruction instr) throws Exception {
+        // Parse line's arguments
+        final int layer = instr.argAsInt(0);
+        final int x = instr.argAsInt(1);
+        final int y = instr.argAsInt(2);
+
+        synchronized (canvas) {
+            canvas.addLineSubpath(layer, x, y);
+        }
+    }
 }

@@ -19,9 +19,9 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.protocol.handler;
 
-import de.bwl.bwfla.common.services.guacplay.graphics.OffscreenCanvas;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionHandler;
 
+import de.bwl.bwfla.emucomp.services.guacplay.graphics.OffscreenCanvas;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.InstructionHandler;
 
 /** Base class for all drawing instructions. */
 public abstract class DrawingInstrHandler extends InstructionHandler
