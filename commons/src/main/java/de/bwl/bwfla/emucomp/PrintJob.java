@@ -1,15 +1,12 @@
 package de.bwl.bwfla.emucomp;
 
 
-import de.bwl.bwfla.common.utils.jaxb.JaxbType;
-
-import javax.activation.DataHandler;
-import javax.xml.bind.annotation.*;
-
+import jakarta.activation.DataHandler;
+import jakarta.xml.bind.annotation.*;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
-public class PrintJob extends JaxbType {
+public class PrintJob extends JsonType {
 
     @XmlElement
     private String label;

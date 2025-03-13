@@ -1,7 +1,7 @@
 package de.bwl.bwfla.emucomp;
 
 
-import com.google.gson.GsonBuilder;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.util.List;
 
@@ -21,7 +21,12 @@ public class FileCollection extends JsonType {
     }
 
     public static FileCollection fromValue(String data) {
-        return new GsonBuilder().create().fromJson(data, FileCollection.class);
+        try {
+            return objectMapperThreadLocal.get().readValue(data, FileCollection.class);
+        } catch (JsonProcessingException e) {
+            jsonLog.warning(e.getMessage());
+            return null;
+        }
     }
 
     public FileCollectionEntry getDefaultEntry() {

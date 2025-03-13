@@ -19,8 +19,8 @@
 
 package de.bwl.bwfla.emucomp.components.emulators;
 
-import de.bwl.bwfla.common.datatypes.EmuCompState;
 
+import de.bwl.bwfla.emucomp.components.EmuCompState;
 
 /** This class represents internal state of an EmulatorBean. */
 public final class EmulatorBeanState

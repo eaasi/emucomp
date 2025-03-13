@@ -19,100 +19,108 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.net;
 
+
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
+import jakarta.xml.bind.annotation.XmlType;
 import org.glyptodon.guacamole.protocol.GuacamoleClientInformation;
 import org.glyptodon.guacamole.protocol.GuacamoleConfiguration;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
+/**
+ * This class describes the parameters for the construction of {@link GuacTunnel}s.
+ */
+@XmlType(name = "tunnelConfig", namespace = "http://bwfla.bwl.de/common/datatypes")
+@XmlRootElement(name = "tunnelConfig")
+public final class TunnelConfig {
+    // Member fields
+
+    @XmlElement(name = "guacamoleConfiguration")
+    private final GuacConfigurationWrapper config;
+
+    @XmlElement(name = "guacamoleClientInformation")
+    private final GuacClientInformationWrapper info;
+
+    private IGuacInterceptor interceptor;
+    private String guachost;
+    private int guacport;
+
+    /**
+     * Port, used by the GUACD deamon.
+     */
+    public static final int GUACD_PORT = 4822;
 
 
-/** This class describes the parameters for the construction of {@link GuacTunnel}s. */
-@XmlType(name="tunnelConfig", namespace = "http://bwfla.bwl.de/common/datatypes")
-@XmlRootElement(name="tunnelConfig")
-public final class TunnelConfig
-{
-	// Member fields
-	
-	@XmlElement(name="guacamoleConfiguration")
-	private final GuacConfigurationWrapper config;
-	
-	@XmlElement(name="guacamoleClientInformation")
-	private final GuacClientInformationWrapper info;
+    /* Constructor */
+    public TunnelConfig() {
+        this("localhost", GUACD_PORT);
+    }
 
-	private IGuacInterceptor interceptor;
-	private String guachost;
-	private int guacport;
-	
-	/** Port, used by the GUACD deamon. */
-	public static final int GUACD_PORT	= 4822;
-	
-	
-	/* Constructor */
-	public TunnelConfig()
-	{
-		this("localhost", GUACD_PORT);
-	}
-	
-	/* Constructor */
-	public TunnelConfig(String guachost, int guacport)
-	{
-		this.config = new GuacConfigurationWrapper();
-		this.info = new GuacClientInformationWrapper();
-		this.interceptor = null;
-		this.guachost = guachost;
-		this.guacport = guacport;
-	}
+    /* Constructor */
+    public TunnelConfig(String guachost, int guacport) {
+        this.config = new GuacConfigurationWrapper();
+        this.info = new GuacClientInformationWrapper();
+        this.interceptor = null;
+        this.guachost = guachost;
+        this.guacport = guacport;
+    }
 
-	/** Returns the Gucamole's configuration. */
-	public GuacamoleConfiguration getGuacamoleConfiguration()
-	{
-		return config;
-	}
-	
-	/** Returns the information about Gucamole's client. */
-	public GuacamoleClientInformation getGuacamoleClientInformation()
-	{
-		return info;
-	}
-	
-	/** Registers the {@link IGuacInterceptor}. */
-	public void setInterceptor(IGuacInterceptor interceptor)
-	{
-		this.interceptor = interceptor;
-	}
-	
-	/** Returns the registered {@link IGuacInterceptor}. */
-	@XmlTransient
-	public IGuacInterceptor getInterceptor()
-	{
-		return interceptor;
-	}
-	
-	/** Returns the hostname of guacd. */
-	@XmlElement(name="guachost")
-	public String getGuacdHostname()
-	{
-		return guachost;
-	}
+    /**
+     * Returns the Gucamole's configuration.
+     */
+    public GuacamoleConfiguration getGuacamoleConfiguration() {
+        return config;
+    }
 
-	/** Sets the hostname of guacd. */
-	public void setGuacdHostname(String host)
-	{
-		this.guachost = host;
-	}
-	
-	/** Returns the port of guacd. */
-	@XmlElement(name="guacport")
-	public int getGuacdPort()
-	{
-		return guacport;
-	}
-	
-	/** Sets the port of guacd. */
-	public void setGuacdPort(int port)
-	{
-		this.guacport = port;
-	}
+    /**
+     * Returns the information about Gucamole's client.
+     */
+    public GuacamoleClientInformation getGuacamoleClientInformation() {
+        return info;
+    }
+
+    /**
+     * Registers the {@link IGuacInterceptor}.
+     */
+    public void setInterceptor(IGuacInterceptor interceptor) {
+        this.interceptor = interceptor;
+    }
+
+    /**
+     * Returns the registered {@link IGuacInterceptor}.
+     */
+    @XmlTransient
+    public IGuacInterceptor getInterceptor() {
+        return interceptor;
+    }
+
+    /**
+     * Returns the hostname of guacd.
+     */
+    @XmlElement(name = "guachost")
+    public String getGuacdHostname() {
+        return guachost;
+    }
+
+    /**
+     * Sets the hostname of guacd.
+     */
+    public void setGuacdHostname(String host) {
+        this.guachost = host;
+    }
+
+    /**
+     * Returns the port of guacd.
+     */
+    @XmlElement(name = "guacport")
+    public int getGuacdPort() {
+        return guacport;
+    }
+
+    /**
+     * Sets the port of guacd.
+     */
+    public void setGuacdPort(int port) {
+        this.guacport = port;
+    }
 }

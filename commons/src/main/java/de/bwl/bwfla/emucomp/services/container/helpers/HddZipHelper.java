@@ -19,9 +19,10 @@
 
 package de.bwl.bwfla.emucomp.services.container.helpers;
 
-import de.bwl.bwfla.common.services.container.types.Container;
-import de.bwl.bwfla.common.services.container.types.HddZipContainer;
-import de.bwl.bwfla.common.utils.Zip32Utils;
+
+import de.bwl.bwfla.emucomp.services.Zip32Utils;
+import de.bwl.bwfla.emucomp.services.container.types.Container;
+import de.bwl.bwfla.emucomp.services.container.types.HddZipContainer;
 
 import java.io.File;
 import java.io.IOException;

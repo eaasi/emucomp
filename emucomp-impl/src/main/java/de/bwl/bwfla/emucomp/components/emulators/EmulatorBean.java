@@ -19,40 +19,19 @@
 
 package de.bwl.bwfla.emucomp.components.emulators;
 
-import de.bwl.bwfla.blobstore.api.BlobDescription;
-import de.bwl.bwfla.blobstore.api.BlobHandle;
-import de.bwl.bwfla.blobstore.client.BlobStoreClient;
-import de.bwl.bwfla.common.datatypes.EmuCompState;
-import de.bwl.bwfla.common.datatypes.ProcessMonitorVID;
-import de.bwl.bwfla.common.exceptions.BWFLAException;
-import de.bwl.bwfla.common.exceptions.IllegalEmulatorStateException;
-import de.bwl.bwfla.common.services.guacplay.GuacDefs;
-import de.bwl.bwfla.common.services.guacplay.capture.ScreenShooter;
-import de.bwl.bwfla.common.services.guacplay.net.GuacInterceptorChain;
-import de.bwl.bwfla.common.services.guacplay.net.GuacTunnel;
-import de.bwl.bwfla.common.services.guacplay.net.TunnelConfig;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionBuilder;
-import de.bwl.bwfla.common.services.guacplay.record.SessionRecorder;
-import de.bwl.bwfla.common.utils.DeprecatedProcessRunner;
-import de.bwl.bwfla.common.utils.EaasFileUtils;
-import de.bwl.bwfla.common.utils.ProcessMonitor;
-import de.bwl.bwfla.common.utils.Zip32Utils;
 import de.bwl.bwfla.emucomp.*;
 import de.bwl.bwfla.emucomp.api.EmulatorComponent;
 import de.bwl.bwfla.emucomp.components.BindingsManager;
 import de.bwl.bwfla.emucomp.components.EaasComponentBean;
+import de.bwl.bwfla.emucomp.components.EmuCompState;
 import de.bwl.bwfla.emucomp.control.connectors.*;
+import de.bwl.bwfla.emucomp.services.guacplay.capture.ScreenShooter;
+import de.bwl.bwfla.emucomp.services.guacplay.net.TunnelConfig;
+import de.bwl.bwfla.emucomp.services.guacplay.record.SessionRecorder;
 import de.bwl.bwfla.emucomp.ws.MockedCollection;
 import de.bwl.bwfla.emucomp.xpra.IAudioStreamer;
 import de.bwl.bwfla.emucomp.xpra.PulseAudioStreamer;
 import org.apache.commons.io.FileUtils;
-import org.apache.tamaya.ConfigurationProvider;
-import org.apache.tamaya.inject.api.Config;
-import org.glyptodon.guacamole.GuacamoleException;
-import org.glyptodon.guacamole.net.GuacamoleTunnel;
-import org.glyptodon.guacamole.protocol.GuacamoleClientInformation;
-import org.glyptodon.guacamole.protocol.GuacamoleConfiguration;
-
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
 import javax.annotation.Resource;

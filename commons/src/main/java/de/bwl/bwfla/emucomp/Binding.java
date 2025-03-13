@@ -27,7 +27,7 @@
 
 package de.bwl.bwfla.emucomp;
 
-import javax.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.*;
 
 
 /**

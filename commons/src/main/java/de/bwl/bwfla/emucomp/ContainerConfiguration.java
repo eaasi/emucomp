@@ -22,7 +22,7 @@ package de.bwl.bwfla.emucomp;
 import de.bwl.bwfla.common.utils.jaxb.JaxbType;
 
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 

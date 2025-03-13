@@ -19,56 +19,52 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay;
 
-import de.bwl.bwfla.common.services.guacplay.net.IGuacInterceptor;
-import de.bwl.bwfla.common.services.guacplay.util.CharArrayWrapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import de.bwl.bwfla.emucomp.services.guacplay.net.IGuacInterceptor;
+import de.bwl.bwfla.emucomp.services.guacplay.util.CharArrayWrapper;
 
-public class GuacSessionLogger implements IGuacInterceptor
-{
-	private static final int MAX_CHARS_TO_PRINT = 80;
+import java.util.logging.Logger;
 
-	/** Logger instance. */
-	private final Logger log = LoggerFactory.getLogger(GuacSessionLogger.class);
+public class GuacSessionLogger implements IGuacInterceptor {
+    private static final int MAX_CHARS_TO_PRINT = 80;
 
-	@Override
-	public synchronized void onBeginConnection() throws Exception
-	{
-		log.info("========== GUACAMOLE SESSION START ==========");
-	}
+    /**
+     * Logger instance.
+     */
+    private final Logger log = Logger.getLogger(GuacSessionLogger.class.getName());
 
-	@Override
-	public synchronized void onEndConnection() throws Exception
-	{
-		log.info("========== GUACAMOLE SESSION END ===========");
-	}
+    @Override
+    public synchronized void onBeginConnection() throws Exception {
+        log.info("========== GUACAMOLE SESSION START ==========");
+    }
 
-	@Override
-	public synchronized boolean onClientMessage(CharArrayWrapper message) throws Exception
-	{
-		log.info("C2S: {}", GuacSessionLogger.getInstrHead(message));
-		return true;
-	}
+    @Override
+    public synchronized void onEndConnection() throws Exception {
+        log.info("========== GUACAMOLE SESSION END ===========");
+    }
 
-	@Override
-	public synchronized boolean onServerMessage(CharArrayWrapper message) throws Exception
-	{
-		log.info("S2C: {}", GuacSessionLogger.getInstrHead(message));
-		return true;
-	}
-	
-	private static String getInstrHead(CharArrayWrapper message)
-	{
-		final char[] data = message.array();
-		final int offset = message.offset();
-		final int length = message.length();
-		
-		final int count = Math.min(length, MAX_CHARS_TO_PRINT);
-		String instr = new String(data, offset, count);
-		if (length > MAX_CHARS_TO_PRINT)
-			instr += "...";
-		
-		return instr;
-	}
+    @Override
+    public synchronized boolean onClientMessage(CharArrayWrapper message) throws Exception {
+        log.info("C2S: " + GuacSessionLogger.getInstrHead(message));
+        return true;
+    }
+
+    @Override
+    public synchronized boolean onServerMessage(CharArrayWrapper message) throws Exception {
+        log.info("S2C: " + GuacSessionLogger.getInstrHead(message));
+        return true;
+    }
+
+    private static String getInstrHead(CharArrayWrapper message) {
+        final char[] data = message.array();
+        final int offset = message.offset();
+        final int length = message.length();
+
+        final int count = Math.min(length, MAX_CHARS_TO_PRINT);
+        String instr = new String(data, offset, count);
+        if (length > MAX_CHARS_TO_PRINT)
+            instr += "...";
+
+        return instr;
+    }
 }

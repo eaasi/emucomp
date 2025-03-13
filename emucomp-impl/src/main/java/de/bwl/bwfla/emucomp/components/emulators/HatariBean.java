@@ -19,12 +19,8 @@
 
 package de.bwl.bwfla.emucomp.components.emulators;
 
-import de.bwl.bwfla.common.exceptions.BWFLAException;
-import de.bwl.bwfla.common.utils.Zip32Utils;
-import de.bwl.bwfla.emucomp.Drive;
 import de.bwl.bwfla.emucomp.MachineConfiguration;
-import de.bwl.bwfla.emucomp.Nic;
-import org.apache.tamaya.inject.api.Config;
+import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 
 import javax.inject.Inject;
 import java.io.IOException;
