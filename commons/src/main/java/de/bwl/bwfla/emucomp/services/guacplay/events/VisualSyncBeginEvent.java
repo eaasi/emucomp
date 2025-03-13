@@ -19,9 +19,9 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.events;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.EventType;
-import de.bwl.bwfla.common.services.guacplay.protocol.Instruction;
 
+import de.bwl.bwfla.emucomp.services.guacplay.GuacDefs;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.Instruction;
 
 /**
  * A special event, representing the begin of a visual-sync phase.
@@ -48,7 +48,7 @@ public class VisualSyncBeginEvent extends GuacEvent
 	 */
 	public VisualSyncBeginEvent(Object source, long timestamp, Instruction instr)
 	{
-		super(EventType.VSYNC_BEGIN, source);
+		super(GuacDefs.EventType.VSYNC_BEGIN, source);
 		this.instruction = instr;
 		this.timestamp = timestamp;
 	}
