@@ -19,8 +19,8 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.protocol;
 
-import de.bwl.bwfla.common.exceptions.BWFLAException;
 
+import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 
 /**
  * An exception of this type is thrown, when the {@link InstructionParser}

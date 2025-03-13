@@ -19,66 +19,66 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.protocol.handler;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.OpCode;
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.SourceType;
-import de.bwl.bwfla.common.services.guacplay.protocol.Instruction;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionDescription;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionHandler;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionParserException;
+import de.bwl.bwfla.emucomp.services.guacplay.GuacDefs.OpCode;
+import de.bwl.bwfla.emucomp.services.guacplay.GuacDefs.SourceType;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.Instruction;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.InstructionDescription;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.InstructionHandler;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.InstructionParserException;
 
 import java.util.ArrayList;
 
-
 /**
  * Handler for Guacamole's <i>size-</i> instruction (server-side).
- * 
+ *
  * @see <a href="http://guac-dev.org/doc/gug/protocol-reference.html#size-instruction">
- *          Guacamole's protocol reference
- *      </a>
+ * Guacamole's protocol reference
+ * </a>
  */
-public class SizeInstrHandler extends InstructionHandler
-{
-	private ArrayList<ISizeInstrListener> listeners;
-	
-	
-	/** Constructor */
-	public SizeInstrHandler()
-	{
-		this(2);
-	}
-	
-	/** Constructor */
-	public SizeInstrHandler(int numListeners)
-	{
-		super(OpCode.SIZE);
-		this.listeners = new ArrayList<ISizeInstrListener>(numListeners);
-	}
-	
-	/** Add a new listener, that will be notified, when the size-instruction is recieved. */
-	public void addListener(ISizeInstrListener listener)
-	{
-		listeners.add(listener);
-	}
-	
-	@Override
-	public void execute(InstructionDescription desc, Instruction instruction) throws InstructionParserException
-	{
-		// The Guacamole protocol contains two different size instructions!
-		// But we care only for the server-side one!
-		if (desc.getSourceType() != SourceType.SERVER)
-			return;
-		
-		// Get the arguments
-		final int layer = instruction.argAsInt(0);
-		final int width = instruction.argAsInt(1);
-		final int height = instruction.argAsInt(2);
-		
-		// Ignore invalid sizes!
-		if (width < 1 || height < 1)
-			return;
-		
-		// Update all registered listeners
-		for (ISizeInstrListener listener : listeners)
-			listener.resize(layer, width, height);
-	}
+public class SizeInstrHandler extends InstructionHandler {
+    private ArrayList<ISizeInstrListener> listeners;
+
+
+    /**
+     * Constructor
+     */
+    public SizeInstrHandler() {
+        this(2);
+    }
+
+    /**
+     * Constructor
+     */
+    public SizeInstrHandler(int numListeners) {
+        super(OpCode.SIZE);
+        this.listeners = new ArrayList<ISizeInstrListener>(numListeners);
+    }
+
+    /**
+     * Add a new listener, that will be notified, when the size-instruction is recieved.
+     */
+    public void addListener(ISizeInstrListener listener) {
+        listeners.add(listener);
+    }
+
+    @Override
+    public void execute(InstructionDescription desc, Instruction instruction) throws InstructionParserException {
+        // The Guacamole protocol contains two different size instructions!
+        // But we care only for the server-side one!
+        if (desc.getSourceType() != SourceType.SERVER)
+            return;
+
+        // Get the arguments
+        final int layer = instruction.argAsInt(0);
+        final int width = instruction.argAsInt(1);
+        final int height = instruction.argAsInt(2);
+
+        // Ignore invalid sizes!
+        if (width < 1 || height < 1)
+            return;
+
+        // Update all registered listeners
+        for (ISizeInstrListener listener : listeners)
+            listener.resize(layer, width, height);
+    }
 }

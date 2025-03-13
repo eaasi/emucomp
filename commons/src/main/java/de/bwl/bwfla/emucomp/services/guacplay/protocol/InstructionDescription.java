@@ -19,8 +19,8 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.protocol;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.SourceType;
 
+import de.bwl.bwfla.emucomp.services.guacplay.GuacDefs.*;
 
 /** A helper class, containing instruction-specific data. */
 public class InstructionDescription
