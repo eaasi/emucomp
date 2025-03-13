@@ -19,46 +19,40 @@
 
 package de.bwl.bwfla.emucomp;
 
-import de.bwl.bwfla.common.utils.jaxb.JaxbType;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.xml.bind.annotation.*;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "dockerContainerConfiguration", namespace = "http://bwfla.bwl.de/common/datatypes", propOrder = {
-		"image",
+        "image",
 })
 @XmlRootElement(name = "dockerContainerConfiguration", namespace = "http://bwfla.bwl.de/common/datatypes")
-public class DockerContainerConfiguration extends ContainerConfiguration
-{
-	@XmlElement(namespace = "http://bwfla.bwl.de/common/datatypes", required = true)
-	protected String image;
+public class DockerContainerConfiguration extends ContainerConfiguration {
+    @XmlElement(namespace = "http://bwfla.bwl.de/common/datatypes", required = true)
+    protected String image;
 
-	public String getImage()
-	{
-		return image;
-	}
+    public String getImage() {
+        return image;
+    }
 
-	public void setImage(String image)
-	{
-		this.image = image;
-	}
+    public void setImage(String image) {
+        this.image = image;
+    }
 
-	public static DockerContainerConfiguration fromValue(String data) throws JAXBException
-	{
-		return JaxbType.fromValue(data, DockerContainerConfiguration.class);
-	}
+    public static DockerContainerConfiguration fromValue(String data) throws JsonProcessingException {
+        return objectMapperThreadLocal.get().readValue(data, DockerContainerConfiguration.class);
+    }
 
-	public DockerContainerConfiguration copy()
-	{
-		try {
-			return DockerContainerConfiguration.fromValue(this.value());
-		}
-		catch (JAXBException e) {
-			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
-			return null;
-		}
-	}
+    public DockerContainerConfiguration copy() {
+        try {
+            return DockerContainerConfiguration.fromValue(this.value());
+        } catch (JsonProcessingException e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+            return null;
+        }
+    }
 }

@@ -20,6 +20,7 @@
 package de.bwl.bwfla.emucomp;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import jakarta.xml.bind.annotation.*;
@@ -91,8 +92,8 @@ public class Environment extends ComponentConfiguration {
         this.description = value;
     }
 
-    public static Environment fromValue(String data) {
-        return new GsonBuilder().disableHtmlEscaping().create().fromJson(data, Environment.class);
+    public static Environment fromValue(String data) throws JsonProcessingException {
+        return objectMapperThreadLocal.get().readValue(data, Environment.class);
     }
 
     public Environment copy() {
@@ -102,10 +103,6 @@ public class Environment extends ComponentConfiguration {
             Logger.getLogger(this.getClass().getName()).log(Level.WARNING, e.getMessage(), e);
             return null;
         }
-    }
-
-    public String value() {
-        return new GsonBuilder().setPrettyPrinting().create().toJson(this);
     }
 
     public String getMetaDataVersion() {

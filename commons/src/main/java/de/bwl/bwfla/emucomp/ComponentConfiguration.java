@@ -1,6 +1,9 @@
 package de.bwl.bwfla.emucomp;
 
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
@@ -13,6 +16,6 @@ package de.bwl.bwfla.emucomp;
         @JsonSubTypes.Type(value = VdeSocksConfiguration.class, name = "vdeSocks"),
         @JsonSubTypes.Type(value = NodeTcpConfiguration.class, name = "nodeTcp")
 })
-public abstract class ComponentConfiguration {
+public abstract class ComponentConfiguration extends JsonType{
 
 }
