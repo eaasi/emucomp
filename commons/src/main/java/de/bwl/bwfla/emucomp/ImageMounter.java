@@ -1,7 +1,7 @@
 package de.bwl.bwfla.emucomp;
 
 
-import de.bwl.bwfla.common.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 
 import java.io.File;
 import java.io.IOException;

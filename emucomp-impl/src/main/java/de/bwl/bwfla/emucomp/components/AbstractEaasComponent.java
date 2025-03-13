@@ -22,7 +22,7 @@ package de.bwl.bwfla.emucomp.components;
 
 
 import de.bwl.bwfla.blobstore.api.BlobHandle;
-import de.bwl.bwfla.common.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 import de.bwl.bwfla.common.services.sse.EventSink;
 import de.bwl.bwfla.emucomp.ComponentState;
 import de.bwl.bwfla.emucomp.api.ClusterComponent;

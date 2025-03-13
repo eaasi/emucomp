@@ -19,7 +19,6 @@
 
 package de.bwl.bwfla.emucomp.components;
 
-import de.bwl.bwfla.common.logging.PrefixLogger;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
