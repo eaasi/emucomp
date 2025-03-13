@@ -19,6 +19,7 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.capture;
 
+import de.bwl.bwfla.emucomp.services.guacplay.GuacDefs;
 import de.bwl.bwfla.emucomp.services.guacplay.GuacDefs.ExtOpCode;
 import de.bwl.bwfla.emucomp.services.guacplay.GuacDefs.OpCode;
 import de.bwl.bwfla.emucomp.services.guacplay.graphics.OffscreenCanvas;
@@ -26,6 +27,7 @@ import de.bwl.bwfla.emucomp.services.guacplay.net.IGuacInterceptor;
 import de.bwl.bwfla.emucomp.services.guacplay.protocol.BufferedMessageProcessor;
 import de.bwl.bwfla.emucomp.services.guacplay.protocol.InstructionBuilder;
 import de.bwl.bwfla.emucomp.services.guacplay.protocol.handler.*;
+import de.bwl.bwfla.emucomp.services.guacplay.util.CharArrayWrapper;
 import de.bwl.bwfla.emucomp.services.guacplay.util.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -184,7 +186,7 @@ public class ScreenShooter implements IGuacInterceptor {
      * Request a new screenshot.
      */
     public void takeScreenshot() {
-        msgProcessor.postMessage(SourceType.INTERNAL, stopwatch.timems(), SCREENSHOT_MESSAGE);
+        msgProcessor.postMessage(GuacDefs.SourceType.INTERNAL, stopwatch.timems(), SCREENSHOT_MESSAGE);
     }
 
     /**
@@ -222,7 +224,7 @@ public class ScreenShooter implements IGuacInterceptor {
     @Override
     public boolean onServerMessage(CharArrayWrapper message) throws Exception {
         // Pass the message unmodified to the processor and forward it
-        if (msgProcessor.postMessage(SourceType.SERVER, stopwatch.timems(), message) == 1)
+        if (msgProcessor.postMessage(GuacDefs.SourceType.SERVER, stopwatch.timems(), message) == 1)
             msgWorker.wakeup();
 
         return true;

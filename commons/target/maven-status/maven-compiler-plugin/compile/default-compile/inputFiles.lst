@@ -59,6 +59,7 @@
 /usr/local/bin/emucomp/commons/src/main/java/de/bwl/bwfla/emucomp/logging/LoggerFactory.java
 /usr/local/bin/emucomp/commons/src/main/java/de/bwl/bwfla/emucomp/logging/PrefixLogger.java
 /usr/local/bin/emucomp/commons/src/main/java/de/bwl/bwfla/emucomp/logging/PrefixLoggerContext.java
+/usr/local/bin/emucomp/commons/src/main/java/de/bwl/bwfla/emucomp/services/Zip32Utils.java
 /usr/local/bin/emucomp/commons/src/main/java/de/bwl/bwfla/emucomp/services/container/helpers/CdromIsoHelper.java
 /usr/local/bin/emucomp/commons/src/main/java/de/bwl/bwfla/emucomp/services/container/helpers/ContainerHelper.java
 /usr/local/bin/emucomp/commons/src/main/java/de/bwl/bwfla/emucomp/services/container/helpers/ContainerHelperFactory.java

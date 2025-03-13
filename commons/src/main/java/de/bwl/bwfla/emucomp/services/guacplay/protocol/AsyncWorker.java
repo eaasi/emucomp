@@ -19,8 +19,9 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.protocol;
 
-import de.bwl.bwfla.common.services.guacplay.util.ConditionVariable;
-import de.bwl.bwfla.common.services.guacplay.util.PaddedAtomicInteger;
+
+import de.bwl.bwfla.emucomp.services.guacplay.util.ConditionVariable;
+import de.bwl.bwfla.emucomp.services.guacplay.util.PaddedAtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
