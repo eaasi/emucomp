@@ -3,5 +3,7 @@ quarkus:
     name: emucomp-impl
   config:
     locations:
-      - default.yml
-      - blob-default.yml
+      - classpath:/default.yml
+      - classpath:/blob-default.yml
+      - classpath:/connection.yml
+      - classpath:/threads.yml

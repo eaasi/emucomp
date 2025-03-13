@@ -1,9 +1,7 @@
 package de.bwl.bwfla.emucomp;
 
-import de.bwl.bwfla.common.utils.NetworkUtils;
 
-import javax.xml.bind.annotation.*;
-
+import jakarta.xml.bind.annotation.*;
 
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(namespace = "http://bwfla.bwl.de/common/datatypes")

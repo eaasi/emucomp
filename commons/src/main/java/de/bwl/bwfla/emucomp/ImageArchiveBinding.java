@@ -1,133 +1,126 @@
 package de.bwl.bwfla.emucomp;
 
-import de.bwl.bwfla.common.utils.jaxb.JaxbType;
 
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.annotation.*;
+import com.google.gson.GsonBuilder;
+import jakarta.xml.bind.annotation.*;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "imageArchiveBinding", namespace = "http://bwfla.bwl.de/common/datatypes", propOrder = { "urlPrefix",
-		"imageId", "type", "fileSystemType", "backendName" })
+@XmlType(name = "imageArchiveBinding", namespace = "http://bwfla.bwl.de/common/datatypes", propOrder = {"urlPrefix",
+        "imageId", "type", "fileSystemType", "backendName"})
 @XmlRootElement(namespace = "http://bwfla.bwl.de/common/datatypes")
-public class ImageArchiveBinding extends Binding
-{
-	// transient
-	protected String urlPrefix = null;
+public class ImageArchiveBinding extends Binding {
+    // transient
+    protected String urlPrefix = null;
 
-	@XmlElement(namespace = "http://bwfla.bwl.de/common/datatypes", required = true)
-	protected String backendName;
+    @XmlElement(namespace = "http://bwfla.bwl.de/common/datatypes", required = true)
+    protected String backendName;
 
-	@XmlElement(namespace = "http://bwfla.bwl.de/common/datatypes", required = true)
-	protected String imageId;
+    @XmlElement(namespace = "http://bwfla.bwl.de/common/datatypes", required = true)
+    protected String imageId;
 
-	@XmlElement(namespace = "http://bwfla.bwl.de/common/datatypes", required = true)
-	protected String type;
+    @XmlElement(namespace = "http://bwfla.bwl.de/common/datatypes", required = true)
+    protected String type;
 
-	@XmlElement(namespace = "http://bwfla.bwl.de/common/datatypes", required = false)
-	protected String fileSystemType;
+    @XmlElement(namespace = "http://bwfla.bwl.de/common/datatypes", required = false)
+    protected String fileSystemType;
 
-	public ImageArchiveBinding()
-	{
-		backendName = null;
-		urlPrefix = null;
-		imageId = null;
-		type = null;
-		fileSystemType = null;
-	}
-	
-	public ImageArchiveBinding(String backend, String urlPrefix, String imageId, String type)
-	{
-		this(backend, urlPrefix, imageId, type,null);
-	}
+    public ImageArchiveBinding() {
+        backendName = null;
+        urlPrefix = null;
+        imageId = null;
+        type = null;
+        fileSystemType = null;
+    }
 
-	public ImageArchiveBinding(String backend, String urlPrefix, String imageId, String type, String fileSystemType)
-	{
-		this.backendName = backend;
-		this.urlPrefix = urlPrefix;
-		this.imageId = imageId;
-		this.type = type;
-		this.fileSystemType = fileSystemType;
-	}
-	
-	public void copy(ImageArchiveBinding b)
-	{
-		this.backendName = b.backendName;
-		this.urlPrefix = b.urlPrefix;
-		this.imageId = b.imageId;
-		this.type = b.type;
-		this.fileSystemType = b.fileSystemType;
-	}
+    public ImageArchiveBinding(String backend, String urlPrefix, String imageId, String type) {
+        this(backend, urlPrefix, imageId, type, null);
+    }
 
-	/** Replaces this with all non-null fields from other */
-	public void update(ImageArchiveBinding other)
-	{
-		if (other.backendName != null)
-			this.backendName = other.backendName;
+    public ImageArchiveBinding(String backend, String urlPrefix, String imageId, String type, String fileSystemType) {
+        this.backendName = backend;
+        this.urlPrefix = urlPrefix;
+        this.imageId = imageId;
+        this.type = type;
+        this.fileSystemType = fileSystemType;
+    }
 
-		if (other.urlPrefix != null)
-			this.urlPrefix = other.urlPrefix;
+    public void copy(ImageArchiveBinding b) {
+        this.backendName = b.backendName;
+        this.urlPrefix = b.urlPrefix;
+        this.imageId = b.imageId;
+        this.type = b.type;
+        this.fileSystemType = b.fileSystemType;
+    }
 
-		if (other.imageId != null)
-			this.imageId = other.imageId;
+    /**
+     * Replaces this with all non-null fields from other
+     */
+    public void update(ImageArchiveBinding other) {
+        if (other.backendName != null)
+            this.backendName = other.backendName;
 
-		if (other.type != null)
-			this.type = other.type;
+        if (other.urlPrefix != null)
+            this.urlPrefix = other.urlPrefix;
 
-		if (other.fileSystemType != null)
-			this.fileSystemType = other.fileSystemType;
-	}
+        if (other.imageId != null)
+            this.imageId = other.imageId;
 
-	public String getBackendName() {
-		return backendName;
-	}
+        if (other.type != null)
+            this.type = other.type;
 
-	public void setBackendName(String name) {
-		this.backendName = name;
-	}
+        if (other.fileSystemType != null)
+            this.fileSystemType = other.fileSystemType;
+    }
 
-	public String getUrlPrefix() {
-		return urlPrefix;
-	}
+    public String getBackendName() {
+        return backendName;
+    }
 
-	public void setUrlPrefix(String host) {
-		if (host != null && !host.endsWith("/"))
-			host += "/";
+    public void setBackendName(String name) {
+        this.backendName = name;
+    }
 
-		this.urlPrefix = host;
-	}
+    public String getUrlPrefix() {
+        return urlPrefix;
+    }
 
-	public String getImageId() {
-		return imageId;
-	}
+    public void setUrlPrefix(String host) {
+        if (host != null && !host.endsWith("/"))
+            host += "/";
 
-	public void setImageId(String imageId) {
-		this.imageId = imageId;
-	}
+        this.urlPrefix = host;
+    }
 
-	public String getType() {
-		return type;
-	}
+    public String getImageId() {
+        return imageId;
+    }
 
-	public void setType(String type) {
-		this.type = type;
-	}
+    public void setImageId(String imageId) {
+        this.imageId = imageId;
+    }
 
-	public String getFileSystemType() {
-		return fileSystemType;
-	}
+    public String getType() {
+        return type;
+    }
 
-	public void setFileSystemType(String type) {
-		this.fileSystemType = type;
-	}
+    public void setType(String type) {
+        this.type = type;
+    }
 
-	@Override
-	public String getUrl()
-	{
-		return urlPrefix + imageId;
-	}
+    public String getFileSystemType() {
+        return fileSystemType;
+    }
 
-	public static ImageArchiveBinding fromValue(String value) throws JAXBException
-	{
-		return JaxbType.fromValue(value, ImageArchiveBinding.class);
-	}
+    public void setFileSystemType(String type) {
+        this.fileSystemType = type;
+    }
+
+    @Override
+    public String getUrl() {
+        return urlPrefix + imageId;
+    }
+
+    public static ImageArchiveBinding fromValue(String value) {
+        return new GsonBuilder().create().fromJson(value, ImageArchiveBinding.class);
+    }
 }

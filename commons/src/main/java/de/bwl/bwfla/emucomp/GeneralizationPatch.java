@@ -1,9 +1,7 @@
 package de.bwl.bwfla.emucomp;
 
-import de.bwl.bwfla.common.utils.jaxb.JaxbType;
-
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.annotation.*;
+import com.google.gson.GsonBuilder;
+import jakarta.xml.bind.annotation.*;
 
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -21,7 +19,7 @@ public class GeneralizationPatch extends Environment {
         return imageGeneralization;
     }
 
-    public static GeneralizationPatch fromValue(String data) throws JAXBException {
-        return JaxbType.fromValue(data, GeneralizationPatch.class);
+    public static GeneralizationPatch fromValue(String value) {
+        return new GsonBuilder().create().fromJson(value, GeneralizationPatch.class);
     }
 }

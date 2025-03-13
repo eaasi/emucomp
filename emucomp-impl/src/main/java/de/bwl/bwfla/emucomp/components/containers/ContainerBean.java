@@ -19,16 +19,11 @@
 
 package de.bwl.bwfla.emucomp.components.containers;
 
-import de.bwl.bwfla.blobstore.api.BlobDescription;
-import de.bwl.bwfla.blobstore.api.BlobHandle;
-import de.bwl.bwfla.blobstore.client.BlobStoreClient;
-import de.bwl.bwfla.common.exceptions.BWFLAException;
-import de.bwl.bwfla.common.utils.DeprecatedProcessRunner;
+import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 import de.bwl.bwfla.emucomp.*;
 import de.bwl.bwfla.emucomp.api.ContainerComponent;
 import de.bwl.bwfla.emucomp.components.BindingsManager;
 import de.bwl.bwfla.emucomp.components.EaasComponentBean;
-import org.apache.tamaya.inject.api.Config;
 
 import javax.annotation.Resource;
 import javax.enterprise.concurrent.ManagedThreadFactory;
@@ -53,7 +48,8 @@ public abstract class ContainerBean extends EaasComponentBean implements Contain
 
 	protected final BindingsManager bindings = new BindingsManager();
 
-	@Resource(lookup = "java:jboss/ee/concurrency/factory/default")
+	@Inject
+	@Resource
 	protected ManagedThreadFactory workerThreadFactory;
 
 	@Inject

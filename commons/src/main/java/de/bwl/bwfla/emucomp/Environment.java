@@ -19,11 +19,11 @@
 
 package de.bwl.bwfla.emucomp;
 
-import de.bwl.bwfla.common.datatypes.EnvironmentDescription;
-import de.bwl.bwfla.common.utils.jaxb.JaxbType;
 
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.annotation.*;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
+import jakarta.xml.bind.annotation.*;
+
 import java.time.Instant;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,29 +31,29 @@ import java.util.logging.Logger;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "environment", namespace = "http://bwfla.bwl.de/common/datatypes", propOrder = {
-	Environment.Fields.IDENTIFIER,
-	Environment.Fields.TIMESTAMP,
-    "description",
-    "metaDataVersion",
-    "userTag",
-    "configurationType"
+        Environment.Fields.IDENTIFIER,
+        Environment.Fields.TIMESTAMP,
+        "description",
+        "metaDataVersion",
+        "userTag",
+        "configurationType"
 })
 @XmlSeeAlso({
-    MachineConfiguration.class,
-	MachineConfigurationTemplate.class,
-    DockerContainerConfiguration.class,
-    OciContainerConfiguration.class,
-	GeneralizationPatch.class
+        MachineConfiguration.class,
+        MachineConfigurationTemplate.class,
+        DockerContainerConfiguration.class,
+        OciContainerConfiguration.class,
+        GeneralizationPatch.class
 //    NetworkEnvironment.class
 })
 public class Environment extends ComponentConfiguration {
 
-	@XmlElement(name = Fields.IDENTIFIER, namespace = "http://bwfla.bwl.de/common/datatypes", required = true)
-	protected String id;
+    @XmlElement(name = Fields.IDENTIFIER, namespace = "http://bwfla.bwl.de/common/datatypes", required = true)
+    protected String id;
 
-	@XmlElement(name = Fields.TIMESTAMP, namespace = "http://bwfla.bwl.de/common/datatypes")
-	protected String timestamp = Instant.now().toString();
-    
+    @XmlElement(name = Fields.TIMESTAMP, namespace = "http://bwfla.bwl.de/common/datatypes")
+    protected String timestamp = Instant.now().toString();
+
     @XmlElement(namespace = "http://bwfla.bwl.de/common/datatypes", required = true)
     protected EnvironmentDescription description;
 
@@ -75,42 +75,46 @@ public class Environment extends ComponentConfiguration {
         this.id = value;
     }
 
-	public String getTimestamp() {
-		return timestamp;
-	}
+    public String getTimestamp() {
+        return timestamp;
+    }
 
-	public void setTimestamp(String value) {
-		this.timestamp = value;
-	}
+    public void setTimestamp(String value) {
+        this.timestamp = value;
+    }
 
-	public EnvironmentDescription getDescription() {
+    public EnvironmentDescription getDescription() {
         return description;
     }
 
     public void setDescription(EnvironmentDescription value) {
         this.description = value;
     }
-    
-    public static Environment fromValue(String data) throws JAXBException {
-        return JaxbType.fromValue(data, Environment.class);
-   	}
-    
-	public Environment copy() {
-		try {
-			return Environment.fromValue(this.value());
-		} catch (JAXBException e) {
+
+    public static Environment fromValue(String data) {
+        return new GsonBuilder().disableHtmlEscaping().create().fromJson(data, Environment.class);
+    }
+
+    public Environment copy() {
+        try {
+            return Environment.fromValue(this.value());
+        } catch (Exception e) {
             Logger.getLogger(this.getClass().getName()).log(Level.WARNING, e.getMessage(), e);
-			return null;
-		}
-	}
+            return null;
+        }
+    }
 
-	public String getMetaDataVersion() {
-		return metaDataVersion;
-	}
+    public String value() {
+        return new GsonBuilder().setPrettyPrinting().create().toJson(this);
+    }
 
-	public void setMetaDataVersion(String string) {
-		this.metaDataVersion = string;
-	}
+    public String getMetaDataVersion() {
+        return metaDataVersion;
+    }
+
+    public void setMetaDataVersion(String string) {
+        this.metaDataVersion = string;
+    }
 
     public String getUserTag() {
         return userTag;
@@ -125,10 +129,11 @@ public class Environment extends ComponentConfiguration {
     }
 
 
-	/** Field names definition */
-	public final class Fields
-	{
-		public static final String IDENTIFIER = "id";
-		public static final String TIMESTAMP  = "timestamp";
-	}
+    /**
+     * Field names definition
+     */
+    public final class Fields {
+        public static final String IDENTIFIER = "id";
+        public static final String TIMESTAMP = "timestamp";
+    }
 }

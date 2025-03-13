@@ -19,10 +19,9 @@
 
 package de.bwl.bwfla.emucomp;
 
-import de.bwl.bwfla.common.utils.jaxb.JaxbType;
+import com.google.gson.GsonBuilder;
+import jakarta.xml.bind.annotation.*;
 
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -251,14 +250,14 @@ public class MachineConfiguration extends Environment {
 
     }
 
-    public static MachineConfiguration fromValue(String data) throws JAXBException {
-        return JaxbType.fromValue(data, MachineConfiguration.class);
+    public static MachineConfiguration fromValue(String data) {
+        return new GsonBuilder().create().fromJson(data, MachineConfiguration.class);
     }
 
     public MachineConfiguration copy() {
         try {
             return MachineConfiguration.fromValue(this.value());
-        } catch (JAXBException e) {
+        } catch (Exception e) {
             Logger.getLogger(MachineConfiguration.class.getName()).log(Level.WARNING, e.getMessage(), e);
             return null;
         }

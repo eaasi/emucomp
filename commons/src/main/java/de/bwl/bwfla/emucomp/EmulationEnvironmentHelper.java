@@ -18,16 +18,16 @@
  */
 package de.bwl.bwfla.emucomp;
 
-import de.bwl.bwfla.common.exceptions.BWFLAException;
-import de.bwl.bwfla.common.services.container.helpers.ContainerHelper;
-import de.bwl.bwfla.common.services.container.helpers.ContainerHelperFactory;
-import de.bwl.bwfla.common.services.container.types.Container;
-import de.bwl.bwfla.common.services.container.types.Container.Filesystem;
-import de.bwl.bwfla.common.utils.Pair;
 
-import javax.xml.bind.JAXBException;
+import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.services.container.helpers.ContainerHelper;
+import de.bwl.bwfla.emucomp.services.container.helpers.ContainerHelperFactory;
+import de.bwl.bwfla.emucomp.services.container.types.Container;
+import jakarta.xml.bind.JAXBException;
+
 import java.io.File;
 import java.util.*;
+import java.util.List;
 import java.util.logging.Logger;
 
 import static de.bwl.bwfla.emucomp.Binding.AccessType.*;
@@ -141,26 +141,21 @@ public class EmulationEnvironmentHelper {
 	}
 
 	private static String _registerDataSource(String conf, String ref, String type) {
-		try {
-			MachineConfiguration env = MachineConfiguration.fromValue(conf);
+        MachineConfiguration env = MachineConfiguration.fromValue(conf);
 
-			Drive.DriveType t = DriveType.valueOf(type);
-			Drive d = findEmptyDrive(env, t);
-			if (d != null) {
-				Binding r = new Binding();
-				String id = UUID.randomUUID().toString();
-				r.setId(id);
-				r.setUrl(ref);
-				r.setAccess(COW);
-				env.getAbstractDataResource().add(r);
-				d.setData("binding://" + id);
-			}
-			return env.toString();
-		} catch (JAXBException e) {
-			log.severe("invalid config format, got " + conf);
-			return null;
-		}
-	}
+        DriveType t = DriveType.valueOf(type);
+        Drive d = findEmptyDrive(env, t);
+        if (d != null) {
+            Binding r = new Binding();
+            String id = UUID.randomUUID().toString();
+            r.setId(id);
+            r.setUrl(ref);
+            r.setAccess(COW);
+            env.getAbstractDataResource().add(r);
+            d.setData("binding://" + id);
+        }
+        return env.toString();
+    }
 
 //	/**
 //	 * Drives capable to accept ready made images.
@@ -215,12 +210,8 @@ public class EmulationEnvironmentHelper {
 		xml = _registerDataSource(xml, ref, type.name());
 		if (xml == null)
 			return null;
-		try {
-			return Environment.fromValue(xml);
-		} catch (JAXBException e) {
-			throw new BWFLAException("register data source failed: " + e.getMessage(), e);
-		}
-	}
+        return Environment.fromValue(xml);
+    }
 
 	public static String addBinding(MachineConfiguration env, String url) {
 		return addBinding(env, url, COW);
@@ -445,10 +436,10 @@ public class EmulationEnvironmentHelper {
 		List<Pair<String, String>> devices = EmulationEnvironmentHelper
 				.getHelperDrives((MachineConfiguration) _environment);
 
-		Filesystem fs = null;
+		Container.Filesystem fs = null;
 		for (Pair<String, String> device : devices)
 			if (device.getA().equalsIgnoreCase(_dev))
-				fs = Filesystem.valueOf(device.getB().toUpperCase());
+				fs = Container.Filesystem.valueOf(device.getB().toUpperCase());
 
 		if (fs == null) {
 			log.severe("could not determine filesystem to uploaded attach files for the device (skipping): " + _dev);

@@ -23,25 +23,24 @@ package de.bwl.bwfla.emucomp;
 import de.bwl.bwfla.common.exceptions.BWFLAException;
 import de.bwl.bwfla.common.logging.PrefixLogger;
 import de.bwl.bwfla.emucomp.components.AbstractEaasComponent;
-import de.bwl.bwfla.emucomp.components.containers.ContainerBean;
 import de.bwl.bwfla.emucomp.components.emulators.EmulatorBean;
 import de.bwl.bwfla.emucomp.components.network.NetworkSwitchBean;
 import de.bwl.bwfla.emucomp.components.network.NodeTcpBean;
 import de.bwl.bwfla.emucomp.components.network.VdeSlirpBean;
 import de.bwl.bwfla.emucomp.components.network.VdeSocksBean;
-import javax.enterprise.context.ApplicationScoped;
-import javax.xml.bind.JAXBException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tamaya.inject.api.Config;
+import org.eclipse.microprofile.context.ManagedExecutor;
 
+import javax.annotation.Resource;
 import javax.enterprise.concurrent.ManagedScheduledExecutorService;
 import javax.enterprise.concurrent.ManagedThreadFactory;
-import javax.annotation.Resource;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.xml.bind.JAXBException;
 import java.time.Duration;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -50,17 +49,19 @@ public class NodeManager {
     @Inject
     protected PrefixLogger plog;
 
+    @Inject
+    @Resource
+    protected ManagedThreadFactory workerThreadFactory;
 
-    @Resource(lookup = "java:jboss/ee/concurrency/factory/default")
-    private ManagedThreadFactory workerThreadFactory = null;
-
-    @Resource(lookup = "java:jboss/ee/concurrency/scheduler/default")
+    @Inject
+    @Resource
     protected ManagedScheduledExecutorService scheduler;
 
-    @Resource(lookup = "java:jboss/ee/concurrency/executor/io")
-    protected ExecutorService executor;
+    @Inject
+    @Resource
+    protected ManagedExecutor executor;
 
-    protected ConcurrentMap<String, AbstractEaasComponent> components = new ConcurrentHashMap<String, AbstractEaasComponent>();
+    protected ConcurrentMap<String, AbstractEaasComponent> components = new ConcurrentHashMap<>();
 
     @Inject
     @Config("components.warmup_timeout")

@@ -42,9 +42,9 @@ import de.bwl.bwfla.emucomp.api.EmulatorComponent;
 import de.bwl.bwfla.emucomp.components.BindingsManager;
 import de.bwl.bwfla.emucomp.components.EaasComponentBean;
 import de.bwl.bwfla.emucomp.control.connectors.*;
+import de.bwl.bwfla.emucomp.ws.MockedCollection;
 import de.bwl.bwfla.emucomp.xpra.IAudioStreamer;
 import de.bwl.bwfla.emucomp.xpra.PulseAudioStreamer;
-import de.bwl.bwfla.imagearchive.util.EnvironmentsAdapter;
 import org.apache.commons.io.FileUtils;
 import org.apache.tamaya.ConfigurationProvider;
 import org.apache.tamaya.inject.api.Config;
@@ -460,23 +460,26 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
 						.anyMatch((resource) -> resource.getId().contentEquals(EMUCON_ROOTFS_BINDING_ID));
 
 				if (!isRootFsFound) {
+					//TODO REMOVE ImageArchiveBinding replace with GRPC implementation
 					// Not found, try to get latest image ID as configured by the archive
-					final EnvironmentsAdapter archive = new EnvironmentsAdapter(imageArchiveAddress);
-					final String name = EMUCON_ROOTFS_BINDING_ID + "/" + this.getEmuContainerName(env);
-					final ImageArchiveBinding image;
-					if (env.getEmulator().getContainerName() != null && env.getEmulator().getContainerVersion() != null) {
-						LOG.warning("loading emulator: " + name + " " + env.getEmulator().getContainerVersion());
-						image = archive.getImageBinding(this.getEmulatorArchive(), name, env.getEmulator().getContainerVersion());
-					}
-					else {
-						LOG.warning("loading emulator " + name + " latest");
-						image = archive.getImageBinding(this.getEmulatorArchive(), name, "latest");
-					}
+//					final EnvironmentsAdapter archive = new EnvironmentsAdapter(imageArchiveAddress);
+//					final String name = EMUCON_ROOTFS_BINDING_ID + "/" + this.getEmuContainerName(env);
 
-					if (image == null) {
-						throw new BWFLAException("Emulator's rootfs-image not found!")
-								.setId(this.getComponentId());
-					}
+					final MockedCollection mockedCollection = new MockedCollection();
+					final ImageArchiveBinding image = mockedCollection.getImageArchiveBinding();
+//					if (env.getEmulator().getContainerName() != null && env.getEmulator().getContainerVersion() != null) {
+//						LOG.warning("loading emulator: " + name + " " + env.getEmulator().getContainerVersion());
+//						image = archive.getImageBinding(this.getEmulatorArchive(), name, env.getEmulator().getContainerVersion());
+//					}
+//					else {
+//						LOG.warning("loading emulator " + name + " latest");
+//						image = archive.getImageBinding(this.getEmulatorArchive(), name, "latest");
+//					}
+
+//					if (image == null) {
+//						throw new BWFLAException("Emulator's rootfs-image not found!")
+//								.setId(this.getComponentId());
+//					}
 
 					// Add rootfs binding
 					image.setId(EMUCON_ROOTFS_BINDING_ID);

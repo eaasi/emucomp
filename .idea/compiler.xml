@@ -2,7 +2,6 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
-      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
@@ -12,18 +11,5 @@
         <module name="emucomp-api" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="emucomp-client" target="17" />
-      <module name="emucomp-commons" target="17" />
-      <module name="files" target="11" />
-      <module name="imagearchive-connector" target="17" />
-    </bytecodeTargetLevel>
-  </component>
-  <component name="JavacSettings">
-    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="emucomp-api" options="" />
-      <module name="emucomp-client" options="-parameters" />
-      <module name="emucomp-impl" options="" />
-    </option>
   </component>
 </project>

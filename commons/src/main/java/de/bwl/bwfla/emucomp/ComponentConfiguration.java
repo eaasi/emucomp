@@ -1,14 +1,18 @@
 package de.bwl.bwfla.emucomp;
 
-import de.bwl.bwfla.common.utils.jaxb.JaxbType;
 
-import javax.xml.bind.annotation.XmlSeeAlso;
-
-@XmlSeeAlso({VdeSlirpConfiguration.class,
-             Environment.class,
-             NetworkSwitchConfiguration.class,
-             VdeSocksConfiguration.class,
-             NodeTcpConfiguration.class})
-public abstract class ComponentConfiguration extends JaxbType {
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "type"
+)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = VdeSlirpConfiguration.class, name = "vdeSlirp"),
+        @JsonSubTypes.Type(value = Environment.class, name = "environment"),
+        @JsonSubTypes.Type(value = NetworkSwitchConfiguration.class, name = "networkSwitch"),
+        @JsonSubTypes.Type(value = VdeSocksConfiguration.class, name = "vdeSocks"),
+        @JsonSubTypes.Type(value = NodeTcpConfiguration.class, name = "nodeTcp")
+})
+public abstract class ComponentConfiguration {
 
 }

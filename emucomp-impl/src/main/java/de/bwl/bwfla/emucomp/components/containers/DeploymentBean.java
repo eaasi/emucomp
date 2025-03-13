@@ -53,7 +53,8 @@ public abstract class DeploymentBean extends EaasComponentBean implements Contai
 
 	protected final BindingsManager bindings = new BindingsManager();
 
-	@Resource(lookup = "java:jboss/ee/concurrency/factory/default")
+	@Inject
+	@Resource
 	protected ManagedThreadFactory workerThreadFactory;
 
 	@Inject
