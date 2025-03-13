@@ -20,7 +20,6 @@
 package de.bwl.bwfla.emucomp;
 
 import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
-import de.bwl.bwfla.emucomp.DiskPartitionDescription;
 
 import java.io.File;
 import java.io.IOException;
