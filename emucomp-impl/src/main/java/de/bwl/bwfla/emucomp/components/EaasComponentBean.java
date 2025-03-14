@@ -20,6 +20,8 @@
 package de.bwl.bwfla.emucomp.components;
 
 
+import de.bwl.bwfla.emucomp.logging.PrefixLogger;
+
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;

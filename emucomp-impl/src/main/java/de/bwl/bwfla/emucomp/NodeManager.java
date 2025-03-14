@@ -20,14 +20,14 @@
 package de.bwl.bwfla.emucomp;
 
 
-import de.bwl.bwfla.common.exceptions.BWFLAException;
-import de.bwl.bwfla.common.logging.PrefixLogger;
 import de.bwl.bwfla.emucomp.components.AbstractEaasComponent;
 import de.bwl.bwfla.emucomp.components.emulators.EmulatorBean;
 import de.bwl.bwfla.emucomp.components.network.NetworkSwitchBean;
 import de.bwl.bwfla.emucomp.components.network.NodeTcpBean;
 import de.bwl.bwfla.emucomp.components.network.VdeSlirpBean;
 import de.bwl.bwfla.emucomp.components.network.VdeSocksBean;
+import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.logging.PrefixLogger;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tamaya.inject.api.Config;
 import org.eclipse.microprofile.context.ManagedExecutor;
@@ -122,7 +122,7 @@ public class NodeManager {
             } else {
                 throw new BWFLAException("A runtime error occurred while allocating the component: " + e.getMessage(), e);
             }
-        } catch (BWFLAException | JAXBException e) {
+        } catch (BWFLAException e) {
             throw new RuntimeException(e);
         }
     }

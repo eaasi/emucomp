@@ -17,6 +17,16 @@ public abstract class JsonType {
             return objectMapperThreadLocal.get()
                     .writeValueAsString(this);
         } catch (JsonProcessingException e) {
+            jsonLog.warning(e.getMessage());
+            return null;
+        }
+    }
+
+    public static <T extends JsonType> T fromValue(String json, Class<T> clazz) {
+        try {
+            return objectMapperThreadLocal.get().readValue(json, clazz);
+        } catch (JsonProcessingException e) {
+            jsonLog.warning(e.getMessage());
             return null;
         }
     }
