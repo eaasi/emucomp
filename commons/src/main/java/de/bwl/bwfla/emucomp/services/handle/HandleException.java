@@ -19,7 +19,7 @@
 
 package de.bwl.bwfla.emucomp.services.handle;
 
-import de.bwl.bwfla.common.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 import net.handle.hdllib.AbstractResponse;
 
 

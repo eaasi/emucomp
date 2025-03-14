@@ -19,8 +19,8 @@
 
 package de.bwl.bwfla.emucomp.services.handle;
 
-import de.bwl.bwfla.common.exceptions.BWFLAException;
-import de.bwl.bwfla.common.utils.ConfigHelpers;
+import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.services.ConfigHelpers;
 import net.handle.hdllib.*;
 import org.apache.tamaya.Configuration;
 import org.apache.tamaya.ConfigurationProvider;

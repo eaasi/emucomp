@@ -19,14 +19,15 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.tools;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.ExtOpCode;
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.OpCode;
-import de.bwl.bwfla.common.services.guacplay.io.TraceBlockReader;
-import de.bwl.bwfla.common.services.guacplay.io.TraceFile;
-import de.bwl.bwfla.common.services.guacplay.io.TraceFileReader;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionParser;
-import de.bwl.bwfla.common.services.guacplay.protocol.Message;
-import de.bwl.bwfla.common.services.guacplay.util.TimeUtils;
+
+
+import de.bwl.bwfla.emucomp.services.guacplay.GuacDefs;
+import de.bwl.bwfla.emucomp.services.guacplay.io.TraceBlockReader;
+import de.bwl.bwfla.emucomp.services.guacplay.io.TraceFile;
+import de.bwl.bwfla.emucomp.services.guacplay.io.TraceFileReader;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.InstructionParser;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.Message;
+import de.bwl.bwfla.emucomp.services.guacplay.util.TimeUtils;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -35,6 +36,8 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.concurrent.TimeUnit;
+
+import static de.bwl.bwfla.emucomp.services.guacplay.GuacDefs.*;
 
 
 public final class TraceStats

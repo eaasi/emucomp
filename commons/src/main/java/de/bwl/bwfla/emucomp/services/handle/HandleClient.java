@@ -19,7 +19,8 @@
 
 package de.bwl.bwfla.emucomp.services.handle;
 
-import de.bwl.bwfla.common.exceptions.BWFLAException;
+
+import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 import net.handle.hdllib.*;
 
 import java.util.ArrayList;
@@ -42,8 +43,7 @@ public class HandleClient
 	public static final int TTL_URL_RECORD = (int) TimeUnit.SECONDS.convert(1L, TimeUnit.HOURS);
 
 
-	public HandleClient() throws BWFLAException
-	{
+	public HandleClient() throws BWFLAException {
 		this(HandleUtils.getHandlePrefix(), HandleUtils.preparePublicKeyAuthentication());
 	}
 

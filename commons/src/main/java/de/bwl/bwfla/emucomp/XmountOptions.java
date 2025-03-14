@@ -1,5 +1,6 @@
 package de.bwl.bwfla.emucomp;
 
+import de.bwl.bwfla.emucomp.services.security.MachineTokenProvider;
 import org.eclipse.microprofile.config.ConfigProvider;
 
 import java.util.logging.Logger;

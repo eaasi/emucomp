@@ -19,6 +19,8 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.tools;
 
+import de.bwl.bwfla.emucomp.services.guacplay.util.Base64;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -193,7 +195,7 @@ public class Base64Benchmark
 		for (int i = 0; i < NUM_ITERATIONS; ++i) {
 			for (int j = 0; j < ENCODED_DATA.length; ++j) {
 				//char[] chars = ENCODED_DATA[j].toCharArray();
-				bytebuf = de.bwl.bwfla.common.services.guacplay.util.Base64.decode(chars[j], 0, chars[j].length, bytebuf);
+				bytebuf = Base64.decode(chars[j], 0, chars[j].length, bytebuf);
 				totalBytesDecoded += bytebuf.remaining();
 			}
 		}
@@ -205,7 +207,7 @@ public class Base64Benchmark
 		timer.start();
 		for (int i = 0; i < NUM_ITERATIONS; ++i) {
 			for (int j = 0; j < DECODED_DATA.length; ++j) {
-				charbuf = de.bwl.bwfla.common.services.guacplay.util.Base64.encode(DECODED_DATA[j], 0, DECODED_DATA[j].length, charbuf);
+				charbuf = Base64.encode(DECODED_DATA[j], 0, DECODED_DATA[j].length, charbuf);
 				totalBytesDecoded += charbuf.length();
 			}
 		}

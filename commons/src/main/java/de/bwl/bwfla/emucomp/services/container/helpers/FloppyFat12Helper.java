@@ -23,6 +23,7 @@
 package de.bwl.bwfla.emucomp.services.container.helpers;
 
 import de.bwl.bwfla.emucomp.DeprecatedProcessRunner;
+import de.bwl.bwfla.emucomp.conf.CommonSingleton;
 import de.bwl.bwfla.emucomp.services.container.types.Container;
 import de.bwl.bwfla.emucomp.services.container.types.FloppyContainer;
 import org.apache.commons.io.FileUtils;

@@ -19,8 +19,8 @@
 
 package de.bwl.bwfla.emucomp.services.net;
 
-import de.bwl.bwfla.common.utils.ByteRange;
-import de.bwl.bwfla.common.utils.FileRangeIterator;
+import de.bwl.bwfla.emucomp.services.ByteRange;
+import de.bwl.bwfla.emucomp.services.FileRangeIterator;
 import org.apache.tamaya.inject.api.Config;
 
 import javax.annotation.PostConstruct;

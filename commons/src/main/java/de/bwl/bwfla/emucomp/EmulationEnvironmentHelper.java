@@ -19,6 +19,7 @@
 package de.bwl.bwfla.emucomp;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 import de.bwl.bwfla.emucomp.services.container.helpers.ContainerHelper;
 import de.bwl.bwfla.emucomp.services.container.helpers.ContainerHelperFactory;
@@ -200,7 +201,7 @@ public class EmulationEnvironmentHelper {
 	}
 
 	public static Environment registerDataSource(Environment env, String ref, Drive.DriveType type)
-			throws BWFLAException, IllegalArgumentException {
+            throws BWFLAException, IllegalArgumentException, JsonProcessingException {
 		if (type == null)
 			type = CDROM;
 		if (env == null || ref == null || type == null)

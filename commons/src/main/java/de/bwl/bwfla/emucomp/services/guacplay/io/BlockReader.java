@@ -25,6 +25,8 @@ import de.bwl.bwfla.emucomp.services.guacplay.util.*;
 import java.io.IOException;
 import java.nio.CharBuffer;
 
+import static de.bwl.bwfla.emucomp.services.guacplay.io.TraceFileDefs.*;
+
 /**
  * A base class for readers, that should read
  * custom blocks from the {@link TraceFile}.

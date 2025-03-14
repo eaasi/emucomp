@@ -59,6 +59,10 @@ C:\Users\lobac\IdeaProjects\unpleasant_duty\emucomp\commons\src\main\java\de\bwl
 C:\Users\lobac\IdeaProjects\unpleasant_duty\emucomp\commons\src\main\java\de\bwl\bwfla\emucomp\ProcessMonitorVID.java
 C:\Users\lobac\IdeaProjects\unpleasant_duty\emucomp\commons\src\main\java\de\bwl\bwfla\emucomp\QcowOptions.java
 C:\Users\lobac\IdeaProjects\unpleasant_duty\emucomp\commons\src\main\java\de\bwl\bwfla\emucomp\RequiredFiles.java
+C:\Users\lobac\IdeaProjects\unpleasant_duty\emucomp\commons\src\main\java\de\bwl\bwfla\emucomp\services\ByteRange.java
+C:\Users\lobac\IdeaProjects\unpleasant_duty\emucomp\commons\src\main\java\de\bwl\bwfla\emucomp\services\ByteRangeChannel.java
+C:\Users\lobac\IdeaProjects\unpleasant_duty\emucomp\commons\src\main\java\de\bwl\bwfla\emucomp\services\ByteRangeIterator.java
+C:\Users\lobac\IdeaProjects\unpleasant_duty\emucomp\commons\src\main\java\de\bwl\bwfla\emucomp\services\ConfigHelpers.java
 C:\Users\lobac\IdeaProjects\unpleasant_duty\emucomp\commons\src\main\java\de\bwl\bwfla\emucomp\services\container\helpers\CdromIsoHelper.java
 C:\Users\lobac\IdeaProjects\unpleasant_duty\emucomp\commons\src\main\java\de\bwl\bwfla\emucomp\services\container\helpers\ContainerHelper.java
 C:\Users\lobac\IdeaProjects\unpleasant_duty\emucomp\commons\src\main\java\de\bwl\bwfla\emucomp\services\container\helpers\ContainerHelperFactory.java
@@ -75,6 +79,7 @@ C:\Users\lobac\IdeaProjects\unpleasant_duty\emucomp\commons\src\main\java\de\bwl
 C:\Users\lobac\IdeaProjects\unpleasant_duty\emucomp\commons\src\main\java\de\bwl\bwfla\emucomp\services\container\types\HddHfsContainer.java
 C:\Users\lobac\IdeaProjects\unpleasant_duty\emucomp\commons\src\main\java\de\bwl\bwfla\emucomp\services\container\types\HddZipContainer.java
 C:\Users\lobac\IdeaProjects\unpleasant_duty\emucomp\commons\src\main\java\de\bwl\bwfla\emucomp\services\container\types\ImageFileContainer.java
+C:\Users\lobac\IdeaProjects\unpleasant_duty\emucomp\commons\src\main\java\de\bwl\bwfla\emucomp\services\FileRangeIterator.java
 C:\Users\lobac\IdeaProjects\unpleasant_duty\emucomp\commons\src\main\java\de\bwl\bwfla\emucomp\services\guacplay\capture\ScreenShooter.java
 C:\Users\lobac\IdeaProjects\unpleasant_duty\emucomp\commons\src\main\java\de\bwl\bwfla\emucomp\services\guacplay\capture\ScrShotInstrHandler.java
 C:\Users\lobac\IdeaProjects\unpleasant_duty\emucomp\commons\src\main\java\de\bwl\bwfla\emucomp\services\guacplay\capture\ServerMessageProcessor.java
