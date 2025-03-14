@@ -19,23 +19,23 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.replay;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.*;
-import de.bwl.bwfla.common.services.guacplay.events.EventSink;
-import de.bwl.bwfla.common.services.guacplay.events.GuacEvent;
-import de.bwl.bwfla.common.services.guacplay.events.IGuacEventListener;
-import de.bwl.bwfla.common.services.guacplay.graphics.OffscreenCanvas;
-import de.bwl.bwfla.common.services.guacplay.graphics.ScreenRegionList;
-import de.bwl.bwfla.common.services.guacplay.io.*;
-import de.bwl.bwfla.common.services.guacplay.net.GuacTunnel;
-import de.bwl.bwfla.common.services.guacplay.net.PlayerSocket;
-import de.bwl.bwfla.common.services.guacplay.net.PlayerTunnel;
-import de.bwl.bwfla.common.services.guacplay.protocol.BufferedMessageProcessor;
-import de.bwl.bwfla.common.services.guacplay.protocol.MessageProcessor;
-import de.bwl.bwfla.common.services.guacplay.protocol.handler.*;
-import de.bwl.bwfla.common.services.guacplay.record.SessionRecorder;
-import de.bwl.bwfla.common.services.guacplay.replay.ServerMessageProcessor;
-import de.bwl.bwfla.common.services.guacplay.util.ICharArrayConsumer;
-import de.bwl.bwfla.common.utils.ProcessMonitor;
+
+import de.bwl.bwfla.emucomp.ProcessMonitor;
+import de.bwl.bwfla.emucomp.services.guacplay.GuacDefs;
+import de.bwl.bwfla.emucomp.services.guacplay.events.EventSink;
+import de.bwl.bwfla.emucomp.services.guacplay.events.GuacEvent;
+import de.bwl.bwfla.emucomp.services.guacplay.events.IGuacEventListener;
+import de.bwl.bwfla.emucomp.services.guacplay.graphics.OffscreenCanvas;
+import de.bwl.bwfla.emucomp.services.guacplay.graphics.ScreenRegionList;
+import de.bwl.bwfla.emucomp.services.guacplay.io.*;
+import de.bwl.bwfla.emucomp.services.guacplay.net.GuacTunnel;
+import de.bwl.bwfla.emucomp.services.guacplay.net.PlayerSocket;
+import de.bwl.bwfla.emucomp.services.guacplay.net.PlayerTunnel;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.BufferedMessageProcessor;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.MessageProcessor;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.handler.*;
+import de.bwl.bwfla.emucomp.services.guacplay.record.SessionRecorder;
+import de.bwl.bwfla.emucomp.services.guacplay.util.ICharArrayConsumer;
 import org.glyptodon.guacamole.GuacamoleException;
 import org.glyptodon.guacamole.io.GuacamoleWriter;
 import org.slf4j.Logger;
@@ -44,6 +44,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+
+import static de.bwl.bwfla.emucomp.services.guacplay.GuacDefs.*;
 
 
 public class SessionPlayer implements ICharArrayConsumer, IGuacEventListener

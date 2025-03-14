@@ -19,90 +19,89 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.replay;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.EventType;
-import de.bwl.bwfla.common.services.guacplay.events.EventSink;
-import de.bwl.bwfla.common.services.guacplay.events.GuacEvent;
-import de.bwl.bwfla.common.services.guacplay.io.TraceBlockReader;
-import de.bwl.bwfla.common.services.guacplay.protocol.AsyncWorker;
-import de.bwl.bwfla.common.services.guacplay.protocol.Message;
-import de.bwl.bwfla.common.services.guacplay.protocol.MessageProcessor;
-import de.bwl.bwfla.common.services.guacplay.util.StopWatch;
 
 // Internal class (package-private)
 
 
-final class TraceFileProcessor extends AsyncWorker
-{
-	// Member fields
-	private final MessageProcessor processor;
-	private final TraceBlockReader block;
-	private final EventSink esink;
-	private final Message message;
-	private final StopWatch stopwatch;
-	private long lastTimestamp;
-	private volatile int numEntriesRead;
+import de.bwl.bwfla.emucomp.services.guacplay.events.EventSink;
+import de.bwl.bwfla.emucomp.services.guacplay.events.GuacEvent;
+import de.bwl.bwfla.emucomp.services.guacplay.io.TraceBlockReader;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.AsyncWorker;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.Message;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.MessageProcessor;
+import de.bwl.bwfla.emucomp.services.guacplay.util.StopWatch;
 
-	
-	/** Constructor */
-	public TraceFileProcessor(MessageProcessor processor, TraceBlockReader block, EventSink esink)
-	{
-		super();
-		
-		this.processor = processor;
-		this.block = block;
-		this.esink = esink;
-		this.message = new Message();
-		this.stopwatch = new StopWatch();
-		this.lastTimestamp = Long.MAX_VALUE;
-		this.numEntriesRead = 0;
-	}
-	
-	/** Returns the number of entries read from the trace-block. */
-	public int getNumEntriesRead()
-	{
-		return numEntriesRead;
-	}
-	
-	
-	/* ========== AsyncMessageWorker Implementation ========== */
+import static de.bwl.bwfla.emucomp.services.guacplay.GuacDefs.EventType;
 
-	@Override
-	protected void execute() throws Exception
-	{
-		// Read and process the next message
-		if (block.read(message)) {
-			final long timestamp = message.getTimestamp();
-			if (timestamp > lastTimestamp) {
-				// Compute the delay for the current message/instruction
-				final long elapsed = stopwatch.timems();
-				final long delay = timestamp - lastTimestamp - elapsed;
-				if (delay > 0)
-					Thread.sleep(delay);
-			}
-			
-			processor.process(message);
-			
-			// Update values for the next run
-			lastTimestamp = timestamp;
-			stopwatch.start();
-			++numEntriesRead;
-		}
-		else {
-			// Nothing left!
-			log.info("End of trace-block reached, exiting...");
-			this.terminate(false);
-		}
-	}
+final class TraceFileProcessor extends AsyncWorker {
+    // Member fields
+    private final MessageProcessor processor;
+    private final TraceBlockReader block;
+    private final EventSink esink;
+    private final Message message;
+    private final StopWatch stopwatch;
+    private long lastTimestamp;
+    private volatile int numEntriesRead;
 
-	@Override
-	protected void finish() throws Exception
-	{
-		esink.consume(new GuacEvent(EventType.TRACE_END, this));
-	}
 
-	@Override
-	protected String getName()
-	{
-		return processor.getName();
-	}
+    /**
+     * Constructor
+     */
+    public TraceFileProcessor(MessageProcessor processor, TraceBlockReader block, EventSink esink) {
+        super();
+
+        this.processor = processor;
+        this.block = block;
+        this.esink = esink;
+        this.message = new Message();
+        this.stopwatch = new StopWatch();
+        this.lastTimestamp = Long.MAX_VALUE;
+        this.numEntriesRead = 0;
+    }
+
+    /**
+     * Returns the number of entries read from the trace-block.
+     */
+    public int getNumEntriesRead() {
+        return numEntriesRead;
+    }
+
+
+    /* ========== AsyncMessageWorker Implementation ========== */
+
+    @Override
+    protected void execute() throws Exception {
+        // Read and process the next message
+        if (block.read(message)) {
+            final long timestamp = message.getTimestamp();
+            if (timestamp > lastTimestamp) {
+                // Compute the delay for the current message/instruction
+                final long elapsed = stopwatch.timems();
+                final long delay = timestamp - lastTimestamp - elapsed;
+                if (delay > 0)
+                    Thread.sleep(delay);
+            }
+
+            processor.process(message);
+
+            // Update values for the next run
+            lastTimestamp = timestamp;
+            stopwatch.start();
+            ++numEntriesRead;
+        } else {
+            // Nothing left!
+            log.info("End of trace-block reached, exiting...");
+            this.terminate(false);
+        }
+    }
+
+    @Override
+    protected void finish() throws Exception {
+        esink.consume(new GuacEvent(EventType.TRACE_END, this));
+    }
+
+    @Override
+    protected String getName() {
+        return processor.getName();
+    }
 }

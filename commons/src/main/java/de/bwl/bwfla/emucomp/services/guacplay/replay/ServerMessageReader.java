@@ -1,12 +1,14 @@
 package de.bwl.bwfla.emucomp.services.guacplay.replay;
 
-import de.bwl.bwfla.common.services.guacplay.net.GuacReader;
-import de.bwl.bwfla.common.services.guacplay.protocol.AsyncWorker;
-import de.bwl.bwfla.common.services.guacplay.protocol.MessageProcessor;
-import de.bwl.bwfla.common.services.guacplay.util.ICharArrayConsumer;
+
 
 // Internal class (package-private)
 
+
+import de.bwl.bwfla.emucomp.services.guacplay.net.GuacReader;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.AsyncWorker;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.MessageProcessor;
+import de.bwl.bwfla.emucomp.services.guacplay.util.ICharArrayConsumer;
 
 final class ServerMessageReader extends AsyncWorker
 {

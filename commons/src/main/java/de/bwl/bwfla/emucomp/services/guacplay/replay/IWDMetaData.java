@@ -19,16 +19,19 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.replay;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.MetadataTag;
-import de.bwl.bwfla.common.services.guacplay.io.Metadata;
-import de.bwl.bwfla.common.services.guacplay.io.MetadataChunk;
-import de.bwl.bwfla.common.services.guacplay.io.TraceFile;
-import de.bwl.bwfla.common.services.guacplay.io.TraceFileReader;
+
+import de.bwl.bwfla.emucomp.services.guacplay.GuacDefs;
+import de.bwl.bwfla.emucomp.services.guacplay.io.Metadata;
+import de.bwl.bwfla.emucomp.services.guacplay.io.MetadataChunk;
+import de.bwl.bwfla.emucomp.services.guacplay.io.TraceFile;
+import de.bwl.bwfla.emucomp.services.guacplay.io.TraceFileReader;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
+
+import static de.bwl.bwfla.emucomp.services.guacplay.GuacDefs.*;
 
 public class IWDMetaData {
 	private String uuid = null;
