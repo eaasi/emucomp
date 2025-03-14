@@ -19,8 +19,8 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.net;
 
-import de.bwl.bwfla.common.services.guacplay.util.ObjectRegistry;
 
+import de.bwl.bwfla.emucomp.services.guacplay.util.ObjectRegistry;
 
 /**
  * A helper class for maintaining a mapping between the browser's windows/tabs

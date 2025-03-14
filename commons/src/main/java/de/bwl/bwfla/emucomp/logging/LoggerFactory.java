@@ -1,11 +1,11 @@
 package de.bwl.bwfla.emucomp.logging;
 
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.context.Dependent;
-import jakarta.enterprise.inject.Produces;
-import jakarta.enterprise.inject.Typed;
-import jakarta.enterprise.inject.spi.InjectionPoint;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.Produces;
+import javax.enterprise.inject.Typed;
+import javax.enterprise.inject.spi.InjectionPoint;
 
 import java.util.logging.Logger;
 

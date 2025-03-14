@@ -19,11 +19,11 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.net;
 
+import javax.servlet.http.HttpSession;
 import org.glyptodon.guacamole.GuacamoleException;
 import org.glyptodon.guacamole.GuacamoleServerException;
 import org.glyptodon.guacamole.servlet.GuacamoleSession;
 
-import javax.servlet.http.HttpSession;
 
 
 public class GuacSession extends GuacamoleSession

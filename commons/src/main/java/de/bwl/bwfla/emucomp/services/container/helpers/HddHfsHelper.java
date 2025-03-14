@@ -19,10 +19,11 @@
 
 package de.bwl.bwfla.emucomp.services.container.helpers;
 
-import de.bwl.bwfla.common.services.container.types.Container;
-import de.bwl.bwfla.common.services.container.types.HddHfsContainer;
-import de.bwl.bwfla.common.utils.DeprecatedProcessRunner;
-import de.bwl.bwfla.conf.CommonSingleton;
+
+import de.bwl.bwfla.emucomp.DeprecatedProcessRunner;
+import de.bwl.bwfla.emucomp.conf.CommonSingleton;
+import de.bwl.bwfla.emucomp.services.container.types.Container;
+import de.bwl.bwfla.emucomp.services.container.types.HddHfsContainer;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;

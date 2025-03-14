@@ -17,37 +17,20 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.bwl.bwfla.emucomp;
+package de.bwl.bwfla.emucomp.conf;
 
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlRootElement;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "environmentDescription", namespace = "http://bwfla.bwl.de/common/datatypes", propOrder = {
-    "title",
-    "os"
-})
-public class EnvironmentDescription {
-
-    @XmlElement(namespace = "http://bwfla.bwl.de/common/datatypes", required = true)
-    protected String title;
-	
-    @XmlElement(namespace="http://bwfla.bwl.de/common/datatypes", required = false)
-    protected String os;
-    
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String value) {
-        this.title = value;
-    }
-
-    public String getOs() {
-        return os;
-    }
-
-    public void setOs(String os) {
-        this.os = os;
-    }
+@XmlRootElement
+public class CommonConf {
+    @ConfigProperty(name = "commonconf.keyfile")
+    public String keyfile;
+    @ConfigProperty(name = "commonconf.authindex")
+    public String authIndex;
+    @ConfigProperty(name = "commonconf.authhandle")
+    public String authHandle;
+    @ConfigProperty(name = "commonconf.serverdatadir")
+    public String serverdatadir;
 }

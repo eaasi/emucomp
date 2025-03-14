@@ -1,8 +1,8 @@
 package de.bwl.bwfla.emucomp;
 
 
-import jakarta.activation.DataHandler;
-import jakarta.xml.bind.annotation.*;
+import javax.activation.DataHandler;
+import javax.xml.bind.annotation.*;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)

@@ -18,15 +18,16 @@
  */
 
 /**
- * 
+ *
  */
 // TODO: add exception throwing/handling
 package de.bwl.bwfla.emucomp.services.container.helpers;
 
-import de.bwl.bwfla.common.services.container.types.Container;
-import de.bwl.bwfla.common.services.container.types.HddContainer;
-import de.bwl.bwfla.common.utils.DeprecatedProcessRunner;
-import de.bwl.bwfla.conf.CommonSingleton;
+
+import de.bwl.bwfla.emucomp.DeprecatedProcessRunner;
+import de.bwl.bwfla.emucomp.conf.CommonSingleton;
+import de.bwl.bwfla.emucomp.services.container.types.Container;
+import de.bwl.bwfla.emucomp.services.container.types.HddContainer;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -42,143 +43,121 @@ import java.util.logging.Logger;
  *
  */
 // TODO: add exception/error handling
-public class HddFat16Helper extends ContainerHelper 
-{
-	private static final int DEFAULT_HDD_SIZE = 150;
-	private static final int MAX_HDD_SIZE_MB = 500;
-	private static final int MIN_HDD_SIZE_MB = 100;
+public class HddFat16Helper extends ContainerHelper {
+    private static final int DEFAULT_HDD_SIZE = 150;
+    private static final int MAX_HDD_SIZE_MB = 500;
+    private static final int MIN_HDD_SIZE_MB = 100;
 
-	Logger LOG = Logger.getLogger(this.getClass().getName());
+    Logger LOG = Logger.getLogger(this.getClass().getName());
 
-	@Override
-	public HddContainer createEmptyContainer()
-	{
-		return createEmptyContainer(DEFAULT_HDD_SIZE);
-	}
-	
-	public HddContainer createEmptyContainer(int sizeMB)
-	{	
-		// validating input data
-		if (sizeMB < MIN_HDD_SIZE_MB)
-			sizeMB = MIN_HDD_SIZE_MB;
-		
-		if (sizeMB > MAX_HDD_SIZE_MB)
-			sizeMB = MAX_HDD_SIZE_MB;	
-		
-		// acquire hdd_create.sh script location
-		File hddCreateScript = new File(CommonSingleton.helpersConf.hddFat16Create); 
-		File hddFile = null;
-		HddContainer hddContainer = null;
-		
-		try
-		{
-			hddFile = File.createTempFile("/hdd_", ".img");
+    @Override
+    public HddContainer createEmptyContainer() {
+        return createEmptyContainer(DEFAULT_HDD_SIZE);
+    }
 
-			DeprecatedProcessRunner runner = new DeprecatedProcessRunner();
-			runner.setCommand(hddCreateScript.getAbsolutePath());
-			runner.addArgument("6");
-			runner.addArgument(String.valueOf(sizeMB));
-			runner.addArgument(hddFile.toString());
+    public HddContainer createEmptyContainer(int sizeMB) {
+        // validating input data
+        if (sizeMB < MIN_HDD_SIZE_MB)
+            sizeMB = MIN_HDD_SIZE_MB;
 
-			if(runner.execute() && hddFile.isFile())
-			{
-				hddContainer = new HddContainer();
-				hddContainer.setFile(hddFile);
-			}
-		}
-		catch(IOException e)
-		{
-			LOG.log(Level.SEVERE, e.getMessage(), e);
-		}
-		finally
-		{
-			if(hddContainer == null && hddFile != null && hddFile.isFile())
-			{
-				hddFile.delete();
-				return null;
-			}
-		}
+        if (sizeMB > MAX_HDD_SIZE_MB)
+            sizeMB = MAX_HDD_SIZE_MB;
 
-		return hddContainer;
-	}
+        // acquire hdd_create.sh script location
+        File hddCreateScript = new File(CommonSingleton.helpersConf.hddFat16Create);
+        File hddFile = null;
+        HddContainer hddContainer = null;
 
-	@Override
-	public boolean insertIntoContainer(Container container, List<File> files) 
-	{
-		// validating input
-		if (!(container instanceof HddContainer))
-			return false;
-		
-		File hddFile = container.getFile();
-		if(!hddFile.exists())
-			return false;
-		
-		// acquire hdd_io.sh script location
-		File hddIoScript = new File(CommonSingleton.helpersConf.hddFat16Io);
-		DeprecatedProcessRunner runner = new DeprecatedProcessRunner();
-	
-		// iteratively inject files into hdd
-		for (File file: files)
-		{
-			runner.setCommand(hddIoScript.getAbsolutePath());
-	        runner.addArgument("i");
-	        runner.addArgument(hddFile.getAbsolutePath());
-	        runner.addArgument(file.getAbsolutePath());
-	        if (!runner.execute())
-	        	return false;
-		}
-		
-		return true;
-	}
+        try {
+            hddFile = File.createTempFile("/hdd_", ".img");
 
-	
-	@Override
-	public File extractFromContainer(Container container)
-	{
-		if (!(container instanceof HddContainer))
-			return null;
-				
-		File hddFile = container.getFile();
-		if(!hddFile.exists())
-			return null;
-		
-		File hddIoScript = new File(CommonSingleton.helpersConf.hddFat16Io);
-		File result = null;
-		boolean success = false;
-		
-		try
-		{
-		    result = Files.createTempDirectory("").toFile();
+            DeprecatedProcessRunner runner = new DeprecatedProcessRunner();
+            runner.setCommand(hddCreateScript.getAbsolutePath());
+            runner.addArgument("6");
+            runner.addArgument(String.valueOf(sizeMB));
+            runner.addArgument(hddFile.toString());
 
-			DeprecatedProcessRunner runner = new DeprecatedProcessRunner();
-			runner.setCommand(hddIoScript.getAbsolutePath());
-			runner.addArgument("e");
-			runner.addArgument(hddFile.getAbsolutePath());
-			runner.addArgument(result.getAbsolutePath());
-			success = runner.execute();
-		}
-		catch (IOException e)
-		{
-		    // Cannot create temporary directory
-		    return null;
-		}
-		finally
-		{
-			if(!success && result != null && result.isDirectory())
-			{
-				try
-				{
-					FileUtils.deleteDirectory(result);
-				}
-				catch(IOException e)
-				{
-					LOG.log(Level.SEVERE, e.getMessage(), e);
-				}
+            if (runner.execute() && hddFile.isFile()) {
+                hddContainer = new HddContainer();
+                hddContainer.setFile(hddFile);
+            }
+        } catch (IOException e) {
+            LOG.log(Level.SEVERE, e.getMessage(), e);
+        } finally {
+            if (hddContainer == null && hddFile != null && hddFile.isFile()) {
+                hddFile.delete();
+                return null;
+            }
+        }
 
-				return null;
-			}
-		}
+        return hddContainer;
+    }
 
-		return result;
-	}
+    @Override
+    public boolean insertIntoContainer(Container container, List<File> files) {
+        // validating input
+        if (!(container instanceof HddContainer))
+            return false;
+
+        File hddFile = container.getFile();
+        if (!hddFile.exists())
+            return false;
+
+        // acquire hdd_io.sh script location
+        File hddIoScript = new File(CommonSingleton.helpersConf.hddFat16Io);
+        DeprecatedProcessRunner runner = new DeprecatedProcessRunner();
+
+        // iteratively inject files into hdd
+        for (File file : files) {
+            runner.setCommand(hddIoScript.getAbsolutePath());
+            runner.addArgument("i");
+            runner.addArgument(hddFile.getAbsolutePath());
+            runner.addArgument(file.getAbsolutePath());
+            if (!runner.execute())
+                return false;
+        }
+
+        return true;
+    }
+
+
+    @Override
+    public File extractFromContainer(Container container) {
+        if (!(container instanceof HddContainer))
+            return null;
+
+        File hddFile = container.getFile();
+        if (!hddFile.exists())
+            return null;
+
+        File hddIoScript = new File(CommonSingleton.helpersConf.hddFat16Io);
+        File result = null;
+        boolean success = false;
+
+        try {
+            result = Files.createTempDirectory("").toFile();
+
+            DeprecatedProcessRunner runner = new DeprecatedProcessRunner();
+            runner.setCommand(hddIoScript.getAbsolutePath());
+            runner.addArgument("e");
+            runner.addArgument(hddFile.getAbsolutePath());
+            runner.addArgument(result.getAbsolutePath());
+            success = runner.execute();
+        } catch (IOException e) {
+            // Cannot create temporary directory
+            return null;
+        } finally {
+            if (!success && result != null && result.isDirectory()) {
+                try {
+                    FileUtils.deleteDirectory(result);
+                } catch (IOException e) {
+                    LOG.log(Level.SEVERE, e.getMessage(), e);
+                }
+
+                return null;
+            }
+        }
+
+        return result;
+    }
 }

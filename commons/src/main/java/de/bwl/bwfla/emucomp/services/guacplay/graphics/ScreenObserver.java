@@ -19,8 +19,8 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.graphics;
 
-import de.bwl.bwfla.common.services.guacplay.util.ConditionVariable;
 
+import de.bwl.bwfla.emucomp.services.guacplay.util.ConditionVariable;
 
 /**
  * An observer, that notifies a set of threads waiting on

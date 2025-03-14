@@ -3,7 +3,7 @@ package de.bwl.bwfla.emucomp;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import jakarta.xml.bind.annotation.*;
+import javax.xml.bind.annotation.*;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,

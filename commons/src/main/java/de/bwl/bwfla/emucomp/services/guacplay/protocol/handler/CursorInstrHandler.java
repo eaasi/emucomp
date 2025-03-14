@@ -19,12 +19,12 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.protocol.handler;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.OpCode;
-import de.bwl.bwfla.common.services.guacplay.graphics.OffscreenCanvas;
-import de.bwl.bwfla.common.services.guacplay.protocol.Instruction;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionDescription;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionParserException;
 
+import de.bwl.bwfla.emucomp.services.guacplay.GuacDefs;
+import de.bwl.bwfla.emucomp.services.guacplay.graphics.OffscreenCanvas;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.Instruction;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.InstructionDescription;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.InstructionParserException;
 
 /**
  * Handler for Guacamole's <i>cursor-</i> instruction.
@@ -38,7 +38,7 @@ public class CursorInstrHandler extends DrawingInstrHandler
 	/** Constructor */
 	public CursorInstrHandler(OffscreenCanvas canvas)
 	{
-		super(OpCode.CURSOR, canvas);
+		super(GuacDefs.OpCode.CURSOR, canvas);
 	}
 
 	@Override

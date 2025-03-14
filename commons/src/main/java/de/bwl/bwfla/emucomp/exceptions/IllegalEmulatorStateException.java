@@ -19,24 +19,21 @@
 
 package de.bwl.bwfla.emucomp.exceptions;
 
-import de.bwl.bwfla.common.datatypes.EmuCompState;
+
+import de.bwl.bwfla.emucomp.EmuCompState;
+
+public class IllegalEmulatorStateException extends BWFLAException {
+    private static final long serialVersionUID = -965446023541148755L;
+
+    private final EmuCompState state;
 
 
-public class IllegalEmulatorStateException extends BWFLAException
-{
-	private static final long serialVersionUID = -965446023541148755L;
+    public IllegalEmulatorStateException(String message, EmuCompState curstate) {
+        super(message + " Current state: " + curstate.value());
+        this.state = curstate;
+    }
 
-	private final EmuCompState state;
-	
-	
-	public IllegalEmulatorStateException(String message, EmuCompState curstate)
-	{
-		super(message + " Current state: " + curstate.value());
-		this.state = curstate;
-	}
-	
-	public EmuCompState getEmuCompState()
-	{
-		return state;
-	}
+    public EmuCompState getEmuCompState() {
+        return state;
+    }
 }

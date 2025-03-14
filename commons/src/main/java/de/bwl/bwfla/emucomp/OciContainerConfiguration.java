@@ -19,9 +19,9 @@
 
 package de.bwl.bwfla.emucomp;
 
-import de.bwl.bwfla.common.utils.jaxb.JaxbType;
 
-import jakarta.xml.bind.annotation.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import javax.xml.bind.annotation.*;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -69,10 +69,14 @@ public class OciContainerConfiguration extends ContainerConfiguration
 		this.rootfs = rootfs;
 	}
 
-	public static OciContainerConfiguration fromValue(String data) throws JAXBException
+	public static OciContainerConfiguration fromValue(String data)
 	{
-		return JaxbType.fromValue(data, OciContainerConfiguration.class);
-	}
+        try {
+            return objectMapperThreadLocal.get().readValue(data, OciContainerConfiguration.class);
+        } catch (JsonProcessingException e) {
+            return null;
+        }
+    }
 
 	public boolean isGui() {
 		return isGui;

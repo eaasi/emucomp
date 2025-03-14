@@ -19,14 +19,17 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.protocol.handler;
 
-import de.bwl.bwfla.common.datatypes.ProcessMonitorVID;
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.ExtOpCode;
-import de.bwl.bwfla.common.services.guacplay.protocol.Instruction;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionDescription;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionHandler;
-import de.bwl.bwfla.common.utils.ProcessMonitor;
+
+import de.bwl.bwfla.emucomp.ProcessMonitor;
+import de.bwl.bwfla.emucomp.ProcessMonitorVID;
+import de.bwl.bwfla.emucomp.services.guacplay.GuacDefs;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.Instruction;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.InstructionDescription;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.InstructionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static de.bwl.bwfla.emucomp.services.guacplay.GuacDefs.*;
 
 
 /** Handler for the custom <i>supd-</i> instruction. */

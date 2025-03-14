@@ -20,11 +20,10 @@
 package de.bwl.bwfla.emucomp;
 
 
-
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
-import jakarta.xml.bind.annotation.*;
+import javax.xml.bind.annotation.*;
 import java.nio.file.Path;
 
 

@@ -19,12 +19,10 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.net;
 
+import javax.xml.bind.annotation.*;
 import org.glyptodon.guacamole.protocol.GuacamoleConfiguration;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlValue;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;

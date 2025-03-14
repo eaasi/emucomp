@@ -19,8 +19,8 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.protocol;
 
-import de.bwl.bwfla.common.services.guacplay.util.AbstractSink;
 
+import de.bwl.bwfla.emucomp.services.guacplay.util.AbstractSink;
 
 /** A collection of listeners/consumers for Guacamole's instructions. */
 public class InstructionSink extends AbstractSink<IGuacInstructionConsumer>

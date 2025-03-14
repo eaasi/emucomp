@@ -19,17 +19,16 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.protocol.handler;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.EventType;
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.KeyCode;
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.KeyState;
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.OpCode;
-import de.bwl.bwfla.common.services.guacplay.events.EventSink;
-import de.bwl.bwfla.common.services.guacplay.events.GuacEvent;
-import de.bwl.bwfla.common.services.guacplay.protocol.Instruction;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionDescription;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionHandler;
-import de.bwl.bwfla.common.services.guacplay.util.ICharArrayConsumer;
 
+import de.bwl.bwfla.emucomp.services.guacplay.GuacDefs;
+import de.bwl.bwfla.emucomp.services.guacplay.events.EventSink;
+import de.bwl.bwfla.emucomp.services.guacplay.events.GuacEvent;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.Instruction;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.InstructionDescription;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.InstructionHandler;
+import de.bwl.bwfla.emucomp.services.guacplay.util.ICharArrayConsumer;
+
+import static de.bwl.bwfla.emucomp.services.guacplay.GuacDefs.*;
 
 /**
  * Handler for Guacamole's <i>key-</i> instruction.

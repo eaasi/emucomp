@@ -19,7 +19,8 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.io;
 
-import de.bwl.bwfla.common.services.guacplay.util.CharUtils;
+
+import de.bwl.bwfla.emucomp.services.guacplay.util.CharUtils;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
@@ -46,6 +47,6 @@ public class BlockReaderException extends IOException
 	public BlockReaderException(String message, String expstr, CharBuffer buffer)
 	{
 		super(message + " Expected '" + expstr + "', but found '"
-				+ CharUtils.substring(buffer, expstr.length() + 10) + "'.");
+			  + CharUtils.substring(buffer, expstr.length() + 10) + "'.");
 	}
 }

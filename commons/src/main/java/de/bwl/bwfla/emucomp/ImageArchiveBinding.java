@@ -1,8 +1,8 @@
 package de.bwl.bwfla.emucomp;
 
 
-import com.google.gson.GsonBuilder;
-import jakarta.xml.bind.annotation.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import javax.xml.bind.annotation.*;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "imageArchiveBinding", namespace = "http://bwfla.bwl.de/common/datatypes", propOrder = {"urlPrefix",
@@ -121,6 +121,10 @@ public class ImageArchiveBinding extends Binding {
     }
 
     public static ImageArchiveBinding fromValue(String value) {
-        return new GsonBuilder().create().fromJson(value, ImageArchiveBinding.class);
+        try {
+            return objectMapperThreadLocal.get().readValue(value, ImageArchiveBinding.class);
+        } catch (JsonProcessingException e) {
+            return null;
+        }
     }
 }

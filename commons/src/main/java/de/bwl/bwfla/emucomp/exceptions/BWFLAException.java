@@ -20,7 +20,7 @@
 package de.bwl.bwfla.emucomp.exceptions;
 
 
-import jakarta.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import java.util.TreeMap;
 

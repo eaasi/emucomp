@@ -19,11 +19,10 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.protocol;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs;
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.ExtOpCode;
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.VSyncType;
-import de.bwl.bwfla.common.services.guacplay.graphics.OffscreenCanvas;
-import de.bwl.bwfla.common.services.guacplay.util.Base64;
+
+import de.bwl.bwfla.emucomp.services.guacplay.GuacDefs;
+import de.bwl.bwfla.emucomp.services.guacplay.graphics.OffscreenCanvas;
+import de.bwl.bwfla.emucomp.services.guacplay.util.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,6 +31,8 @@ import java.awt.image.DataBuffer;
 import java.awt.image.DataBufferInt;
 import java.awt.image.SampleModel;
 import java.nio.CharBuffer;
+
+import static de.bwl.bwfla.emucomp.services.guacplay.GuacDefs.*;
 
 
 /** A generator for the custom visual-sync instruction. */
@@ -100,15 +101,15 @@ final class EqualPixelsVSyncInstrGenerator extends VSyncInstrGenerator
 	private final VSyncData vsdata;
 	
 	// Internal Constants
-	private static final int VSYNC_RECT_HALF_WIDTH  = GuacDefs.VSYNC_RECT_WIDTH  / 2;
-	private static final int VSYNC_RECT_HALF_HEIGHT = GuacDefs.VSYNC_RECT_HEIGHT / 2;
+	private static final int VSYNC_RECT_HALF_WIDTH  = VSYNC_RECT_WIDTH  / 2;
+	private static final int VSYNC_RECT_HALF_HEIGHT = VSYNC_RECT_HEIGHT / 2;
 	
 	/** Constructor */
 	public EqualPixelsVSyncInstrGenerator(OffscreenCanvas canvas)
 	{
 		super(canvas, VSyncType.EQUAL_PIXELS);
 		
-		this.vsimage = canvas.newBufferedImage(GuacDefs.VSYNC_RECT_WIDTH, GuacDefs.VSYNC_RECT_HEIGHT);
+		this.vsimage = canvas.newBufferedImage(VSYNC_RECT_WIDTH, VSYNC_RECT_HEIGHT);
 		this.vsdata = new VSyncData();
 	}
 
@@ -214,15 +215,15 @@ final class AverageColorVSyncInstrGenerator extends VSyncInstrGenerator
 	private final VSyncData vsdata;
 	
 	// Internal Constants
-	private static final int VSYNC_RECT_HALF_WIDTH  = GuacDefs.VSYNC_RECT_WIDTH  / 2;
-	private static final int VSYNC_RECT_HALF_HEIGHT = GuacDefs.VSYNC_RECT_HEIGHT / 2;
+	private static final int VSYNC_RECT_HALF_WIDTH  = VSYNC_RECT_WIDTH  / 2;
+	private static final int VSYNC_RECT_HALF_HEIGHT = VSYNC_RECT_HEIGHT / 2;
 	
 	/** Constructor */
 	public AverageColorVSyncInstrGenerator(OffscreenCanvas canvas)
 	{
 		super(canvas, VSyncType.AVERAGE_COLOR);
 		
-		this.vsimage = canvas.newBufferedImage(GuacDefs.VSYNC_RECT_WIDTH, GuacDefs.VSYNC_RECT_HEIGHT);
+		this.vsimage = canvas.newBufferedImage(VSYNC_RECT_WIDTH, VSYNC_RECT_HEIGHT);
 		this.vsdata = new VSyncData();
 	}
 

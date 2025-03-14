@@ -19,11 +19,12 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.protocol.handler;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.MouseButton;
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.OpCode;
-import de.bwl.bwfla.common.services.guacplay.protocol.*;
-import de.bwl.bwfla.common.services.guacplay.util.FlagSet;
 
+import de.bwl.bwfla.emucomp.services.guacplay.GuacDefs;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.*;
+import de.bwl.bwfla.emucomp.services.guacplay.util.FlagSet;
+
+import static de.bwl.bwfla.emucomp.services.guacplay.GuacDefs.*;
 
 /**
  * Handler for Guacamole's <i>mouse-</i> instruction (Record-Version).

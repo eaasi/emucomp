@@ -19,7 +19,7 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.io;
 
-import de.bwl.bwfla.common.services.guacplay.util.CharUtils;
+import de.bwl.bwfla.emucomp.services.guacplay.util.CharUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

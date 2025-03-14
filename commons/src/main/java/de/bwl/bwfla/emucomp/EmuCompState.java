@@ -17,11 +17,11 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.bwl.bwfla.emucomp.components;
+package de.bwl.bwfla.emucomp;
 
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
-import javax.xml.bind.annotation.XmlType;
+
+import javax.xml.bind.annotation.*;
+
 import java.util.Map;
 import java.util.TreeMap;
 

@@ -19,13 +19,14 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.graphics;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.CompositeMode;
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.LineCapStyle;
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.LineJoinStyle;
+
+import de.bwl.bwfla.emucomp.services.guacplay.GuacDefs;
 
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
+
+import static de.bwl.bwfla.emucomp.services.guacplay.GuacDefs.*;
 
 
 /** Helper class, containing utility methods for use with the {@link java.awt} package. */

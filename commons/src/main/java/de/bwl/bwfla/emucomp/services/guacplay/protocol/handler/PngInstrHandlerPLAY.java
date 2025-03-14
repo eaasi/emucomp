@@ -19,16 +19,18 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.protocol.handler;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.*;
-import de.bwl.bwfla.common.services.guacplay.events.GuacEvent;
-import de.bwl.bwfla.common.services.guacplay.events.IGuacEventListener;
-import de.bwl.bwfla.common.services.guacplay.graphics.OffscreenCanvas;
-import de.bwl.bwfla.common.services.guacplay.graphics.ScreenRegionList;
-import de.bwl.bwfla.common.services.guacplay.protocol.Instruction;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionBuilder;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionDescription;
-import de.bwl.bwfla.common.services.guacplay.util.ICharArrayConsumer;
 
+import de.bwl.bwfla.emucomp.services.guacplay.GuacDefs;
+import de.bwl.bwfla.emucomp.services.guacplay.events.GuacEvent;
+import de.bwl.bwfla.emucomp.services.guacplay.events.IGuacEventListener;
+import de.bwl.bwfla.emucomp.services.guacplay.graphics.OffscreenCanvas;
+import de.bwl.bwfla.emucomp.services.guacplay.graphics.ScreenRegionList;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.Instruction;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.InstructionBuilder;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.InstructionDescription;
+import de.bwl.bwfla.emucomp.services.guacplay.util.ICharArrayConsumer;
+
+import static de.bwl.bwfla.emucomp.services.guacplay.GuacDefs.*;
 
 /** Handler for Guacamole's <i>png-</i> instruction (Replay-Version). */
 public class PngInstrHandlerPLAY extends PngInstrHandler implements IGuacEventListener

@@ -2,7 +2,7 @@ package de.bwl.bwfla.emucomp;
 
 import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 
-import jakarta.xml.bind.annotation.*;
+import javax.xml.bind.annotation.*;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "objectArchiveBinding", namespace = "http://bwfla.bwl.de/common/datatypes", propOrder = {

@@ -19,58 +19,58 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.protocol.handler;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.ExtOpCode;
-import de.bwl.bwfla.common.services.guacplay.graphics.OffscreenCanvas;
-import de.bwl.bwfla.common.services.guacplay.protocol.Instruction;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionBuilder;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionDescription;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionSink;
-import de.bwl.bwfla.common.services.guacplay.util.FlagSet;
+import de.bwl.bwfla.emucomp.services.guacplay.graphics.OffscreenCanvas;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.Instruction;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.InstructionBuilder;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.InstructionDescription;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.InstructionSink;
+import de.bwl.bwfla.emucomp.services.guacplay.util.FlagSet;
+
+import static de.bwl.bwfla.emucomp.services.guacplay.GuacDefs.ExtOpCode;
 
 
 /**
  * Handler for Guacamole's <i>png-</i> instruction (Record-Version).
- * 
+ *
  * @see <a href="http://guac-dev.org/doc/gug/protocol-reference.html#png-instruction">
- *          Guacamole's protocol reference
- *      </a>
+ * Guacamole's protocol reference
+ * </a>
  */
-public class PngInstrHandlerREC extends PngInstrHandler
-{
-	/* Member fields */
-	private final InstructionBuilder ibuilder;
-	private final InstructionSink isink;
-	private final Instruction updinstr;
-	
-	
-	/** Constructor */
-	public PngInstrHandlerREC(InstructionSink sink, OffscreenCanvas canvas)
-	{
-		super(canvas);
-		
-		this.ibuilder = new InstructionBuilder(100);
-		this.isink = sink;
-		this.updinstr = new Instruction(4);
-		
-		// Mark this instruction-instance as shared!
-		final FlagSet flags = updinstr.flags();
-		flags.set(Instruction.FLAG_SHARED_INSTANCE);
-		flags.set(Instruction.FLAG_SHARED_ARRAYDATA);
-	}
+public class PngInstrHandlerREC extends PngInstrHandler {
+    /* Member fields */
+    private final InstructionBuilder ibuilder;
+    private final InstructionSink isink;
+    private final Instruction updinstr;
 
-	@Override
-	public void execute(InstructionDescription desc, Instruction instruction) throws Exception
-	{
-		super.execute(desc, instruction);
-		
-		// Construct the instruction for screen update
-		ibuilder.start(ExtOpCode.SCREEN_UPDATE, updinstr);
-		ibuilder.addArgument(xpos);
-		ibuilder.addArgument(ypos);
-		ibuilder.addArgument(imgsize.getWidth());
-		ibuilder.addArgument(imgsize.getHeight());
-		ibuilder.finish();
-		
-		isink.consume(desc, updinstr);
-	}
+
+    /**
+     * Constructor
+     */
+    public PngInstrHandlerREC(InstructionSink sink, OffscreenCanvas canvas) {
+        super(canvas);
+
+        this.ibuilder = new InstructionBuilder(100);
+        this.isink = sink;
+        this.updinstr = new Instruction(4);
+
+        // Mark this instruction-instance as shared!
+        final FlagSet flags = updinstr.flags();
+        flags.set(Instruction.FLAG_SHARED_INSTANCE);
+        flags.set(Instruction.FLAG_SHARED_ARRAYDATA);
+    }
+
+    @Override
+    public void execute(InstructionDescription desc, Instruction instruction) throws Exception {
+        super.execute(desc, instruction);
+
+        // Construct the instruction for screen update
+        ibuilder.start(ExtOpCode.SCREEN_UPDATE, updinstr);
+        ibuilder.addArgument(xpos);
+        ibuilder.addArgument(ypos);
+        ibuilder.addArgument(imgsize.getWidth());
+        ibuilder.addArgument(imgsize.getHeight());
+        ibuilder.finish();
+
+        isink.consume(desc, updinstr);
+    }
 }

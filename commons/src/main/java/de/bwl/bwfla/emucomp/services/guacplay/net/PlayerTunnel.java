@@ -19,8 +19,8 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.net;
 
-import de.bwl.bwfla.common.services.guacplay.util.ICharArrayConsumer;
 
+import de.bwl.bwfla.emucomp.services.guacplay.util.ICharArrayConsumer;
 
 /** A custom {@link GuacTunnel} for connections between the client and the player. */
 public class PlayerTunnel extends GuacTunnel

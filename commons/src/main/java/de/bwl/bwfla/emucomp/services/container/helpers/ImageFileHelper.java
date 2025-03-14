@@ -18,12 +18,13 @@
  */
 
 /**
- * 
+ *
  */
 package de.bwl.bwfla.emucomp.services.container.helpers;
 
-import de.bwl.bwfla.common.services.container.types.Container;
-import de.bwl.bwfla.common.services.container.types.ImageFileContainer;
+
+import de.bwl.bwfla.emucomp.services.container.types.Container;
+import de.bwl.bwfla.emucomp.services.container.types.ImageFileContainer;
 
 import java.io.File;
 import java.util.List;
@@ -32,53 +33,47 @@ import java.util.List;
  * @author mme
  *
  */
-public class ImageFileHelper extends ContainerHelper 
-{
-	/* (non-Javadoc)
-	 * @see de.bwl.bwfla.common.services.container.helpers.ContainerHelper#createEmptyContainer()
-	 */
-	@Override
-	public Container createEmptyContainer() 
-	{
-		return new ImageFileContainer();
-	}
-	
-	@Override
-	public Container createEmptyContainer(int size) 
-	{
-		return new Container();
-	}
-	
-	public Container createContainerAndInject(List<File> files) 
-	{		
-		if(files.size() != 1)
-			return null;
+public class ImageFileHelper extends ContainerHelper {
+    /* (non-Javadoc)
+     * @see de.bwl.bwfla.common.services.container.helpers.ContainerHelper#createEmptyContainer()
+     */
+    @Override
+    public Container createEmptyContainer() {
+        return new ImageFileContainer();
+    }
 
-		Container container = new ImageFileContainer();
-		container.setFile(files.get(0));
-		return container;
-	}
-	
-	
-	/* (non-Javadoc)
-	 * @see de.bwl.bwfla.common.services.container.helpers.ContainerHelper#insertIntoContainer(de.bwl.bwfla.common.services.container.types.Container, java.util.List)
-	 */
-	@Override
-	public boolean insertIntoContainer(Container container, List<File> files) 
-	{
-		Container buf = createContainerAndInject(files);
-		container.setFile(buf.getFile());
-		
-		return true;
-	}
+    @Override
+    public Container createEmptyContainer(int size) {
+        return new Container();
+    }
 
-	
-	/* (non-Javadoc)
-	 * @see de.bwl.bwfla.common.services.container.helpers.ContainerHelper#extractFromContainer(de.bwl.bwfla.common.services.container.types.Container)
-	 */
-	@Override
-	public File extractFromContainer(Container container) 
-	{
-		return null;	
-	}
+    public Container createContainerAndInject(List<File> files) {
+        if (files.size() != 1)
+            return null;
+
+        Container container = new ImageFileContainer();
+        container.setFile(files.get(0));
+        return container;
+    }
+
+
+    /* (non-Javadoc)
+     * @see de.bwl.bwfla.common.services.container.helpers.ContainerHelper#insertIntoContainer(de.bwl.bwfla.common.services.container.types.Container, java.util.List)
+     */
+    @Override
+    public boolean insertIntoContainer(Container container, List<File> files) {
+        Container buf = createContainerAndInject(files);
+        container.setFile(buf.getFile());
+
+        return true;
+    }
+
+
+    /* (non-Javadoc)
+     * @see de.bwl.bwfla.common.services.container.helpers.ContainerHelper#extractFromContainer(de.bwl.bwfla.common.services.container.types.Container)
+     */
+    @Override
+    public File extractFromContainer(Container container) {
+        return null;
+    }
 }

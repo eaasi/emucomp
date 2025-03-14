@@ -19,8 +19,8 @@
 
 package de.bwl.bwfla.emucomp;
 
-import com.google.gson.GsonBuilder;
-import jakarta.xml.bind.annotation.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import javax.xml.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -251,7 +251,11 @@ public class MachineConfiguration extends Environment {
     }
 
     public static MachineConfiguration fromValue(String data) {
-        return new GsonBuilder().create().fromJson(data, MachineConfiguration.class);
+        try {
+            return objectMapperThreadLocal.get().readValue(data, MachineConfiguration.class);
+        } catch (JsonProcessingException e) {
+            return null;
+        }
     }
 
     public MachineConfiguration copy() {

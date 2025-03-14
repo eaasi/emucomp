@@ -23,7 +23,7 @@ import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 import de.bwl.bwfla.emucomp.services.container.helpers.ContainerHelper;
 import de.bwl.bwfla.emucomp.services.container.helpers.ContainerHelperFactory;
 import de.bwl.bwfla.emucomp.services.container.types.Container;
-import jakarta.xml.bind.JAXBException;
+import javax.xml.bind.JAXBException;
 
 import java.io.File;
 import java.util.*;

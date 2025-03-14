@@ -19,13 +19,14 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.png;
 
-import de.bwl.bwfla.common.services.guacplay.util.MathUtils;
+
+import de.bwl.bwfla.emucomp.services.guacplay.util.MathUtils;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-import static de.bwl.bwfla.common.services.guacplay.png.PngDefs.ALPHA_OPAQUE;
-import static de.bwl.bwfla.common.services.guacplay.png.PngDefs.ALPHA_TRANSPARENT;
+import static de.bwl.bwfla.emucomp.services.guacplay.png.PngDefs.ALPHA_OPAQUE;
+import static de.bwl.bwfla.emucomp.services.guacplay.png.PngDefs.ALPHA_TRANSPARENT;
 
 
 /** A common interface for all color-type coverters. */

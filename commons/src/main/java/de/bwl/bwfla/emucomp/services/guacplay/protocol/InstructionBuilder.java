@@ -19,11 +19,11 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.protocol;
 
-import de.bwl.bwfla.common.services.guacplay.util.IntegerUtils;
-import de.bwl.bwfla.common.services.guacplay.util.StringBuffer;
+import de.bwl.bwfla.emucomp.services.guacplay.util.IntegerUtils;
+import de.bwl.bwfla.emucomp.services.guacplay.util.StringBuffer;
 import org.glyptodon.guacamole.protocol.GuacamoleInstruction;
 
-import static de.bwl.bwfla.common.services.guacplay.GuacDefs.*;
+import static de.bwl.bwfla.emucomp.services.guacplay.GuacDefs.*;
 
 
 /**

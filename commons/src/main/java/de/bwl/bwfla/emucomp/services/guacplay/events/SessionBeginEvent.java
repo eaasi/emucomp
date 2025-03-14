@@ -19,8 +19,10 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.events;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.EventType;
 
+import de.bwl.bwfla.emucomp.services.guacplay.GuacDefs;
+
+import static de.bwl.bwfla.emucomp.services.guacplay.GuacDefs.*;
 
 /** An event, representing the begin of a session. */
 public class SessionBeginEvent extends GuacEvent

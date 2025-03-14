@@ -21,9 +21,7 @@ package de.bwl.bwfla.emucomp;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonSyntaxException;
-import jakarta.xml.bind.annotation.*;
+import javax.xml.bind.annotation.*;
 
 import java.time.Instant;
 import java.util.logging.Level;

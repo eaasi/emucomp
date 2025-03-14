@@ -2,14 +2,19 @@ package de.bwl.bwfla.emucomp;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import java.util.List;
 
+@XmlRootElement
 public class FileCollection extends JsonType {
+
     public String id;
 
     public List<FileCollectionEntry> files;
 
+    @XmlElement
     private String label;
 
     public FileCollection() {
@@ -24,7 +29,6 @@ public class FileCollection extends JsonType {
         try {
             return objectMapperThreadLocal.get().readValue(data, FileCollection.class);
         } catch (JsonProcessingException e) {
-            jsonLog.warning(e.getMessage());
             return null;
         }
     }

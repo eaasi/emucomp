@@ -19,13 +19,14 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.record;
 
-import de.bwl.bwfla.common.services.guacplay.protocol.Instruction;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionDescription;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionHandler;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionSink;
 
 // Internal class (package-private)
 
+
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.Instruction;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.InstructionDescription;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.InstructionHandler;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.InstructionSink;
 
 final class InstructionForwarder extends InstructionHandler
 {

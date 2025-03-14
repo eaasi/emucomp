@@ -27,8 +27,8 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.EnumSet;
 
-import static de.bwl.bwfla.common.services.guacplay.io.TraceFileDefs.VERSION_MAJOR;
-import static de.bwl.bwfla.common.services.guacplay.io.TraceFileDefs.VERSION_MINOR;
+import static de.bwl.bwfla.emucomp.services.guacplay.io.TraceFileDefs.VERSION_MAJOR;
+import static de.bwl.bwfla.emucomp.services.guacplay.io.TraceFileDefs.VERSION_MINOR;
 
 
 /**

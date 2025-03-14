@@ -19,10 +19,8 @@
 
 package de.bwl.bwfla.emucomp;
 
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
-import javax.xml.bind.annotation.XmlType;
 
+import javax.xml.bind.annotation.*;
 
 @XmlEnum
 @XmlType(namespace = "http://bwfla.bwl.de/components/datatypes")

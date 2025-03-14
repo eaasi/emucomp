@@ -19,11 +19,11 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.io;
 
-import de.bwl.bwfla.common.services.guacplay.util.StringBuffer;
+import de.bwl.bwfla.emucomp.services.guacplay.util.StringBuffer;
 
 import java.io.IOException;
 
-import static de.bwl.bwfla.common.services.guacplay.io.TraceFileDefs.*;
+import static de.bwl.bwfla.emucomp.services.guacplay.io.TraceFileDefs.*;
 
 
 /**

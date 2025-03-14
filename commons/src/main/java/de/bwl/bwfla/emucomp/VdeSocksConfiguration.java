@@ -20,7 +20,7 @@
 package de.bwl.bwfla.emucomp;
 
 
-import jakarta.xml.bind.annotation.*;
+import javax.xml.bind.annotation.*;
 
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(namespace = "http://bwfla.bwl.de/common/datatypes")

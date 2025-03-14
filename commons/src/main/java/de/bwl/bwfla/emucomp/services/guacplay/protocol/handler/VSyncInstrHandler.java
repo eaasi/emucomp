@@ -19,18 +19,17 @@
 
 package de.bwl.bwfla.emucomp.services.guacplay.protocol.handler;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs;
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.*;
-import de.bwl.bwfla.common.services.guacplay.events.EventSink;
-import de.bwl.bwfla.common.services.guacplay.events.GuacEvent;
-import de.bwl.bwfla.common.services.guacplay.events.IGuacEventListener;
-import de.bwl.bwfla.common.services.guacplay.graphics.OffscreenCanvas;
-import de.bwl.bwfla.common.services.guacplay.graphics.ScreenObserver;
-import de.bwl.bwfla.common.services.guacplay.protocol.*;
-import de.bwl.bwfla.common.services.guacplay.util.Base64;
-import de.bwl.bwfla.common.services.guacplay.util.CharArrayBuffer;
-import de.bwl.bwfla.common.services.guacplay.util.ConditionVariable;
-import de.bwl.bwfla.common.services.guacplay.util.ICharArrayConsumer;
+import de.bwl.bwfla.emucomp.services.guacplay.GuacDefs;
+import de.bwl.bwfla.emucomp.services.guacplay.events.EventSink;
+import de.bwl.bwfla.emucomp.services.guacplay.events.GuacEvent;
+import de.bwl.bwfla.emucomp.services.guacplay.events.IGuacEventListener;
+import de.bwl.bwfla.emucomp.services.guacplay.graphics.OffscreenCanvas;
+import de.bwl.bwfla.emucomp.services.guacplay.graphics.ScreenObserver;
+import de.bwl.bwfla.emucomp.services.guacplay.protocol.*;
+import de.bwl.bwfla.emucomp.services.guacplay.util.Base64;
+import de.bwl.bwfla.emucomp.services.guacplay.util.CharArrayBuffer;
+import de.bwl.bwfla.emucomp.services.guacplay.util.ConditionVariable;
+import de.bwl.bwfla.emucomp.services.guacplay.util.ICharArrayConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +39,8 @@ import java.awt.image.DataBufferInt;
 import java.awt.image.SampleModel;
 import java.io.IOException;
 import java.nio.IntBuffer;
+
+import static de.bwl.bwfla.emucomp.services.guacplay.GuacDefs.*;
 
 
 /** A handler for the custom vsync-instruction. */
@@ -120,7 +121,7 @@ public class VSyncInstrHandler extends InstructionHandler implements IGuacEventL
 		this.esink = esink;
 		this.client = client;
 		this.canvas = canvas;
-		this.image = canvas.newBufferedImage(GuacDefs.VSYNC_RECT_WIDTH, GuacDefs.VSYNC_RECT_HEIGHT);
+		this.image = canvas.newBufferedImage(VSYNC_RECT_WIDTH, VSYNC_RECT_HEIGHT);
 		this.ibuilder = new InstructionBuilder(512);
 		this.waitcond = new ConditionVariable();
 		this.observer = new ScreenObserver(waitcond);
@@ -238,12 +239,12 @@ public class VSyncInstrHandler extends InstructionHandler implements IGuacEventL
 		switch (typeid)
 		{
 			case VSyncType.EQUAL_PIXELS: {
-				parser = new EqualPixelsVSyncInstrParser(GuacDefs.VSYNC_PIXEL_THRESHOLD);
+				parser = new EqualPixelsVSyncInstrParser(VSYNC_PIXEL_THRESHOLD);
 				break;
 			}
 			
 			case VSyncType.AVERAGE_COLOR: {
-				parser = new AverageColorVSyncInstrParser(GuacDefs.VSYNC_COLOR_THRESHOLD);
+				parser = new AverageColorVSyncInstrParser(VSYNC_COLOR_THRESHOLD);
 				break;
 			}
 			

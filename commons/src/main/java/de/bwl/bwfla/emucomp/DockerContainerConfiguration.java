@@ -20,7 +20,7 @@
 package de.bwl.bwfla.emucomp;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import jakarta.xml.bind.annotation.*;
+import javax.xml.bind.annotation.*;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
