@@ -19,7 +19,7 @@
 
 package de.bwl.bwfla.emucomp.control.connectors;
 
-import de.bwl.bwfla.common.utils.DeprecatedProcessRunner;
+import de.bwl.bwfla.emucomp.DeprecatedProcessRunner;
 import de.bwl.bwfla.emucomp.components.emulators.EmulatorBean;
 
 import java.net.URI;

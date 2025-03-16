@@ -19,7 +19,6 @@
 
 package de.bwl.bwfla.emucomp.api.handlers;
 
-import de.bwl.bwfla.blobstore.api.BlobHandle;
 import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 import de.bwl.bwfla.emucomp.NodeManager;
 import de.bwl.bwfla.emucomp.components.AbstractEaasComponent;
@@ -113,13 +112,14 @@ public class ComponentResource
         return ComponentResource.normalize(component.getEventSourceUrl(), servletContext.getContextPath() + "/");
     }
 
-    @GET
-    @Path("/{componentId}/result")
-    @Consumes(MediaType.TEXT_PLAIN)
-    public BlobHandle getResult(@PathParam("componentId") String componentId) throws BWFLAException {
-        final AbstractEaasComponent component = nodeManager.getComponentById(componentId, AbstractEaasComponent.class);
-        return component.getResult();
-    }
+    //TODO REPLACE
+//    @GET
+//    @Path("/{componentId}/result")
+//    @Consumes(MediaType.TEXT_PLAIN)
+//    public BlobHandle getResult(@PathParam("componentId") String componentId) throws BWFLAException {
+//        final AbstractEaasComponent component = nodeManager.getComponentById(componentId, AbstractEaasComponent.class);
+//        return component.getResult();
+//    }
 
     private static URI normalize(URI orig, String context) {
         try {

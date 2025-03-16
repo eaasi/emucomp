@@ -1,17 +1,17 @@
 package de.bwl.bwfla.emucomp.components.network;
 
 
-import de.bwl.bwfla.common.exceptions.BWFLAException;
-import de.bwl.bwfla.common.utils.DeprecatedProcessRunner;
-import de.bwl.bwfla.common.utils.NetworkUtils;
-import de.bwl.bwfla.common.utils.net.ConfigKey;
-import de.bwl.bwfla.common.utils.net.PortRangeProvider;
+import de.bwl.bwfla.emucomp.DeprecatedProcessRunner;
+import de.bwl.bwfla.emucomp.NetworkUtils;
+import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 import de.bwl.bwfla.emucomp.ComponentConfiguration;
 import de.bwl.bwfla.emucomp.NodeTcpConfiguration;
 import de.bwl.bwfla.emucomp.components.EaasComponentBean;
 import de.bwl.bwfla.emucomp.control.connectors.EthernetConnector;
 import de.bwl.bwfla.emucomp.control.connectors.InfoDummyConnector;
+import de.bwl.bwfla.emucomp.net.PortRangeProvider;
 import org.apache.tamaya.inject.api.Config;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.enterprise.inject.spi.CDI;
 import javax.inject.Inject;
@@ -24,7 +24,7 @@ public class NodeTcpBean extends EaasComponentBean {
     private ArrayList<DeprecatedProcessRunner> vdeProcesses = new ArrayList<DeprecatedProcessRunner>();
 
     @Inject
-    @ConfigKey("components.tcpNode.ports")
+    @ConfigProperty(name = "components.tcpNode.ports")
     private PortRangeProvider.Port tcpPorts;
 
     @Inject

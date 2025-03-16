@@ -20,11 +20,9 @@
 package de.bwl.bwfla.emucomp.components.emulators;
 
 
-import de.bwl.bwfla.common.datatypes.EmuCompState;
-import de.bwl.bwfla.common.exceptions.BWFLAException;
-import de.bwl.bwfla.common.exceptions.IllegalEmulatorStateException;
-import de.bwl.bwfla.common.utils.DeprecatedProcessRunner;
+import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 import de.bwl.bwfla.emucomp.*;
+import de.bwl.bwfla.emucomp.exceptions.IllegalEmulatorStateException;
 import org.apache.tamaya.inject.api.Config;
 
 import javax.activation.DataHandler;

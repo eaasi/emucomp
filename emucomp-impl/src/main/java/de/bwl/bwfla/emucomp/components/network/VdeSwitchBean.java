@@ -19,16 +19,13 @@
 
 package de.bwl.bwfla.emucomp.components.network;
 
-import de.bwl.bwfla.common.exceptions.BWFLAException;
-import de.bwl.bwfla.common.utils.DeprecatedProcessRunner;
-import de.bwl.bwfla.common.utils.NetworkUtils;
-import de.bwl.bwfla.common.utils.ProcessRunner;
-import de.bwl.bwfla.common.utils.WebsocketClient;
-import de.bwl.bwfla.emucomp.ComponentConfiguration;
+
+import de.bwl.bwfla.emucomp.*;
 import de.bwl.bwfla.emucomp.components.emulators.IpcSocket;
 import de.bwl.bwfla.emucomp.control.IPCWebsocketProxy;
 import de.bwl.bwfla.emucomp.control.connectors.EthernetConnector;
 import de.bwl.bwfla.emucomp.control.connectors.IConnector;
+import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 import org.apache.tamaya.inject.api.Config;
 
 import javax.enterprise.concurrent.ManagedThreadFactory;

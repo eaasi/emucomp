@@ -3,10 +3,10 @@ package de.bwl.bwfla.emucomp.client;
 
 import de.bwl.bwfla.emucomp.FileCollection;
 import de.bwl.bwfla.emucomp.ObjectArchiveBinding;
-import jakarta.ws.rs.client.Client;
-import jakarta.ws.rs.client.ClientBuilder;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 public class ObjectArchiveClient {
     private final Client client = ClientBuilder.newClient();

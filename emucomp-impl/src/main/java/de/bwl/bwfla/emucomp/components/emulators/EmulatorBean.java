@@ -23,10 +23,7 @@ import de.bwl.bwfla.emucomp.*;
 import de.bwl.bwfla.emucomp.api.EmulatorComponent;
 import de.bwl.bwfla.emucomp.components.BindingsManager;
 import de.bwl.bwfla.emucomp.components.EaasComponentBean;
-import de.bwl.bwfla.emucomp.control.connectors.AudioConnector;
-import de.bwl.bwfla.emucomp.control.connectors.GuacamoleConnector;
-import de.bwl.bwfla.emucomp.control.connectors.IThrowingSupplier;
-import de.bwl.bwfla.emucomp.control.connectors.XpraConnector;
+import de.bwl.bwfla.emucomp.control.connectors.*;
 import de.bwl.bwfla.emucomp.data.BlobDescription;
 import de.bwl.bwfla.emucomp.data.BlobHandle;
 import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
@@ -40,28 +37,42 @@ import de.bwl.bwfla.emucomp.services.guacplay.net.TunnelConfig;
 import de.bwl.bwfla.emucomp.services.guacplay.protocol.InstructionBuilder;
 import de.bwl.bwfla.emucomp.services.guacplay.record.SessionRecorder;
 import de.bwl.bwfla.emucomp.ws.MockedCollection;
+import de.bwl.bwfla.emucomp.xpra.IAudioStreamer;
 import de.bwl.bwfla.emucomp.xpra.PulseAudioStreamer;
+import org.apache.commons.io.FileUtils;
 import org.apache.tamaya.ConfigurationProvider;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.glyptodon.guacamole.GuacamoleException;
+import org.glyptodon.guacamole.net.GuacamoleTunnel;
+import org.glyptodon.guacamole.protocol.GuacamoleClientInformation;
+import org.glyptodon.guacamole.protocol.GuacamoleConfiguration;
 
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
 import javax.annotation.Resource;
 import javax.enterprise.concurrent.ManagedExecutorService;
 import javax.enterprise.concurrent.ManagedThreadFactory;
 import javax.enterprise.inject.spi.CDI;
 import javax.inject.Inject;
+import javax.xml.bind.JAXBException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 import java.util.logging.Level;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-import static de.bwl.bwfla.emucomp.EmuCompState.*;
 import static de.bwl.bwfla.emucomp.EmuCompState.EMULATOR_READY;
+import static de.bwl.bwfla.emucomp.EmuCompState.*;
 import static de.bwl.bwfla.emucomp.EmulatorUtils.XmountOutputFormat.RAW;
 import static de.bwl.bwfla.emucomp.components.emulators.IpcDefs.EventID.*;
 import static de.bwl.bwfla.emucomp.components.emulators.IpcDefs.MessageType.ATTACH_CLIENT;
@@ -1093,12 +1104,13 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
                         .setId(this.getComponentId());
             }
         }
-        try {
-            return this.emuEnvironment.value();
-        } catch (JAXBException e) {
-            throw new BWFLAException("Serializing environment description failed!", e)
+
+        String value = this.emuEnvironment.value();
+        if (value == null) {
+            throw new BWFLAException("Serializing environment description failed!")
                     .setId(this.getComponentId());
         }
+        return value;
     }
 
     @Override
@@ -1377,9 +1389,6 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
         } catch (IllegalArgumentException | IOException e) {
             throw new BWFLAException("Could not set runtime information.", e)
                     .setId(this.getComponentId());
-        } catch (JAXBException e) {
-
-            LOG.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 

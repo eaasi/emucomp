@@ -1,6 +1,5 @@
 package de.bwl.bwfla.emucomp.api.security;
 
-import de.bwl.bwfla.common.services.security.SOAPClientAuthenticationHandler;
 
 import javax.xml.ws.handler.Handler;
 import javax.xml.ws.handler.HandlerResolver;

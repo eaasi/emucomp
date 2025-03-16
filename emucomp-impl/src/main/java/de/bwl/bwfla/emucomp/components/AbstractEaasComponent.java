@@ -21,12 +21,12 @@ package de.bwl.bwfla.emucomp.components;
 
 
 
-import de.bwl.bwfla.blobstore.api.BlobHandle;
+import de.bwl.bwfla.emucomp.data.BlobHandle;
 import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
-import de.bwl.bwfla.common.services.sse.EventSink;
 import de.bwl.bwfla.emucomp.ComponentState;
 import de.bwl.bwfla.emucomp.api.ClusterComponent;
 import de.bwl.bwfla.emucomp.control.connectors.IConnector;
+import de.bwl.bwfla.emucomp.services.sse.EventSink;
 
 import java.net.URI;
 import java.util.Map;

@@ -19,15 +19,14 @@
 
 package de.bwl.bwfla.emucomp.components.containers;
 
-import de.bwl.bwfla.blobstore.api.BlobDescription;
-import de.bwl.bwfla.blobstore.api.BlobHandle;
-import de.bwl.bwfla.blobstore.client.BlobStoreClient;
-import de.bwl.bwfla.common.exceptions.BWFLAException;
-import de.bwl.bwfla.common.utils.DeprecatedProcessRunner;
+
 import de.bwl.bwfla.emucomp.*;
 import de.bwl.bwfla.emucomp.api.ContainerComponent;
 import de.bwl.bwfla.emucomp.components.BindingsManager;
 import de.bwl.bwfla.emucomp.components.EaasComponentBean;
+import de.bwl.bwfla.emucomp.data.BlobDescription;
+import de.bwl.bwfla.emucomp.data.BlobHandle;
+import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 import org.apache.tamaya.inject.api.Config;
 
 import javax.annotation.Resource;
@@ -251,9 +250,10 @@ public abstract class DeploymentBean extends EaasComponentBean implements Contai
 							.setName(name);
 
 					// Upload the archive to the BlobStore
-					final BlobHandle handle = BlobStoreClient.get()
-							.getBlobStorePort(blobStoreAddress)
-							.put(blob);
+//					final BlobHandle handle = BlobStoreClient.get()
+//							.getBlobStorePort(blobStoreAddress)
+//							.put(blob);
+					BlobHandle handle = new BlobHandle();
 
 					LOG.info("Container's output uploaded to blobstore");
 

@@ -19,7 +19,7 @@
 
 package de.bwl.bwfla.emucomp.xpra;
 
-import de.bwl.bwfla.common.logging.PrefixLogger;
+import de.bwl.bwfla.emucomp.logging.PrefixLogger;
 import org.freedesktop.gstreamer.*;
 import org.freedesktop.gstreamer.webrtc.WebRTCBin;
 import org.freedesktop.gstreamer.webrtc.WebRTCBin.CREATE_OFFER;

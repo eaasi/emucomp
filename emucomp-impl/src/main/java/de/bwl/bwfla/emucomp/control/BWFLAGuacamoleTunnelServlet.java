@@ -19,14 +19,12 @@
 
 package de.bwl.bwfla.emucomp.control;
 
-import de.bwl.bwfla.common.services.guacplay.net.GuacTunnel;
-import de.bwl.bwfla.common.services.guacplay.net.IGuacReader;
 import de.bwl.bwfla.emucomp.NodeManager;
 import de.bwl.bwfla.emucomp.components.AbstractEaasComponent;
 import de.bwl.bwfla.emucomp.control.connectors.GuacamoleConnector;
 import de.bwl.bwfla.emucomp.control.connectors.IConnector;
-
-import javax.inject.Inject;
+import de.bwl.bwfla.emucomp.services.guacplay.net.GuacTunnel;
+import de.bwl.bwfla.emucomp.services.guacplay.net.IGuacReader;
 import org.glyptodon.guacamole.GuacamoleClientException;
 import org.glyptodon.guacamole.GuacamoleException;
 import org.glyptodon.guacamole.GuacamoleResourceNotFoundException;
@@ -35,6 +33,7 @@ import org.glyptodon.guacamole.io.GuacamoleWriter;
 import org.glyptodon.guacamole.net.GuacamoleTunnel;
 import org.glyptodon.guacamole.servlet.GuacamoleHTTPTunnelServlet;
 
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;

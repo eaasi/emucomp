@@ -20,7 +20,7 @@
 package de.bwl.bwfla.emucomp.api;
 
 
-import de.bwl.bwfla.common.datatypes.ProcessMonitorVID;
+import de.bwl.bwfla.emucomp.ProcessMonitorVID;
 import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 import de.bwl.bwfla.emucomp.BindingDataHandler;
 import de.bwl.bwfla.emucomp.PrintJob;

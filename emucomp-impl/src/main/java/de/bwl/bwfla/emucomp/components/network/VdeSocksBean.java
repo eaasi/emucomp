@@ -19,15 +19,15 @@
 
 package de.bwl.bwfla.emucomp.components.network;
 
-import de.bwl.bwfla.common.exceptions.BWFLAException;
-import de.bwl.bwfla.common.utils.ProcessRunner;
-import de.bwl.bwfla.common.utils.net.ConfigKey;
-import de.bwl.bwfla.common.utils.net.PortRangeProvider.Port;
+import de.bwl.bwfla.emucomp.ProcessRunner;
+import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 import de.bwl.bwfla.emucomp.ComponentConfiguration;
 import de.bwl.bwfla.emucomp.VdeSocksConfiguration;
 import de.bwl.bwfla.emucomp.components.EaasComponentBean;
 import de.bwl.bwfla.emucomp.control.connectors.EthernetConnector;
 import de.bwl.bwfla.emucomp.control.connectors.Socks4Connector;
+import de.bwl.bwfla.emucomp.net.ConfigKey;
+import de.bwl.bwfla.emucomp.net.PortRangeProvider;
 import org.apache.tamaya.inject.api.Config;
 
 import javax.enterprise.inject.spi.CDI;
@@ -47,7 +47,7 @@ public class VdeSocksBean extends EaasComponentBean {
     
     @Inject
     @ConfigKey("components.socks.ports")
-    protected Port listenPort;
+    protected PortRangeProvider.Port listenPort;
     
     protected ArrayList<ProcessRunner> vdeProcesses = new ArrayList<ProcessRunner>();
     protected ProcessRunner runner = new ProcessRunner();

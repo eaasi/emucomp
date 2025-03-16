@@ -22,10 +22,10 @@ package de.bwl.bwfla.emucomp.components.emulators;
 
 
 
-import de.bwl.bwfla.common.services.sse.EventSink;
-import de.bwl.bwfla.common.utils.DeprecatedProcessRunner;
+import de.bwl.bwfla.emucomp.DeprecatedProcessRunner;
 import de.bwl.bwfla.emucomp.PrintJob;
 import de.bwl.bwfla.emucomp.components.AbstractEaasComponent;
+import de.bwl.bwfla.emucomp.services.sse.EventSink;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;

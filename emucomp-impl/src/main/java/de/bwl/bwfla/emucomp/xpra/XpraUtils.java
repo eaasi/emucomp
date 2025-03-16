@@ -1,7 +1,7 @@
 package de.bwl.bwfla.emucomp.xpra;
 
 
-import de.bwl.bwfla.common.utils.DeprecatedProcessRunner;
+import de.bwl.bwfla.emucomp.DeprecatedProcessRunner;
 import org.eclipse.microprofile.config.Config;
 import org.eclipse.microprofile.config.ConfigProvider;
 

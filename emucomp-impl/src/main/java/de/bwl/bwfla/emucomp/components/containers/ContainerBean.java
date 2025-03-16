@@ -19,11 +19,14 @@
 
 package de.bwl.bwfla.emucomp.components.containers;
 
+import de.bwl.bwfla.emucomp.data.BlobDescription;
+import de.bwl.bwfla.emucomp.data.BlobHandle;
 import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 import de.bwl.bwfla.emucomp.*;
 import de.bwl.bwfla.emucomp.api.ContainerComponent;
 import de.bwl.bwfla.emucomp.components.BindingsManager;
 import de.bwl.bwfla.emucomp.components.EaasComponentBean;
+import org.apache.tamaya.inject.api.Config;
 
 import javax.annotation.Resource;
 import javax.enterprise.concurrent.ManagedThreadFactory;
@@ -245,14 +248,15 @@ public abstract class ContainerBean extends EaasComponentBean implements Contain
 							.setType(extention)
 							.setName(name);
 
+					//TODO IMPLEMENT
 					// Upload the archive to the BlobStore
-					final BlobHandle handle = BlobStoreClient.get()
-							.getBlobStorePort(blobStoreAddress)
-							.put(blob);
+//					final BlobHandle handle = BlobStoreClient.get()
+//							.getBlobStorePort(blobStoreAddress)
+//							.put(blob);
 
 					LOG.info("Container's output uploaded to blobstore");
 
-					result.complete(handle);
+					result.complete(new BlobHandle());
 				}
 				catch (Exception error) {
 					this.failNoThrow("Preparing container's output failed!\n", error);
