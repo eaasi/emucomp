@@ -1,0 +1,6 @@
+quarkus:
+  application:
+    name: emucomp-api
+  config:
+    locations:
+      - classpath:/application.yml

@@ -33,7 +33,6 @@ de\bwl\bwfla\emucomp\ImageGeneralization.class
 de\bwl\bwfla\emucomp\services\container\helpers\CdromIsoHelper.class
 de\bwl\bwfla\emucomp\services\container\types\CdromContainer.class
 de\bwl\bwfla\emucomp\services\guacplay\net\IGuacInterceptor.class
-de\bwl\bwfla\emucomp\services\guacplay\tools\Base64Benchmark$1.class
 de\bwl\bwfla\emucomp\data\ImageInformation$QemuImageFormat.class
 de\bwl\bwfla\emucomp\EmulatorUtils$1.class
 de\bwl\bwfla\emucomp\services\guacplay\protocol\handler\SizeInstrHandler.class
@@ -120,7 +119,6 @@ de\bwl\bwfla\emucomp\services\guacplay\replay\SizeBasedProgress.class
 de\bwl\bwfla\emucomp\services\guacplay\GuacDefs$VSyncType.class
 de\bwl\bwfla\emucomp\services\guacplay\protocol\handler\EqualPixelsVSyncInstrParser.class
 de\bwl\bwfla\emucomp\services\container\helpers\FloppyFat12Helper.class
-de\bwl\bwfla\emucomp\services\net\HttpExportServlet$1.class
 de\bwl\bwfla\emucomp\UiOptions.class
 de\bwl\bwfla\emucomp\services\guacplay\protocol\handler\LineInstrHandler.class
 de\bwl\bwfla\emucomp\conf\RunnerConf.class
@@ -216,7 +214,6 @@ de\bwl\bwfla\emucomp\services\guacplay\protocol\handler\VSyncInstrHandler.class
 de\bwl\bwfla\emucomp\conf\CommonSingleton.class
 de\bwl\bwfla\emucomp\ProcessMonitorVID.class
 de\bwl\bwfla\emucomp\services\guacplay\tools\BusyWorkerRunner.class
-de\bwl\bwfla\emucomp\MonitorValueMap$1.class
 de\bwl\bwfla\emucomp\services\guacplay\GuacDefs.class
 de\bwl\bwfla\emucomp\services\guacplay\net\GuacSession.class
 de\bwl\bwfla\emucomp\services\guacplay\net\GuacConfigurationWrapper$ParamEntry.class

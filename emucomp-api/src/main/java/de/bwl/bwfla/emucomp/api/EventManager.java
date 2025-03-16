@@ -18,14 +18,14 @@ public class EventManager {
     private final Logger log = Logger.getLogger(EventManager.class.getName());
 
     @Inject
-    NodeManager nodemgr;
+    NodeManager nodeManager;
 
     @GET
     @Path("/events")
     @Produces(MediaType.SERVER_SENT_EVENTS)
     public void register(@Context SseEventSink sink, @Context Sse sse) {
         try {
-            final AbstractEaasComponent component = nodemgr.getCurrentComponent();
+            final AbstractEaasComponent component = nodeManager.<AbstractEaasComponent>getCurrentComponent();
             if (component.hasEventSink())
                 throw new BadRequestException("An event-sink is already registered!");
 

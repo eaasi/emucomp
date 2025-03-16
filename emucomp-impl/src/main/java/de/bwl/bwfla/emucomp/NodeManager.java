@@ -62,7 +62,7 @@ public class NodeManager {
 
     protected AbstractEaasComponent currentComponent;
 
-    private ThreadLocal<ComponentConfiguration> usedComponentConfiguration = ThreadLocal.withInitial(() -> null);
+    private final ThreadLocal<ComponentConfiguration> usedComponentConfiguration = ThreadLocal.withInitial(() -> null);
 
     @Inject
     @Config("components.warmup_timeout")
