@@ -37,11 +37,10 @@ import javax.enterprise.concurrent.ManagedScheduledExecutorService;
 import javax.enterprise.concurrent.ManagedThreadFactory;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.xml.bind.JAXBException;
 import java.time.Duration;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 @Slf4j
 @ApplicationScoped
@@ -61,7 +60,9 @@ public class NodeManager {
     @Resource
     protected ManagedExecutor executor;
 
-    protected ConcurrentMap<String, AbstractEaasComponent> components = new ConcurrentHashMap<>();
+    protected AbstractEaasComponent currentComponent;
+
+    private ThreadLocal<ComponentConfiguration> usedComponentConfiguration = ThreadLocal.withInitial(() -> null);
 
     @Inject
     @Config("components.warmup_timeout")
@@ -101,17 +102,26 @@ public class NodeManager {
                     ComponentConfiguration.fromValue(config, ComponentConfiguration.class);
 
             // atomically create a new bean iff the given id does not already exist
-            final AbstractEaasComponent component = components.computeIfAbsent(componentId, id -> {
-                try {
-                    return createComponentInstance(configuration, id);
-                } catch (BWFLAException e) {
-                    throw new RuntimeException(e);
+            final Supplier<AbstractEaasComponent> component = () -> {
+                if (usedComponentConfiguration.get() != null && Objects.deepEquals(usedComponentConfiguration, configuration)) {
+                    log.info("Already allocated component: {}", componentId);
+                } else {
+                    usedComponentConfiguration.set(configuration);
+                    try {
+                        return createComponentInstance(configuration, componentId);
+                    } catch (BWFLAException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
-            });
+                throw new RuntimeException("Component " + componentId + " already allocated");
+            };
+
 
             // don't to this in the atomic insert to reduce
             // the time the map's bucket is locked
-            component.initialize(configuration);
+
+            currentComponent = component.get();
+            currentComponent.initialize(configuration);
 
             return componentId;
 
@@ -131,12 +141,12 @@ public class NodeManager {
     /**
      * Destroys the component instance with the given {@code componentId}.
      *
+     * @Removed
      * @param componentId
      */
-    public void releaseComponent(String componentId) {
-        AbstractEaasComponent component = components.remove(componentId);
-        if (component != null)
-            component.destroy();
+    public void releaseComponent() {
+        if (currentComponent != null)
+            currentComponent.destroy();
     }
 
     /**
@@ -149,26 +159,47 @@ public class NodeManager {
         component.setKeepaliveTimestamp(NodeManager.timestamp());
     }
 
-
     /**
-     * Returns the component instance for the given {@code componentId}.
+     * Resets the keepalive timeout for the specified {@code component}.
      *
-     * @param componentId
-     * @return a component instance
-     * @throws BWFLAException if there is no registered component instance with
-     *                        the given id.
      */
-    public AbstractEaasComponent getComponentById(String componentId) throws BWFLAException {
-        AbstractEaasComponent component = this.components.get(componentId);
-        if (component == null) {
-            throw new BWFLAException("Could not find a component instance for the given id: " + component);
-        }
-
-        return component;
+    public void keepalive() throws BWFLAException {
+        AbstractEaasComponent component = this.getCurrentComponent();
+        component.setKeepaliveTimestamp(NodeManager.timestamp());
     }
 
+
+//    /**
+//     * Returns the component instance for the given {@code componentId}.
+//     *
+//     * @param componentId
+//     * @return a component instance
+//     * @throws BWFLAException if there is no registered component instance with
+//     *                        the given id.
+//     */
+//    public AbstractEaasComponent getComponentById(String componentId) throws BWFLAException {
+//        AbstractEaasComponent component = this.components.get(componentId);
+//        if (component == null) {
+//            throw new BWFLAException("Could not find a component instance for the given id: " + component);
+//        }
+//
+//        return component;
+//    }
+
+    public AbstractEaasComponent getCurrentComponent() throws BWFLAException {
+        if(currentComponent == null) {
+            throw new BWFLAException("Component is not allocated and cannot be found.");
+        }
+        return currentComponent;
+    }
+
+    @Deprecated
     public <T> T getComponentById(String componentId, Class<T> klass) throws BWFLAException {
-        return klass.cast(this.getComponentById(componentId));
+        return klass.cast(this.getCurrentComponent());
+    }
+
+    public <T> T getComponentTransformed(Class<T> klass) throws BWFLAException {
+        return klass.cast(this.getCurrentComponent());
     }
 
 
@@ -223,12 +254,12 @@ public class NodeManager {
         }
     }
 
-    protected void onComponentTimeout(String componentId) {
-        if (!components.containsKey(componentId))
+    protected void onComponentTimeout() {
+        if (currentComponent == null)
             return;
 
-        log.info("Aww, component " + componentId + " has timed out :-(");
-        this.releaseComponent(componentId);
+        log.info("Aww, component " + currentComponent.getComponentId() + " has timed out :-(");
+        this.releaseComponent();
     }
 
     private static long timestamp() {
@@ -258,7 +289,7 @@ public class NodeManager {
 
                 // Since scheduler tasks should complete quickly and this.onComponentTimeout()
                 // can take longer, submit a new task to an unscheduled executor for it.
-                executor.execute(() -> NodeManager.this.onComponentTimeout(component.getComponentId()));
+                executor.execute(NodeManager.this::onComponentTimeout);
             }
         }
     }

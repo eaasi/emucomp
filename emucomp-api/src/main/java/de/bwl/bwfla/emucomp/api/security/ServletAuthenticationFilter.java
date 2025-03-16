@@ -6,17 +6,23 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
+import io.quarkus.arc.Priority;
 import org.eclipse.microprofile.config.ConfigProvider;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
+@Provider
+@Priority(1)
+@ApplicationScoped
 public class ServletAuthenticationFilter implements Filter {
 
     private ServletContext context;

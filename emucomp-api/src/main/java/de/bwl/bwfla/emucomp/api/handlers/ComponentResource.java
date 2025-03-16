@@ -19,9 +19,9 @@
 
 package de.bwl.bwfla.emucomp.api.handlers;
 
-import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 import de.bwl.bwfla.emucomp.NodeManager;
 import de.bwl.bwfla.emucomp.components.AbstractEaasComponent;
+import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
@@ -35,8 +35,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Path("/ComponentService/Component")
-public class ComponentResource
-{	
+public class ComponentResource {
     @Inject
     NodeManager nodeManager;
 
@@ -47,76 +46,75 @@ public class ComponentResource
     UriInfo uriInfo;
 
     @POST
-    @Path("/{componentId}/initialize")
+    @Path("/initialize")
     @Consumes(MediaType.TEXT_PLAIN)
-    public String initialize(@PathParam("componentId") String componentId, String config) throws BWFLAException {
+    public String initialize(String componentId, String config) throws BWFLAException {
         return nodeManager.allocateComponent(componentId, config);
     }
 
     @POST
-    @Path("/{componentId}/destroy")
+    @Path("/destroy")
     @Consumes(MediaType.TEXT_PLAIN)
-    public void destroy(@PathParam("componentId") String componentId)
-	{
-	    nodeManager.releaseComponent(componentId);
-	}
+    public void destroy(String componentId) {
+        nodeManager.releaseComponent();
+    }
 
     @POST
-    @Path("/{componentId}/keepalive")
+    @Path("/keepalive")
     @Consumes(MediaType.TEXT_PLAIN)
-    public void keepalive(@PathParam("componentId") String componentId) throws BWFLAException {
-        nodeManager.keepalive(componentId);
+    public void keepalive(String componentId) throws BWFLAException {
+        nodeManager.keepalive();
     }
 
     @GET
-    @Path("/{componentId}/state")
+    @Path("/state")
     @Consumes(MediaType.TEXT_PLAIN)
-    public String getState(@PathParam("componentId") String componentId) throws BWFLAException {
+    public String getState(String componentId) throws BWFLAException {
         final AbstractEaasComponent component = nodeManager.getComponentById(componentId, AbstractEaasComponent.class);
         return component.getState().toString();
     }
 
     @GET
-    @Path("/{componentId}/component-type")
+    @Path("/component-type")
     @Consumes(MediaType.TEXT_PLAIN)
-    public String getComponentType(@PathParam("componentId") String componentId) throws BWFLAException {
+    public String getComponentType(String componentId) throws BWFLAException {
         final AbstractEaasComponent component = nodeManager.getComponentById(componentId, AbstractEaasComponent.class);
 
         return component.getComponentType();
     }
 
     @GET
-    @Path("/{componentId}/env-id")
+    @Path("/env-id")
     @Consumes(MediaType.TEXT_PLAIN)
-    public String getEnvironmentId(@PathParam("componentId") String componentId) throws BWFLAException {
-        final AbstractEaasComponent component = nodeManager.getComponentById(componentId, AbstractEaasComponent.class);
+    public String getEnvironmentId(String componentId) throws BWFLAException {
+        final AbstractEaasComponent component = nodeManager.getComponentTransformed(AbstractEaasComponent.class);
         return component.getEnvironmentId();
     }
 
     @GET
-    @Path("/{componentId}/control-url")
+    @Path("/control-url")
     @Consumes(MediaType.TEXT_PLAIN)
-    public Map<String, URI> getControlUrls(@PathParam("componentId") String componentId) throws BWFLAException {
+    public Map<String, URI> getControlUrls(String componentId) throws BWFLAException {
         final String context = servletContext.getContextPath() + "/";
 
-        final AbstractEaasComponent component = nodeManager.getComponentById(componentId, AbstractEaasComponent.class);
+        final AbstractEaasComponent component = nodeManager.getComponentTransformed(AbstractEaasComponent.class);
         return component.getControlUrls().entrySet().stream()
                 .collect(Collectors.toMap(e -> e.getKey(), e -> ComponentResource.normalize(e.getValue(), context)));
     }
 
     @GET
-    @Path("/{componentId}/event-source")
+    @Path("/event-source")
     @Consumes(MediaType.TEXT_PLAIN)
-    public URI getEventSourceUrl(@PathParam("componentId") String componentId) throws BWFLAException {
-        final AbstractEaasComponent component = nodeManager.getComponentById(componentId, AbstractEaasComponent.class);
+    public URI getEventSourceUrl() throws BWFLAException {
+        final AbstractEaasComponent component = nodeManager.getComponentTransformed(AbstractEaasComponent.class);
         return ComponentResource.normalize(component.getEventSourceUrl(), servletContext.getContextPath() + "/");
     }
 
     //TODO REPLACE
 //    @GET
-//    @Path("/{componentId}/result")
+//    @Path("/result")
 //    @Consumes(MediaType.TEXT_PLAIN)
-//    public BlobHandle getResult(@PathParam("componentId") String componentId) throws BWFLAException {
+//    public BlobHandle getResult(String componentId) throws BWFLAException {
 //        final AbstractEaasComponent component = nodeManager.getComponentById(componentId, AbstractEaasComponent.class);
 //        return component.getResult();
 //    }
@@ -124,10 +122,9 @@ public class ComponentResource
     private static URI normalize(URI orig, String context) {
         try {
             final String path = orig.getPath().replace("{context}", context);
-            return new URI(orig.getScheme(), orig.getAuthority(), path, orig.getQuery(),orig.getFragment())
+            return new URI(orig.getScheme(), orig.getAuthority(), path, orig.getQuery(), orig.getFragment())
                     .normalize();
-        }
-        catch (URISyntaxException error) {
+        } catch (URISyntaxException error) {
             throw new IllegalArgumentException(error.getMessage(), error);
         }
     }

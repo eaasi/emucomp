@@ -73,12 +73,4 @@ public class MachineTokenProvider {
             return "Basic " + new String(Base64.getEncoder().encode(("jwt:" + getApiKey()).getBytes()));
         return null;
     }
-
-    public static SOAPClientAuthenticationHandlerResolver getSoapAuthenticationResolver()
-    {
-        if(getApiKey() != null)
-            return new SOAPClientAuthenticationHandlerResolver(getApiKey());
-        else
-            return null;
-    }
 }
