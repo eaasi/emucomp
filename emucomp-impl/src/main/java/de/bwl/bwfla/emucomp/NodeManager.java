@@ -155,7 +155,7 @@ public class NodeManager {
      * @param componentId
      */
     public void keepalive(String componentId) throws BWFLAException {
-        AbstractEaasComponent component = this.getComponentById(componentId);
+        AbstractEaasComponent component = this.getComponentById(componentId, AbstractEaasComponent.class);
         component.setKeepaliveTimestamp(NodeManager.timestamp());
     }
 
@@ -177,14 +177,14 @@ public class NodeManager {
 //     * @throws BWFLAException if there is no registered component instance with
 //     *                        the given id.
 //     */
-//    public AbstractEaasComponent getComponentById(String componentId) throws BWFLAException {
-//        AbstractEaasComponent component = this.components.get(componentId);
-//        if (component == null) {
-//            throw new BWFLAException("Could not find a component instance for the given id: " + component);
-//        }
-//
-//        return component;
-//    }
+    public AbstractEaasComponent getComponentById(String componentId) throws BWFLAException {
+        AbstractEaasComponent component = this.currentComponent;
+        if (component == null) {
+            throw new BWFLAException("Could not find a component instance for the given id: " + componentId);
+        }
+
+        return component;
+    }
 
     public AbstractEaasComponent getCurrentComponent() throws BWFLAException {
         if(currentComponent == null) {
