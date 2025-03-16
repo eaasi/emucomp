@@ -70,7 +70,7 @@ public class ComponentResource {
     @Path("/state")
     @Consumes(MediaType.TEXT_PLAIN)
     public String getState(String componentId) throws BWFLAException {
-        final AbstractEaasComponent component = nodeManager.getComponentById(componentId, AbstractEaasComponent.class);
+        final AbstractEaasComponent component = nodeManager.getComponentTransformed(AbstractEaasComponent.class);
         return component.getState().toString();
     }
 
@@ -78,7 +78,7 @@ public class ComponentResource {
     @Path("/component-type")
     @Consumes(MediaType.TEXT_PLAIN)
     public String getComponentType(String componentId) throws BWFLAException {
-        final AbstractEaasComponent component = nodeManager.getComponentById(componentId, AbstractEaasComponent.class);
+        final AbstractEaasComponent component = nodeManager.getComponentTransformed(AbstractEaasComponent.class);
 
         return component.getComponentType();
     }
@@ -99,7 +99,7 @@ public class ComponentResource {
 
         final AbstractEaasComponent component = nodeManager.getComponentTransformed(AbstractEaasComponent.class);
         return component.getControlUrls().entrySet().stream()
-                .collect(Collectors.toMap(e -> e.getKey(), e -> ComponentResource.normalize(e.getValue(), context)));
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> ComponentResource.normalize(e.getValue(), context)));
     }
 
     @GET
