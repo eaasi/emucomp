@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="emucomp-impl" />
+        <module name="emucomp-grpc-interface" />
         <module name="commons" />
         <module name="emucomp-api" />
       </profile>

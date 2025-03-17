@@ -34,7 +34,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
-import javax.xml.bind.annotation.XmlMimeType;
 import java.util.List;
 import java.util.Set;
 
@@ -79,7 +78,8 @@ public class MachineResource {
 
     @POST
     @Path("/detachMedium")
-    public @XmlMimeType("application/octet-stream") DataHandler detachMedium(int handle) throws BWFLAException {
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public DataHandler detachMedium(int handle) throws BWFLAException {
         EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
         return emul.detachMedium(handle);
     }
@@ -124,7 +124,7 @@ public class MachineResource {
 
     @POST
     @Path("/checkpoint")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public DataHandler checkpoint() throws BWFLAException {
         final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
         return emul.checkpoint();

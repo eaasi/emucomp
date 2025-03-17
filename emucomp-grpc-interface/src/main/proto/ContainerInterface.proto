@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "de.bwl.bwfla.emucomp.grpc";
+option java_outer_classname = "ContainerInterface";
+
+import "Commons.proto";
+
+package emucomp;
+
+service ContainerService {
+  rpc StartContainer (EmptyRequest) returns (EmptyResponse) {}
+  rpc StopContainer (EmptyRequest) returns (EmptyResponse) {}
+}

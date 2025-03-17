@@ -123,7 +123,6 @@ public class NodeManager {
             currentComponent.initialize(configuration);
 
             return componentId;
-
         } catch (RuntimeException e) {
             // from the computeIfAbsent functor
             if (e.getCause() instanceof BWFLAException) {

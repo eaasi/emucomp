@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "de.bwl.bwfla.emucomp.grpc";
+option java_outer_classname = "ComponentInterface";
+
+import "Commons.proto";
+
+package emucomp;
+
+
+service ComponentService {
+  rpc InitializeComponent (ComponentRequest) returns (GenericResponse) {}
+  rpc DestroyComponent (EmptyRequest) returns (GenericResponse) {}
+  rpc KeepAliveComponent (EmptyRequest) returns (GenericResponse) {}
+  rpc State (EmptyRequest) returns (GenericResponse) {}
+  rpc Type (EmptyRequest) returns (GenericResponse) {}
+  rpc EnvironmentId (EmptyRequest) returns (GenericResponse) {}
+  rpc ControlUrls (EmptyRequest) returns (MapResponse) {}
+  rpc EventSourceUrls (EmptyRequest) returns (GenericResponse) {}
+}
+
+message ComponentRequest {
+  string componentId = 1;
+  string componentConfiguration = 2;
+}

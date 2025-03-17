@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "de.bwl.bwfla.emucomp.grpc";
+option java_outer_classname = "MachineInterface";
+
+import "Commons.proto";
+
+package emucomp;
+
+service MachineService {
+  rpc Connect (UrlRequest) returns (GenericResponse);
+  rpc Disconnect (UrlRequest) returns (GenericResponse);
+  rpc WsConnect (EmptyRequest) returns (GenericResponse);
+}
+
+message UrlRequest {
+  string url = 1;
+}
