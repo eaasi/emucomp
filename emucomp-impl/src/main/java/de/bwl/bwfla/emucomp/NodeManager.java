@@ -27,18 +27,18 @@ import de.bwl.bwfla.emucomp.components.network.NodeTcpBean;
 import de.bwl.bwfla.emucomp.components.network.VdeSlirpBean;
 import de.bwl.bwfla.emucomp.components.network.VdeSocksBean;
 import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
-import de.bwl.bwfla.emucomp.logging.PrefixLogger;
+import io.smallrye.common.annotation.Identifier;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tamaya.inject.api.Config;
-import org.eclipse.microprofile.context.ManagedExecutor;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.annotation.Resource;
-import javax.enterprise.concurrent.ManagedScheduledExecutorService;
-import javax.enterprise.concurrent.ManagedThreadFactory;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.time.Duration;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
@@ -46,37 +46,31 @@ import java.util.function.Supplier;
 @ApplicationScoped
 public class NodeManager {
     @Inject
-    protected PrefixLogger plog;
+    ThreadFactory workerThreadFactory;
 
     @Inject
     @Resource
-    protected ManagedThreadFactory workerThreadFactory;
+    protected ScheduledExecutorService scheduler;
 
     @Inject
-    @Resource
-    protected ManagedScheduledExecutorService scheduler;
-
-    @Inject
-    @Resource
-    protected ManagedExecutor executor;
+    @Identifier("managed-executor")
+    ExecutorService executor;
 
     protected AbstractEaasComponent currentComponent;
 
     private final ThreadLocal<ComponentConfiguration> usedComponentConfiguration = ThreadLocal.withInitial(() -> null);
 
-    @Inject
-    @Config("components.warmup_timeout")
+    @ConfigProperty(name = "components.warmup_timeout")
     protected Duration componentWarmupTimeout;
 
-    @Inject
-    @Config("components.timeout")
+    @ConfigProperty(name = "components.timeout")
     protected Duration componentExpirationTimeout;
 
 
     // TODO: does it make sense to do something for @PreDestroy?
 
 
-    public ManagedThreadFactory getWorkerThreadFactory() {
+    public ThreadFactory getWorkerThreadFactory() {
         return workerThreadFactory;
     }
 
@@ -141,8 +135,8 @@ public class NodeManager {
     /**
      * Destroys the component instance with the given {@code componentId}.
      *
-     * @Removed
      * @param componentId
+     * @Removed
      */
     public void releaseComponent() {
         if (currentComponent != null)
@@ -161,7 +155,6 @@ public class NodeManager {
 
     /**
      * Resets the keepalive timeout for the specified {@code component}.
-     *
      */
     public void keepalive() throws BWFLAException {
         AbstractEaasComponent component = this.getCurrentComponent();
@@ -169,7 +162,7 @@ public class NodeManager {
     }
 
 
-//    /**
+    //    /**
 //     * Returns the component instance for the given {@code componentId}.
 //     *
 //     * @param componentId
@@ -187,7 +180,7 @@ public class NodeManager {
     }
 
     public AbstractEaasComponent getCurrentComponent() throws BWFLAException {
-        if(currentComponent == null) {
+        if (currentComponent == null) {
             throw new BWFLAException("Component is not allocated and cannot be found.");
         }
         return currentComponent;

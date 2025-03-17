@@ -20,7 +20,6 @@
 package de.bwl.bwfla.emucomp.api.handlers;
 
 
-
 import de.bwl.bwfla.emucomp.BindingDataHandler;
 import de.bwl.bwfla.emucomp.NodeManager;
 import de.bwl.bwfla.emucomp.PrintJob;
@@ -35,7 +34,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.annotation.XmlMimeType;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -51,71 +49,72 @@ public class MachineResource {
     UriInfo uriInfo;
 
     @POST
-    @Path("/{componentId}/start")
-    public void start(@PathParam("componentId") String componentId) throws BWFLAException {
-        final EmulatorComponent emul = nodeManager.getComponentById(componentId, EmulatorComponent.class);
+    @Path("/start")
+    public void start() throws BWFLAException {
+        final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
         emul.start();
     }
 
     @POST
-    @Path("/{componentId}/stop")
-    public String stop(@PathParam("componentId") String componentId) throws BWFLAException {
-        final EmulatorComponent emul = nodeManager.getComponentById(componentId, EmulatorComponent.class);
+    @Path("/stop")
+    public String stop() throws BWFLAException {
+        final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
         return emul.stop();
     }
+
     @POST
-    @Path("/{componentId}/changeMedium")
-    public int changeMedium(@PathParam("componentId") String componentId, int containerId, String objReference) throws BWFLAException {
-        final EmulatorComponent emul = nodeManager.getComponentById(componentId, EmulatorComponent.class);
+    @Path("/changeMedium")
+    public int changeMedium(int containerId, String objReference) throws BWFLAException {
+        final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
         return emul.changeMedium(containerId, objReference);
     }
 
     @POST
-    @Path("/{componentId}/attachMedium")
-    public int attachMedium(@PathParam("componentId") String componentId, DataHandler data, String mediaType) throws BWFLAException {
-        final EmulatorComponent emul = nodeManager.getComponentById(componentId, EmulatorComponent.class);
+    @Path("/attachMedium")
+    public int attachMedium(DataHandler data, String mediaType) throws BWFLAException {
+        final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
         return emul.attachMedium(data, mediaType);
     }
 
     @POST
-    @Path("/{componentId}/detachMedium")
-    public @XmlMimeType("application/octet-stream") DataHandler detachMedium(@PathParam("componentId") String componentId, int handle) throws BWFLAException {
-        EmulatorComponent emul = nodeManager.getComponentById(componentId, EmulatorComponent.class);
+    @Path("/detachMedium")
+    public @XmlMimeType("application/octet-stream") DataHandler detachMedium(int handle) throws BWFLAException {
+        EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
         return emul.detachMedium(handle);
     }
 
     @GET
-    @Path("/{componentId}/runtime-configuration")
-    public String getRuntimeConfiguration(@PathParam("componentId") String componentId) throws BWFLAException {
-        final EmulatorComponent emul = nodeManager.getComponentById(componentId, EmulatorComponent.class);
+    @Path("/runtime-configuration")
+    public String getRuntimeConfiguration() throws BWFLAException {
+        final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
         return emul.getRuntimeConfiguration();
     }
 
     @GET
-    @Path("/{componentId}/cold-drives")
-    public Set<String> getColdplugableDrives(@PathParam("componentId") String componentId) throws BWFLAException {
-        final EmulatorComponent emul = nodeManager.getComponentById(componentId, EmulatorComponent.class);
+    @Path("/cold-drives")
+    public Set<String> getColdplugableDrives() throws BWFLAException {
+        final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
         return emul.getColdplugableDrives();
     }
 
     @GET
-    @Path("/{componentId}/hot-drives")
-    public Set<String> getHotplugableDrives(@PathParam("componentId") String componentId) throws BWFLAException {
-        final EmulatorComponent emul = nodeManager.getComponentById(componentId, EmulatorComponent.class);
+    @Path("/hot-drives")
+    public Set<String> getHotplugableDrives() throws BWFLAException {
+        final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
         return emul.getHotplugableDrives();
     }
 
     @POST
-    @Path("/{componentId}/snapshot")
-    public List<BindingDataHandler> snapshot(@PathParam("componentId") String componentId) throws BWFLAException {
-        final EmulatorComponent emul = nodeManager.getComponentById(componentId, EmulatorComponent.class);
+    @Path("/snapshot")
+    public List<BindingDataHandler> snapshot() throws BWFLAException {
+        final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
         return emul.snapshot();
     }
 
     @GET
-    @Path("/{componentId}/emulator-state")
-    public String getEmulatorState(@PathParam("componentId") String componentId) throws BWFLAException {
-        final EmulatorComponent emul = nodeManager.getComponentById(componentId, EmulatorComponent.class);
+    @Path("/emulator-state")
+    public String getEmulatorState() throws BWFLAException {
+        final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
         return emul.getEmulatorState();
     }
 
@@ -123,9 +122,9 @@ public class MachineResource {
     /* ==================== EmuCon API ==================== */
 
     @POST
-    @Path("/{componentId}/checkpoint")
-    public @XmlMimeType("application/octet-stream") DataHandler checkpoint(@PathParam("componentId") String componentId) throws BWFLAException {
-        final EmulatorComponent emul = nodeManager.getComponentById(componentId, EmulatorComponent.class);
+    @Path("/checkpoint")
+    public @XmlMimeType("application/octet-stream") DataHandler checkpoint() throws BWFLAException {
+        final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
         return emul.checkpoint();
     }
 
@@ -133,63 +132,60 @@ public class MachineResource {
     /* ==================== Session recording API ==================== */
 
     @POST
-    @Path("/{componentId}/session-recorder/prepare")
-    public boolean prepareSessionRecorder(@PathParam("componentId") String componentId) throws BWFLAException {
-        final EmulatorComponent emul = nodeManager.getComponentById(componentId, EmulatorComponent.class);
+    @Path("/session-recorder/prepare")
+    public boolean prepareSessionRecorder() throws BWFLAException {
+        final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
         return emul.prepareSessionRecorder();
     }
 
     @POST
-    @Path("/{componentId}/session-recorder/start")
-    public void startSessionRecording(@PathParam("componentId") String componentId) throws BWFLAException {
-        final EmulatorComponent emul = nodeManager.getComponentById(componentId, EmulatorComponent.class);
+    @Path("/session-recorder/start")
+    public void startSessionRecording() throws BWFLAException {
+        final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
         emul.startSessionRecording();
     }
 
     @POST
-    @Path("/{componentId}/session-recorder/stop")
-    public void stopSessionRecording(@PathParam("componentId") String componentId) throws BWFLAException {
-        final EmulatorComponent emul = nodeManager.getComponentById(componentId, EmulatorComponent.class);
+    @Path("/session-recorder/stop")
+    public void stopSessionRecording() throws BWFLAException {
+        final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
         emul.stopSessionRecording();
     }
 
     @GET
-    @Path("/{componentId}/session-recorder/enabled")
-    public boolean isRecordModeEnabled(@PathParam("componentId") String componentId) throws BWFLAException {
-        final EmulatorComponent emul = nodeManager.getComponentById(componentId, EmulatorComponent.class);
+    @Path("/session-recorder/enabled")
+    public boolean isRecordModeEnabled() throws BWFLAException {
+        final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
         return emul.isRecordModeEnabled();
     }
 
     @POST
-    @Path("/{componentId}/session-recorder/action-finished/add")
-    public void addActionFinishedMark(@PathParam("componentId") String componentId) throws BWFLAException {
-        final EmulatorComponent emul = nodeManager.getComponentById(componentId, EmulatorComponent.class);
+    @Path("/session-recorder/action-finished/add")
+    public void addActionFinishedMark() throws BWFLAException {
+        final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
         emul.addActionFinishedMark();
     }
 
     @POST
-    @Path("/{componentId}/session-recorder/trace-metadata/define")
-    public void defineTraceMetadataChunk(@PathParam("componentId") String componentId,
-                                         @QueryParam("tag") String tag,
-                                         @QueryParam("comment") String comment) throws BWFLAException {
-        final EmulatorComponent emul = nodeManager.getComponentById(componentId, EmulatorComponent.class);
+    @Path("/session-recorder/trace-metadata/define")
+    public void defineTraceMetadataChunk(@QueryParam("tag") String tag, @QueryParam("comment") String comment) throws BWFLAException {
+        final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
         emul.defineTraceMetadataChunk(tag, comment);
     }
 
     @POST
-    @Path("/{componentId}/session-recorder/trace-metadata/add")
-    public void addTraceMetadataEntry(@PathParam("componentId") String componentId,
-                                      @QueryParam("ctag") String ctag,
+    @Path("/session-recorder/trace-metadata/add")
+    public void addTraceMetadataEntry(@QueryParam("ctag") String ctag,
                                       @QueryParam("key") String key,
                                       @QueryParam("value") String value) throws BWFLAException {
-        final EmulatorComponent emul = nodeManager.getComponentById(componentId, EmulatorComponent.class);
+        final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
         emul.addTraceMetadataEntry(ctag, key, value);
     }
 
     @GET
-    @Path("/{componentId}/session-recorder/trace-metadata")
-    public String getSessionTrace(@PathParam("componentId") String componentId) throws BWFLAException {
-        final EmulatorComponent emul = nodeManager.getComponentById(componentId, EmulatorComponent.class);
+    @Path("/session-recorder/trace-metadata")
+    public String getSessionTrace() throws BWFLAException {
+        final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
         return emul.getSessionTrace();
     }
 
@@ -197,25 +193,24 @@ public class MachineResource {
     /* ==================== Session replay API ==================== */
 
     @POST
-    @Path("/{componentId}/session-player/prepare")
-    public boolean prepareSessionPlayer(@PathParam("componentId") String componentId,
-                                        @QueryParam("trace") String trace,
+    @Path("/session-player/prepare")
+    public boolean prepareSessionPlayer(@QueryParam("trace") String trace,
                                         @QueryParam("headless") boolean headless) throws BWFLAException {
-        final EmulatorComponent emul = nodeManager.getComponentById(componentId, EmulatorComponent.class);
+        final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
         return emul.prepareSessionPlayer(trace, headless);
     }
 
     @GET
-    @Path("/{componentId}/session-player/progress")
-    public int getSessionPlayerProgress(@PathParam("componentId") String componentId) throws BWFLAException {
-        final EmulatorComponent emul = nodeManager.getComponentById(componentId, EmulatorComponent.class);
+    @Path("/session-player/progress")
+    public int getSessionPlayerProgress() throws BWFLAException {
+        final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
         return emul.getSessionPlayerProgress();
     }
 
     @GET
-    @Path("/{componentId}/session-player/enabled")
-    public boolean isReplayModeEnabled(@PathParam("componentId") String componentId) throws BWFLAException {
-        final EmulatorComponent emul = nodeManager.getComponentById(componentId, EmulatorComponent.class);
+    @Path("/session-player/enabled")
+    public boolean isReplayModeEnabled() throws BWFLAException {
+        final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
         return emul.isReplayModeEnabled();
     }
 
@@ -223,57 +218,55 @@ public class MachineResource {
     /* ==================== Monitoring API ==================== */
 
     @PUT
-    @Path("/{componentId}/monitor/update")
-    public boolean updateMonitorValues(@PathParam("componentId") String componentId) throws BWFLAException {
-        final EmulatorComponent emul = nodeManager.getComponentById(componentId, EmulatorComponent.class);
+    @Path("/monitor/update")
+    public boolean updateMonitorValues() throws BWFLAException {
+        final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
         return emul.updateMonitorValues();
     }
 
     @GET
-    @Path("/{componentId}/monitor/value")
-    public String getMonitorValue(@PathParam("componentId") String componentId,
-                                  @QueryParam("monitorVID") ProcessMonitorVID id) throws BWFLAException {
-        final EmulatorComponent emul = nodeManager.getComponentById(componentId, EmulatorComponent.class);
+    @Path("/monitor/value")
+    public String getMonitorValue(@QueryParam("monitorVID") ProcessMonitorVID id) throws BWFLAException {
+        final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
         return emul.getMonitorValue(id);
     }
 
     @GET
-    @Path("/{componentId}/monitor/values")
-    public List<String> getMonitorValues(@PathParam("componentId") String componentId,
-                                         @QueryParam("monitorVIDs") Collection<ProcessMonitorVID> ids) throws BWFLAException {
-        final EmulatorComponent emul = nodeManager.getComponentById(componentId, EmulatorComponent.class);
+    @Path("/monitor/values")
+    public List<String> getMonitorValues(@QueryParam("monitorVIDs") List<ProcessMonitorVID> ids) throws BWFLAException {
+        final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
         return emul.getMonitorValues(ids);
     }
 
     @GET
-    @Path("/{componentId}/monitor/values/all")
-    public List<String> getAllMonitorValues(@PathParam("componentId") String componentId) throws BWFLAException {
-        final EmulatorComponent emul = nodeManager.getComponentById(componentId, EmulatorComponent.class);
+    @Path("/monitor/values/all")
+    public List<String> getAllMonitorValues() throws BWFLAException {
+        final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
         return emul.getAllMonitorValues();
     }
 
 
     /* ==================== Print API ==================== */
     @GET
-    @Path("/{componentId}/print/jobs")
-    public List<PrintJob> getPrintJobs(@PathParam("componentId") String componentId) throws BWFLAException {
-        final EmulatorComponent emul = nodeManager.getComponentById(componentId, EmulatorComponent.class);
+    @Path("/print/jobs")
+    public List<PrintJob> getPrintJobs() throws BWFLAException {
+        final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
         return emul.getPrintJobs();
     }
 
     /* ==================== Screenshot API ==================== */
 
     @POST
-    @Path("/{componentId}/screenshot")
-    public void takeScreenshot(@PathParam("componentId") String componentId) throws BWFLAException {
-        final EmulatorComponent emul = nodeManager.getComponentById(componentId, EmulatorComponent.class);
+    @Path("/screenshot")
+    public void takeScreenshot() throws BWFLAException {
+        final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
         emul.takeScreenshot();
     }
 
     @GET
-    @Path("/{componentId}/screenshot")
-    public @XmlMimeType("application/octet-stream") DataHandler getNextScreenshot(@PathParam("componentId") String componentId) throws BWFLAException {
-        final EmulatorComponent emul = nodeManager.getComponentById(componentId, EmulatorComponent.class);
+    @Path("/screenshot")
+    public @XmlMimeType("application/octet-stream") DataHandler getNextScreenshot() throws BWFLAException {
+        final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
         return emul.getNextScreenshot();
     }
 }
