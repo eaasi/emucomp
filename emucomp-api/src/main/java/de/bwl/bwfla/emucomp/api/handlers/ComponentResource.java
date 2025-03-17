@@ -20,6 +20,7 @@
 package de.bwl.bwfla.emucomp.api.handlers;
 
 import de.bwl.bwfla.emucomp.NodeManager;
+import de.bwl.bwfla.emucomp.api.dto.ComponentRequest;
 import de.bwl.bwfla.emucomp.components.AbstractEaasComponent;
 import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 
@@ -47,37 +48,42 @@ public class ComponentResource {
 
     @POST
     @Path("/initialize")
-    @Consumes(MediaType.TEXT_PLAIN)
-    public String initialize(String componentId, String config) throws BWFLAException {
-        return nodeManager.allocateComponent(componentId, config);
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String initialize(ComponentRequest componentRequest) throws BWFLAException {
+        return nodeManager.allocateComponent(componentRequest.getComponentId(), componentRequest.getConfig());
     }
 
     @POST
     @Path("/destroy")
-    @Consumes(MediaType.TEXT_PLAIN)
-    public void destroy(String componentId) {
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public void destroy() {
         nodeManager.releaseComponent();
     }
 
     @POST
     @Path("/keepalive")
-    @Consumes(MediaType.TEXT_PLAIN)
-    public void keepalive(String componentId) throws BWFLAException {
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public void keepalive() throws BWFLAException {
         nodeManager.keepalive();
     }
 
     @GET
     @Path("/state")
-    @Consumes(MediaType.TEXT_PLAIN)
-    public String getState(String componentId) throws BWFLAException {
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getState() throws BWFLAException {
         final AbstractEaasComponent component = nodeManager.getComponentTransformed(AbstractEaasComponent.class);
         return component.getState().toString();
     }
 
     @GET
     @Path("/component-type")
-    @Consumes(MediaType.TEXT_PLAIN)
-    public String getComponentType(String componentId) throws BWFLAException {
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getComponentType() throws BWFLAException {
         final AbstractEaasComponent component = nodeManager.getComponentTransformed(AbstractEaasComponent.class);
 
         return component.getComponentType();
@@ -85,16 +91,18 @@ public class ComponentResource {
 
     @GET
     @Path("/env-id")
-    @Consumes(MediaType.TEXT_PLAIN)
-    public String getEnvironmentId(String componentId) throws BWFLAException {
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getEnvironmentId() throws BWFLAException {
         final AbstractEaasComponent component = nodeManager.getComponentTransformed(AbstractEaasComponent.class);
         return component.getEnvironmentId();
     }
 
     @GET
     @Path("/control-url")
-    @Consumes(MediaType.TEXT_PLAIN)
-    public Map<String, URI> getControlUrls(String componentId) throws BWFLAException {
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Map<String, URI> getControlUrls() throws BWFLAException {
         final String context = servletContext.getContextPath() + "/";
 
         final AbstractEaasComponent component = nodeManager.getComponentTransformed(AbstractEaasComponent.class);
@@ -104,7 +112,8 @@ public class ComponentResource {
 
     @GET
     @Path("/event-source")
-    @Consumes(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public URI getEventSourceUrl() throws BWFLAException {
         final AbstractEaasComponent component = nodeManager.getComponentTransformed(AbstractEaasComponent.class);
         return ComponentResource.normalize(component.getEventSourceUrl(), servletContext.getContextPath() + "/");
@@ -113,8 +122,9 @@ public class ComponentResource {
     //TODO REPLACE
 //    @GET
 //    @Path("/result")
-//    @Consumes(MediaType.TEXT_PLAIN)
-//    public BlobHandle getResult(String componentId) throws BWFLAException {
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public BlobHandle getResult() throws BWFLAException {
 //        final AbstractEaasComponent component = nodeManager.getComponentById(componentId, AbstractEaasComponent.class);
 //        return component.getResult();
 //    }

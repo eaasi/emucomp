@@ -32,6 +32,7 @@ import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.annotation.XmlMimeType;
 import java.util.List;
@@ -64,7 +65,7 @@ public class MachineResource {
 
     @POST
     @Path("/changeMedium")
-    public int changeMedium(int containerId, String objReference) throws BWFLAException {
+    public int changeMedium(@QueryParam("containerId") int containerId, @QueryParam("objReference") String objReference) throws BWFLAException {
         final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
         return emul.changeMedium(containerId, objReference);
     }
@@ -123,7 +124,8 @@ public class MachineResource {
 
     @POST
     @Path("/checkpoint")
-    public @XmlMimeType("application/octet-stream") DataHandler checkpoint() throws BWFLAException {
+    @Produces(MediaType.APPLICATION_JSON)
+    public DataHandler checkpoint() throws BWFLAException {
         final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
         return emul.checkpoint();
     }
@@ -265,7 +267,8 @@ public class MachineResource {
 
     @GET
     @Path("/screenshot")
-    public @XmlMimeType("application/octet-stream") DataHandler getNextScreenshot() throws BWFLAException {
+    @Produces(MediaType.APPLICATION_JSON)
+    public DataHandler getNextScreenshot() throws BWFLAException {
         final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
         return emul.getNextScreenshot();
     }

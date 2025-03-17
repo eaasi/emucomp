@@ -40,6 +40,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
 @Slf4j
@@ -57,6 +58,8 @@ public class NodeManager {
     ExecutorService executor;
 
     protected AbstractEaasComponent currentComponent;
+
+    private AtomicReference<String> currentComponentId = new AtomicReference<>();
 
     private final ThreadLocal<ComponentConfiguration> usedComponentConfiguration = ThreadLocal.withInitial(() -> null);
 
@@ -101,8 +104,10 @@ public class NodeManager {
                     log.info("Already allocated component: {}", componentId);
                 } else {
                     usedComponentConfiguration.set(configuration);
+                    currentComponentId.getAndSet(componentId);
+
                     try {
-                        return createComponentInstance(configuration, componentId);
+                        return createComponentInstance(configuration);
                     } catch (BWFLAException e) {
                         throw new RuntimeException(e);
                     }
@@ -210,7 +215,7 @@ public class NodeManager {
      *                        classloader or the configuration does not correspond to any
      *                        known bean class.
      */
-    protected AbstractEaasComponent createComponentInstance(ComponentConfiguration configuration, String componentId) throws BWFLAException {
+    protected AbstractEaasComponent createComponentInstance(ComponentConfiguration configuration) throws BWFLAException {
         try {
             AbstractEaasComponent component;
 
@@ -233,7 +238,7 @@ public class NodeManager {
                 throw new BWFLAException("(Valid) Configuration does not correspond to a component type. This is almost certainly a programming error!");
             }
 
-            component.setComponentId(componentId);
+            component.setComponentId(currentComponentId.get());
             component.setKeepaliveTimestamp(NodeManager.timestamp());
 
             // Submit cleanup handler

@@ -48,7 +48,7 @@ public class ContainerResource
 
 	@POST
 	@Path("/{componentId}/start")
-	@Consumes(MediaType.TEXT_PLAIN)
+	@Consumes(MediaType.APPLICATION_JSON)
 	public void startContainer(@PathParam("componentId") String componentId) throws BWFLAException
 	{
 		final ContainerComponent component = this.lookup(componentId);
@@ -57,7 +57,7 @@ public class ContainerResource
 
 	@POST
 	@Path("/{componentId}/stop")
-	@Consumes(MediaType.TEXT_PLAIN)
+	@Consumes(MediaType.APPLICATION_JSON)
 	public void stopContainer(@PathParam("componentId") String componentId) throws BWFLAException
 	{
 		final ContainerComponent component = this.lookup(componentId);

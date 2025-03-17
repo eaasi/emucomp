@@ -1,8 +1,8 @@
 package de.bwl.bwfla.emucomp.api.handlers;
 
-import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 import de.bwl.bwfla.emucomp.NodeManager;
 import de.bwl.bwfla.emucomp.api.NetworkSwitchComponent;
+import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
@@ -28,8 +28,8 @@ public class NetworkSwitchResource {
 
     @POST
     @Path("/{componentId}/connect")
-    @Consumes(MediaType.TEXT_PLAIN)
-    public Response connect(@PathParam("componentId") String componentId, String url) throws BWFLAException {
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response connect(@PathParam("componentId") String componentId, @QueryParam("url") String url) throws BWFLAException {
         final NetworkSwitchComponent comp = nodeManager.getComponentById(componentId, NetworkSwitchComponent.class);
         comp.connect(url);
         return Response.ok().build();
@@ -37,8 +37,8 @@ public class NetworkSwitchResource {
 
     @POST
     @Path("/{componentId}/disconnect")
-    @Consumes(MediaType.TEXT_PLAIN)
-    public Response disconnect(@PathParam("componentId") String componentId, String url) throws BWFLAException {
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response disconnect(@PathParam("componentId") String componentId, @QueryParam("url") String url) throws BWFLAException {
         final NetworkSwitchComponent comp = nodeManager.getComponentById(componentId, NetworkSwitchComponent.class);
         comp.disconnect(url);
         return Response.ok().build();
@@ -46,7 +46,7 @@ public class NetworkSwitchResource {
 
     @GET
     @Path("/{componentId}/ws-connect")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response wsConnect(@PathParam("componentId") String componentId) throws BWFLAException {
         final String context = servletContext.getContextPath() + "/";
         final NetworkSwitchComponent comp = nodeManager.getComponentById(componentId, NetworkSwitchComponent.class);
