@@ -9,3 +9,8 @@ quarkus:
       - blob-default.yml
       - connection.yml
       - threads.yml
+  grpc:
+    server:
+      health:
+        enabled: true
+      host: 0.0.0.0
