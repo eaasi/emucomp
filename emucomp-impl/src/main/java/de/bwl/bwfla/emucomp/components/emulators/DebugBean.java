@@ -5,6 +5,7 @@ import de.bwl.bwfla.emucomp.Drive;
 import de.bwl.bwfla.emucomp.MachineConfiguration;
 import de.bwl.bwfla.emucomp.Nic;
 import org.apache.tamaya.inject.api.Config;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.inject.Inject;
 
@@ -12,7 +13,7 @@ import javax.inject.Inject;
 public class DebugBean extends EmulatorBean
 {
 	@Inject
-	@Config("emucomp.debug_bean_enabled")
+	@ConfigProperty(name = "emucomp.debug_bean_enabled")
 	public boolean isEnabled;
 
 	@Override

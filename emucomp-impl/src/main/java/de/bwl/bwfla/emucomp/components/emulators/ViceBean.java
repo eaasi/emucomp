@@ -23,6 +23,7 @@ import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 
 import de.bwl.bwfla.emucomp.*;
 import org.apache.tamaya.inject.api.Config;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -41,7 +42,7 @@ public abstract class ViceBean extends EmulatorBean
 	private int numAttachedDrives = 0;
 
 	@Inject
-	@Config("components.vice_defaults_dir")
+	@ConfigProperty(name = "components.vice_defaults_dir")
 	protected String defaultsDirectory;
 
 	@Override

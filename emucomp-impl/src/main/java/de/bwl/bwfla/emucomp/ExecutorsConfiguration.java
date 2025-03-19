@@ -13,11 +13,9 @@ import java.util.concurrent.ThreadFactory;
 @ApplicationScoped
 public class ExecutorsConfiguration {
 
-
-    //TODO CONFIG
     @Produces
     ScheduledExecutorService executor() {
-        return Executors.newScheduledThreadPool(5);
+        return Executors.newScheduledThreadPool(10);
     }
 
     @Produces
@@ -27,8 +25,8 @@ public class ExecutorsConfiguration {
 
     @Produces
     @Identifier("managed-executor")
-    @ManagedExecutorConfig(maxAsync = 5, maxQueued = 10)
+    @ManagedExecutorConfig(maxAsync = 5, maxQueued = 100)
     ExecutorService produceExecutor() {
-        return java.util.concurrent.Executors.newFixedThreadPool(5);
+        return java.util.concurrent.Executors.newFixedThreadPool(10);
     }
 }

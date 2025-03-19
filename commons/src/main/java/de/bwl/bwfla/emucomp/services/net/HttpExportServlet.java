@@ -22,6 +22,7 @@ package de.bwl.bwfla.emucomp.services.net;
 import de.bwl.bwfla.emucomp.services.ByteRange;
 import de.bwl.bwfla.emucomp.services.FileRangeIterator;
 import org.apache.tamaya.inject.api.Config;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -60,11 +61,11 @@ public abstract class HttpExportServlet extends HttpServlet
 	protected ExecutorService executor;
 
 	@Inject
-	@Config("http_export_servlet.file_cache.gc_interval")
+	@ConfigProperty(name = "http_export_servlet.file_cache.gc_interval")
 	private Duration fileCacheGcInterval = null;
 
 	@Inject
-	@Config("http_export_servlet.file_cache.entry_eviction_timeout")
+	@ConfigProperty(name = "http_export_servlet.file_cache.entry_eviction_timeout")
 	private Duration fileCacheEntryEvictionTimeout = null;
 
 

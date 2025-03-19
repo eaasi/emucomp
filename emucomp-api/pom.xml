@@ -227,5 +227,10 @@
             <version>1.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>de.bwl.bwfla.emucomp.grpc</groupId>
+            <artifactId>emucomp-grpc-interface</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>

@@ -27,6 +27,7 @@ import de.bwl.bwfla.emucomp.control.connectors.EthernetConnector;
 import de.bwl.bwfla.emucomp.control.connectors.IConnector;
 import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 import org.apache.tamaya.inject.api.Config;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.enterprise.concurrent.ManagedThreadFactory;
 import javax.inject.Inject;
@@ -54,11 +55,11 @@ import java.util.logging.Logger;
 //       port allocation
 public class VdeSwitchBean extends NetworkSwitchBean {
     @Inject
-    @Config("components.binary.vdeswitch")
+    @ConfigProperty(name = "components.binary.vdeswitch")
     private String vdeswitchBinary;
 
     @Inject
-    @Config("components.binary.vdeplug")
+    @ConfigProperty(name = "components.binary.vdeplug")
     private String vdeplugBinary;
 
     private ManagedThreadFactory threadFactory;

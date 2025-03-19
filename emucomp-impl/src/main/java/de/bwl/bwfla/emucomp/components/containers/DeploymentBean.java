@@ -28,6 +28,7 @@ import de.bwl.bwfla.emucomp.data.BlobDescription;
 import de.bwl.bwfla.emucomp.data.BlobHandle;
 import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 import org.apache.tamaya.inject.api.Config;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.annotation.Resource;
 import javax.enterprise.concurrent.ManagedThreadFactory;
@@ -38,6 +39,7 @@ import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.UUID;
+import java.util.concurrent.ThreadFactory;
 import java.util.logging.Level;
 import java.util.stream.Stream;
 
@@ -53,23 +55,22 @@ public abstract class DeploymentBean extends EaasComponentBean implements Contai
 	protected final BindingsManager bindings = new BindingsManager();
 
 	@Inject
-	@Resource
-	protected ManagedThreadFactory workerThreadFactory;
+	protected ThreadFactory workerThreadFactory;
 
 	@Inject
-	@Config("components.containers.blobstore")
+	@ConfigProperty(name = "components.containers.blobstore")
 	private String blobStoreAddress = null;
 
 	@Inject
-	@Config("components.containers.usernamespace.enabled")
+	@ConfigProperty(name = "components.containers.usernamespace.enabled")
 	private boolean conUserNamespaceEnabled = false;
 
 	@Inject
-	@Config("components.containers.usernamespace.user")
+	@ConfigProperty(name = "components.containers.usernamespace.user")
 	private String conRuntimeUser = null;
 
 	@Inject
-	@Config("components.containers.usernamespace.group")
+	@ConfigProperty(name = "components.containers.usernamespace.group")
 	private String conRuntimeGroup = null;
 
 

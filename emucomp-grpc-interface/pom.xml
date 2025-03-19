@@ -53,7 +53,6 @@
                         <goals>
                             <goal>build</goal>
                             <goal>generate-code</goal>
-                            <goal>dev</goal>
                         </goals>
                         <configuration>
                             <properties>

@@ -21,6 +21,7 @@ package de.bwl.bwfla.emucomp.components.emulators;
 
 import de.bwl.bwfla.emucomp.MachineConfiguration;
 import org.apache.tamaya.inject.api.Config;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.inject.Inject;
 
@@ -29,7 +30,7 @@ import javax.inject.Inject;
 public class PceIbmPcBean extends PceBean
 {
     @Inject
-    @Config("components.binary.pce.ibmpc")
+    @ConfigProperty(name = "components.binary.pce.ibmpc")
     protected String emuExecPath;
 
 	/** Max. number of supported drives per type. */

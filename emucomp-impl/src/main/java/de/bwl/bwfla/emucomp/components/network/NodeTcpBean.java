@@ -28,11 +28,11 @@ public class NodeTcpBean extends EaasComponentBean {
     private PortRangeProvider.Port tcpPorts;
 
     @Inject
-    @Config("components.binary.nodetcprunner")
+    @ConfigProperty(name = "components.binary.nodetcprunner")
     private String nodeTcpRunner;
 
     @Inject
-    @Config("components.binary.nodetcpscript")
+    @ConfigProperty(name = "components.binary.nodetcpscript")
     private String nodeTcpScript;
 
     @Override

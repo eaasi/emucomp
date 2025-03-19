@@ -1,4 +1,0 @@
-quarkus:
-  thread-pool:
-    max-threads: 10
-    queue-size: 100

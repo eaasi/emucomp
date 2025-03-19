@@ -27,6 +27,7 @@ import de.bwl.bwfla.emucomp.api.ContainerComponent;
 import de.bwl.bwfla.emucomp.components.BindingsManager;
 import de.bwl.bwfla.emucomp.components.EaasComponentBean;
 import org.apache.tamaya.inject.api.Config;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.annotation.Resource;
 import javax.enterprise.concurrent.ManagedThreadFactory;
@@ -37,6 +38,7 @@ import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.UUID;
+import java.util.concurrent.ThreadFactory;
 import java.util.logging.Level;
 import java.util.stream.Stream;
 
@@ -52,24 +54,23 @@ public abstract class ContainerBean extends EaasComponentBean implements Contain
 	protected final BindingsManager bindings = new BindingsManager();
 
 	@Inject
-	@Resource
-	protected ManagedThreadFactory workerThreadFactory;
+	protected ThreadFactory workerThreadFactory;
 
 	@Inject
-	@Config("components.containers.blobstore")
-	private String blobStoreAddress = null;
+	@ConfigProperty(name = "components.containers.blobstore")
+	String blobStoreAddress = null;
 
 	@Inject
-	@Config("components.containers.usernamespace.enabled")
-	private boolean conUserNamespaceEnabled = false;
+	@ConfigProperty(name = "components.containers.usernamespace.enabled")
+	boolean conUserNamespaceEnabled = false;
 
 	@Inject
-	@Config("components.containers.usernamespace.user")
-	private String conRuntimeUser = null;
+	@ConfigProperty(name = "components.containers.usernamespace.user")
+	String conRuntimeUser = null;
 
 	@Inject
-	@Config("components.containers.usernamespace.group")
-	private String conRuntimeGroup = null;
+	@ConfigProperty(name = "components.containers.usernamespace.group")
+	String conRuntimeGroup = null;
 
 
 	public static ContainerBean createContainerBean(ContainerConfiguration config) throws ClassNotFoundException

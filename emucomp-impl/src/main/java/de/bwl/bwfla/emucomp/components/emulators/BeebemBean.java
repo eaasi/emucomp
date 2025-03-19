@@ -24,6 +24,7 @@ import de.bwl.bwfla.emucomp.EmulatorUtils;
 import de.bwl.bwfla.emucomp.MachineConfiguration;
 import de.bwl.bwfla.emucomp.Nic;
 import org.apache.tamaya.inject.api.Config;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -37,7 +38,7 @@ import java.util.logging.Level;
 public class BeebemBean extends EmulatorBean
 {	
     @Inject
-    @Config("components.binary.beebem")
+	@ConfigProperty(name = "components.binary.beebem")
     public String beebemBean;
 
 	@Override

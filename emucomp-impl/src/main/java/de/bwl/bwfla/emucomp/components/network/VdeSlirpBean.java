@@ -26,6 +26,7 @@ import de.bwl.bwfla.emucomp.components.EaasComponentBean;
 import de.bwl.bwfla.emucomp.control.connectors.EthernetConnector;
 import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 import org.apache.tamaya.inject.api.Config;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.enterprise.inject.spi.CDI;
 import javax.inject.Inject;
@@ -33,7 +34,7 @@ import java.util.ArrayList;
 
 public class VdeSlirpBean extends EaasComponentBean {
     @Inject
-    @Config("components.binary.vdeslirp")
+    @ConfigProperty(name = "components.binary.vdeslirp")
     protected String vdeslirp_bin;
 
     protected DeprecatedProcessRunner runner = new DeprecatedProcessRunner();

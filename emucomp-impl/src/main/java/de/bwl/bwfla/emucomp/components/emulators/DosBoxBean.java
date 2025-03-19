@@ -23,6 +23,7 @@ import de.bwl.bwfla.emucomp.Drive;
 import de.bwl.bwfla.emucomp.MachineConfiguration;
 import de.bwl.bwfla.emucomp.Nic;
 import org.apache.tamaya.inject.api.Config;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.inject.Inject;
 import java.nio.file.Path;
@@ -38,7 +39,7 @@ import java.nio.file.Paths;
 public class DosBoxBean extends EmulatorBean {
 
     @Inject
-    @Config("components.binary.dosbox")
+    @ConfigProperty(name = "components.binary.dosbox")
     private String dosBoxBean;
     
 	private char letter = 'c';

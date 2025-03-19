@@ -41,7 +41,7 @@ service MachineService {
 }
 
 message MediumRequest {
-  int64 handle = 1;
+  int32 handle = 1;
   string objReference = 2;
   string dataHandler = 3;
   string mediaType = 4;

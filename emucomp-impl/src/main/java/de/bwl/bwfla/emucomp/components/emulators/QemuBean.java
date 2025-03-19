@@ -4,6 +4,7 @@ import de.bwl.bwfla.emucomp.*;
 import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 import org.apache.tamaya.ConfigurationProvider;
 import org.apache.tamaya.inject.api.Config;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -28,7 +29,7 @@ public class QemuBean extends EmulatorBean
 	final boolean isGpuEnabled = ConfigurationProvider.getConfiguration().get("components.xpra.enable_gpu", Boolean.class);
 
 	@Inject
-	@Config("components.binary.qemu")
+	@ConfigProperty(name = "components.binary.qemu")
 	protected String qemu_bin;
 
 	private String monitor_path;

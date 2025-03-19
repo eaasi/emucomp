@@ -21,6 +21,7 @@ package de.bwl.bwfla.emucomp;
 
 
 import de.bwl.bwfla.emucomp.components.AbstractEaasComponent;
+import de.bwl.bwfla.emucomp.components.containers.ContainerBean;
 import de.bwl.bwfla.emucomp.components.emulators.EmulatorBean;
 import de.bwl.bwfla.emucomp.components.network.NetworkSwitchBean;
 import de.bwl.bwfla.emucomp.components.network.NodeTcpBean;
@@ -221,11 +222,9 @@ public class NodeManager {
             if (configuration instanceof MachineConfiguration) {
                 component = EmulatorBean.createEmulatorBean((MachineConfiguration) configuration);
                 component.setEnvironmentId(((MachineConfiguration) configuration).getId());
-            }
-//            else if (configuration instanceof ContainerConfiguration) {
-//                component = ContainerBean.createContainerBean((ContainerConfiguration) configuration);
-//            }
-            else if (configuration instanceof VdeSlirpConfiguration) {
+            } else if (configuration instanceof ContainerConfiguration) {
+                component = ContainerBean.createContainerBean((ContainerConfiguration) configuration);
+            } else if (configuration instanceof VdeSlirpConfiguration) {
                 component = VdeSlirpBean.createVdeSlirp((VdeSlirpConfiguration) configuration);
             } else if (configuration instanceof NetworkSwitchConfiguration) {
                 component = NetworkSwitchBean.createNetworkSwitch((NetworkSwitchConfiguration) configuration);

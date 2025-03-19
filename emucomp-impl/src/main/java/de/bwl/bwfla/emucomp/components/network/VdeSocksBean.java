@@ -29,6 +29,7 @@ import de.bwl.bwfla.emucomp.control.connectors.Socks4Connector;
 import de.bwl.bwfla.emucomp.net.ConfigKey;
 import de.bwl.bwfla.emucomp.net.PortRangeProvider;
 import org.apache.tamaya.inject.api.Config;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.enterprise.inject.spi.CDI;
 import javax.inject.Inject;
@@ -38,11 +39,11 @@ import java.util.logging.Level;
 
 public class VdeSocksBean extends EaasComponentBean {
     @Inject
-    @Config("components.binary.vdesocks")
+    @ConfigProperty(name = "components.binary.vdesocks")
     protected String vdesocks_bin;
     
     @Inject
-    @Config("components.socks.listenaddress")
+    @ConfigProperty(name = "components.socks.listenaddress")
     protected String listenAddress;
     
     @Inject

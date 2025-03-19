@@ -4,6 +4,7 @@ import de.bwl.bwfla.emucomp.Drive;
 import de.bwl.bwfla.emucomp.MachineConfiguration;
 import de.bwl.bwfla.emucomp.Nic;
 import org.apache.tamaya.inject.api.Config;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.inject.Inject;
 import java.io.BufferedReader;
@@ -21,7 +22,7 @@ import java.util.logging.Level;
  */
 public class BasiliskIIBean extends EmulatorBean {
     @Inject
-    @Config("components.binary.basilisk")
+    @ConfigProperty(name = "components.binary.basilisk")
     private String basiliskBean;
 
     @Override

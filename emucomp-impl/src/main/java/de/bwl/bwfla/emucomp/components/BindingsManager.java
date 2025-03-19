@@ -23,7 +23,6 @@ package de.bwl.bwfla.emucomp.components;
 import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 
 import de.bwl.bwfla.emucomp.*;
-import de.bwl.bwfla.emucomp.client.ObjectArchiveClient;
 
 import java.io.File;
 import java.io.IOException;
@@ -111,22 +110,22 @@ public class BindingsManager {
             // If the resource is an ArchiveBinding, query the archive
             // and add all entries from the file collection
             final ObjectArchiveBinding object = (ObjectArchiveBinding) resource;
-            ObjectArchiveClient client = new ObjectArchiveClient(object.getArchiveHost());
-            final FileCollection fc;
-            try {
-                fc = client.fetchObjectReference(object);
-            } catch (Exception e) {
-                throw new BWFLAException("Cannot retrieve FileCollection from archive: " + e.getMessage(), e);
-            }
-            if (fc == null || fc.id == null || fc.id.isEmpty())
-                throw new BWFLAException("Retrieving object meta data failed!");
-
-            for (FileCollectionEntry link : fc.files) {
-                if (link.getId() == null || link.getUrl() == null)
-                    continue;
-
-                this.put(id + "/" + link.getId(), link);
-            }
+//            ObjectArchiveClient client = new ObjectArchiveClient(object.getArchiveHost());
+//            final FileCollection fc;
+//            try {
+//                fc = client.fetchObjectReference(object);
+//            } catch (Exception e) {
+//                throw new BWFLAException("Cannot retrieve FileCollection from archive: " + e.getMessage(), e);
+//            }
+//            if (fc == null || fc.id == null || fc.id.isEmpty())
+//                throw new BWFLAException("Retrieving object meta data failed!");
+//
+//            for (FileCollectionEntry link : fc.files) {
+//                if (link.getId() == null || link.getUrl() == null)
+//                    continue;
+//
+//                this.put(id + "/" + link.getId(), link);
+//            }
         } else {
             final String clazz = resource.getClass().getName();
             throw new IllegalArgumentException("Unsupported resource type: " + clazz);

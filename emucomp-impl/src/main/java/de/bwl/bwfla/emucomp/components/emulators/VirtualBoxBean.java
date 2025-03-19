@@ -24,6 +24,7 @@ import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 import de.bwl.bwfla.emucomp.*;
 import de.bwl.bwfla.emucomp.exceptions.IllegalEmulatorStateException;
 import org.apache.tamaya.inject.api.Config;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.activation.DataHandler;
 import javax.inject.Inject;
@@ -48,11 +49,11 @@ public class VirtualBoxBean extends EmulatorBean {
     private String vmname = null;
 
     @Inject
-    @Config("components.binary.vbox.headlessexec")
+    @ConfigProperty(name = "components.binary.vbox.headlessexec")
     private String vboxHeadlessExec;
 
     @Inject
-    @Config("components.binary.vbox.manageexec")
+    @ConfigProperty(name = "components.binary.vbox.manageexec")
     private String vboxManageExec;
 
     @Override
