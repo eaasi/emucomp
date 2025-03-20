@@ -41,7 +41,6 @@ import java.util.logging.Logger;
         MachineConfiguration.class,
         MachineConfigurationTemplate.class,
         DockerContainerConfiguration.class,
-        OciContainerConfiguration.class,
         GeneralizationPatch.class
 //    NetworkEnvironment.class
 })
@@ -56,7 +55,7 @@ public class Environment extends ComponentConfiguration {
     @XmlElement(namespace = "http://bwfla.bwl.de/common/datatypes", required = true)
     protected EnvironmentDescription description;
 
-    // MachineConfiguration, OciContainerConfiguration
+    // MachineConfiguration
     @XmlElement(namespace = "http://bwfla.bwl.de/common/datatypes", required = false)
     protected String configurationType = this.getClass().getCanonicalName();
 

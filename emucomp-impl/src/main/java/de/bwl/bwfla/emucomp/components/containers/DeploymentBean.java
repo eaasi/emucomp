@@ -74,18 +74,6 @@ public abstract class DeploymentBean extends EaasComponentBean implements Contai
 	private String conRuntimeGroup = null;
 
 
-	public static DeploymentBean createContainerBean(ContainerConfiguration config) throws ClassNotFoundException
-	{
-		Class<?> clazz = null;
-		if (config instanceof OciContainerConfiguration)
-			clazz = RuncBean.class;
-		else if (config instanceof DockerContainerConfiguration)
-			clazz = DockerBean.class;
-		else throw new ClassNotFoundException("Unsupported container configuration type: " + config.getClass().getName());
-
-        return (DeploymentBean) CDI.current().select(clazz).get();
-	}
-
 	public Path getDataDir()
 	{
 		return this.getWorkingDir().resolve("data");
