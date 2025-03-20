@@ -1,29 +1,30 @@
-# Этап сборки
-FROM maven:3.8.4-openjdk-17-slim AS builder
+FROM maven:3.8.6-eclipse-temurin-17 as build
 
-# Установка рабочей директории
 WORKDIR /app
 
-# Копирование файлов проекта
-COPY . .
+COPY commons/pom.xml commons/
+COPY emucomp-grpc-interface/pom.xml emucomp-grpc-interface/
+COPY emucomp-impl/pom.xml emucomp-impl/
+COPY emucomp-api/pom.xml emucomp-api/
 
-# Сборка проекта
-RUN mvn clean package -DskipTests
+RUN mvn dependency:go-offline -B
 
-# Этап запуска
-FROM openjdk:17-slim
+COPY ./commons ./commons
+COPY ./emucomp-grpc-interface ./emucomp-grpc-interface
+COPY ./emucomp-impl ./emucomp-impl
+COPY ./emucomp-api ./emucomp-api
 
-# Установка рабочей директории
+RUN mvn clean install -DskipTests
+
+FROM eclipse-temurin:17-jdk-jammy
+
 WORKDIR /app
 
-# Копирование собранного JAR-файла из этапа сборки
-COPY --from=builder /app/emucomp-impl/target/*.jar app.jar
+COPY --from=build /app/commons/target/commons-*.jar ./commons.jar
+COPY --from=build /app/emucomp-grpc-interface/target/emucomp-grpc-interface-*.jar ./emucomp-grpc-interface.jar
+COPY --from=build /app/emucomp-impl/target/emucomp-impl-*.jar ./emucomp-impl.jar
+COPY --from=build /app/emucomp-api/target/emucomp-api-*.jar ./emucomp-api.jar
 
-# Установка переменных окружения
-ENV JAVA_OPTS="-Xmx512m -Xms256m"
-
-# Открытие порта (замените на нужный порт вашего приложения)
 EXPOSE 8080
 
-# Запуск приложения
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"] 
+CMD ["java", "-jar", "./emucomp-api.jar"]
