@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>de.bwl.bwfla.emucomp.grpc</groupId>
+    <artifactId>emucomp-grpc-interface</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <compiler-plugin.version>3.13.0</compiler-plugin.version>
+
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
+        <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
+        <quarkus.platform.version>2.16.5.Final</quarkus.platform.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>${quarkus.platform.group-id}</groupId>
+                <artifactId>${quarkus.platform.artifact-id}</artifactId>
+                <version>${quarkus.platform.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jboss.spec</groupId>
+                <artifactId>jboss-javaee-8.0</artifactId>
+                <version>1.0.0.Final</version>
+                <scope>provided</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <finalName>emucomp-api-dev</finalName>
+        <plugins>
+            <plugin>
+                <groupId>io.quarkus</groupId>
+                <artifactId>quarkus-maven-plugin</artifactId>
+                <version>${quarkus.platform.version}</version>
+                <extensions>true</extensions>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>build</goal>
+                            <goal>generate-code</goal>
+                        </goals>
+                        <configuration>
+                            <properties>
+                                <quarkus.grpc.codegen.proto-directory>${project.basedir}/proto</quarkus.grpc.codegen.proto-directory>
+                            </properties>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>io.quarkus</groupId>
+                        <artifactId>quarkus-core</artifactId>
+                        <version>${quarkus.platform.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${compiler-plugin.version}</version>
+                <configuration>
+                    <parameters>true</parameters>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-grpc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-resteasy</artifactId>
+        </dependency>
+    </dependencies>
+</project>

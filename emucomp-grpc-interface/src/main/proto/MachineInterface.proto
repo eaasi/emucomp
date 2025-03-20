@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "de.bwl.bwfla.emucomp.grpc";
+option java_outer_classname = "MachineInterface";
+
+import "Commons.proto";
+
+package emucomp;
+
+service MachineService {
+  rpc StartMachine (EmptyRequest) returns (EmptyResponse) {}
+  rpc StopMachine (EmptyRequest) returns (EmptyResponse) {}
+  rpc ChangeMedium (MediumRequest) returns (GenericResponse) {}
+  rpc AttachMedium (MediumRequest) returns (GenericResponse) {}
+  rpc DetachMedium (MediumRequest) returns (GenericResponse) {}
+  rpc RuntimeConfiguration (EmptyRequest) returns (GenericResponse) {}
+  rpc ColdDrives (EmptyRequest) returns (ListResponse) {}
+  rpc HotDrives (EmptyRequest) returns (ListResponse) {}
+  rpc Snapshot (EmptyRequest) returns (ListResponse) {}
+  rpc EmulatorState (EmptyRequest) returns (GenericResponse) {}
+  rpc Checkpoint (EmptyRequest) returns (GenericResponse) {}
+  rpc PrepareSessionRecorder (EmptyRequest) returns (GenericResponse) {}
+  rpc StartSessionRecording (EmptyRequest) returns (EmptyResponse) {}
+  rpc StopSessionRecording (EmptyRequest) returns (EmptyResponse) {}
+  rpc IsRecordModeEnabled (EmptyRequest) returns (GenericResponse) {}
+  rpc AddActionFinishedMark (EmptyRequest) returns (EmptyResponse) {}
+  rpc DefineTraceMetadataChunk (MetadataChunkRequest) returns (EmptyResponse) {}
+  rpc AddTraceMetadataEntry (MetadataEntryRequest) returns (EmptyResponse) {}
+  rpc SessionTrace (EmptyRequest) returns (GenericResponse) {}
+  rpc PrepareSessionPlayer (SessionPlayerRequest) returns (GenericResponse) {}
+  rpc SessionPlayerProgress (EmptyRequest) returns (GenericResponse) {}
+  rpc IsReplayModeEnabled (EmptyRequest) returns (GenericResponse) {}
+  rpc UpdateMonitorValues (EmptyRequest) returns (GenericResponse) {}
+  rpc MonitorValue (ProcessMonitorVid) returns (GenericResponse) {}
+  rpc MonitorValues (MonitorValuesRequest) returns (ListResponse) {}
+  rpc AllMonitorValues (EmptyRequest) returns (ListResponse) {}
+  rpc PrintJobs (EmptyRequest) returns (PrintJobResponse) {}
+  rpc TakeScreenshot (EmptyRequest) returns (EmptyResponse) {}
+  rpc NextScreenshot (EmptyRequest) returns (GenericResponse) {}
+}
+
+message MediumRequest {
+  int32 handle = 1;
+  string objReference = 2;
+  string dataHandler = 3;
+  string mediaType = 4;
+}
+
+message MetadataChunkRequest {
+  string tag = 1;
+  string comment = 2;
+}
+
+message MetadataEntryRequest {
+  string ctag = 1;
+  string key = 2;
+  string value = 3;
+}
+
+message SessionPlayerRequest {
+  string trace = 1;
+  bool headless = 2;
+}
+
+message ProcessMonitorVid {
+  string enumVal = 1;
+}
+
+message MonitorValuesRequest {
+  repeated ProcessMonitorVid reqs = 1;
+}
+
+message PrintJob {
+  string label = 1;
+  string dataHandler = 2;
+}
+message PrintJobResponse {
+  repeated PrintJob jobs = 1;
+}

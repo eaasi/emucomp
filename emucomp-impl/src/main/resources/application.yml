@@ -1,0 +1,9 @@
+#quarkus:
+#  application:
+#    name: emucomp-impl
+#  config:
+#    locations:
+#      - classpath:/default.yml
+#      - classpath:/blob-default.yml
+#      - classpath:/connection.yml
+#      - classpath:/threads.yml

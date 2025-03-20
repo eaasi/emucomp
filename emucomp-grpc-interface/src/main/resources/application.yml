@@ -1,0 +1,5 @@
+quarkus:
+  generate-code:
+    grpc:
+      scan-for-proto: all
+      scan-for-imports: all
