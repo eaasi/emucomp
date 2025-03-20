@@ -3,9 +3,11 @@ package de.bwl.bwfla.emucomp.api.handlers.rpc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bwl.bwfla.emucomp.NodeManager;
 import de.bwl.bwfla.emucomp.api.NetworkSwitchComponent;
-import de.bwl.bwfla.emucomp.api.handlers.NetworkSwitchResource;
+import de.bwl.bwfla.emucomp.api.security.SessionManagerResolver;
 import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
-import de.bwl.bwfla.emucomp.grpc.*;
+import de.bwl.bwfla.emucomp.grpc.GenericResponse;
+import de.bwl.bwfla.emucomp.grpc.NetworkSwitchServiceGrpc;
+import de.bwl.bwfla.emucomp.grpc.UrlRequest;
 import io.grpc.ServerServiceDefinition;
 import io.grpc.stub.StreamObserver;
 import io.quarkus.grpc.GrpcService;
@@ -19,10 +21,14 @@ public class NetworkRPCService extends NetworkSwitchServiceGrpc.NetworkSwitchSer
     @Inject
     NodeManager nodeManager;
 
+    @Inject
+    SessionManagerResolver sessionManagerResolver;
+
     private static final ObjectMapper mapper = new ObjectMapper();
 
     @Override
     public void connect(UrlRequest request, StreamObserver<GenericResponse> responseObserver) {
+        sessionManagerResolver.getSessionManager();
         final NetworkSwitchComponent comp;
         try {
             comp = nodeManager.getComponentTransformed(NetworkSwitchComponent.class);

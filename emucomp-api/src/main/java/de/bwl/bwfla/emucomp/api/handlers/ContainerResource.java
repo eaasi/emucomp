@@ -19,9 +19,10 @@
 
 package de.bwl.bwfla.emucomp.api.handlers;
 
-import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 import de.bwl.bwfla.emucomp.NodeManager;
 import de.bwl.bwfla.emucomp.api.ContainerComponent;
+import de.bwl.bwfla.emucomp.api.security.SessionManagerResolver;
+import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
@@ -35,40 +36,40 @@ import javax.ws.rs.core.UriInfo;
 
 
 @Path("/ComponentService/Container")
-public class ContainerResource
-{
+public class ContainerResource {
     @Inject
-	protected NodeManager nodeManager;
+    protected NodeManager nodeManager;
 
-	@Context
-	ServletContext servletContext;
+    @Context
+    ServletContext servletContext;
 
-	@Context
-	UriInfo uriInfo;
+    @Context
+    UriInfo uriInfo;
 
-	@POST
-	@Path("/{componentId}/start")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public void startContainer(@PathParam("componentId") String componentId) throws BWFLAException
-	{
-		final ContainerComponent component = this.lookup(componentId);
-		component.start();
-	}
+    @Inject
+    SessionManagerResolver sessionManagerResolver;
 
-	@POST
-	@Path("/{componentId}/stop")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public void stopContainer(@PathParam("componentId") String componentId) throws BWFLAException
-	{
-		final ContainerComponent component = this.lookup(componentId);
-		component.stop();
-	}
+    @POST
+    @Path("/{componentId}/start")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void startContainer(@PathParam("componentId") String componentId) throws BWFLAException {
+        sessionManagerResolver.getSessionManager();
+        final ContainerComponent component = this.lookup(componentId);
+        component.start();
+    }
+
+    @POST
+    @Path("/{componentId}/stop")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void stopContainer(@PathParam("componentId") String componentId) throws BWFLAException {
+        final ContainerComponent component = this.lookup(componentId);
+        component.stop();
+    }
 
 
-	/* =============== Internal Helpers =============== */
+    /* =============== Internal Helpers =============== */
 
-	private ContainerComponent lookup(String id) throws BWFLAException
-	{
-		return nodeManager.getComponentById(id, ContainerComponent.class);
-	}
+    private ContainerComponent lookup(String id) throws BWFLAException {
+        return nodeManager.getComponentById(id, ContainerComponent.class);
+    }
 }

@@ -5,8 +5,10 @@
     <file url="file://$PROJECT_DIR$/commons/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/emucomp-api/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/emucomp-api/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/emucomp-api/target/generated-sources/grpc" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/emucomp-grpc-interface/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/emucomp-grpc-interface/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/emucomp-grpc-interface/target/generated-sources/grpc" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/emucomp-impl/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/emucomp-impl/src/main/resources" charset="UTF-8" />
   </component>

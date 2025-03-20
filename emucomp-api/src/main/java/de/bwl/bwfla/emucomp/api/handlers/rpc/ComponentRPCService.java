@@ -1,10 +1,10 @@
 package de.bwl.bwfla.emucomp.api.handlers.rpc;
 
 import de.bwl.bwfla.emucomp.NodeManager;
+import de.bwl.bwfla.emucomp.api.security.SessionManagerResolver;
 import de.bwl.bwfla.emucomp.components.AbstractEaasComponent;
 import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 import de.bwl.bwfla.emucomp.grpc.*;
-import io.grpc.ServerServiceDefinition;
 import io.grpc.stub.StreamObserver;
 import io.quarkus.grpc.GrpcService;
 
@@ -19,8 +19,12 @@ public class ComponentRPCService extends ComponentServiceGrpc.ComponentServiceIm
     @Inject
     NodeManager nodeManager;
 
+    @Inject
+    SessionManagerResolver sessionManagerResolver;
+
     @Override
     public void initializeComponent(ComponentRequest request, StreamObserver<GenericResponse> responseObserver) {
+        sessionManagerResolver.getSessionManager();
         try {
             String s = nodeManager.allocateComponent(request.getComponentId(), request.getComponentConfiguration());
             responseObserver.onNext(GenericResponse.newBuilder()

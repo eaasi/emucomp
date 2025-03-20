@@ -25,6 +25,7 @@ import de.bwl.bwfla.emucomp.NodeManager;
 import de.bwl.bwfla.emucomp.PrintJob;
 import de.bwl.bwfla.emucomp.ProcessMonitorVID;
 import de.bwl.bwfla.emucomp.api.EmulatorComponent;
+import de.bwl.bwfla.emucomp.api.security.SessionManagerResolver;
 import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 
 import javax.activation.DataHandler;
@@ -48,9 +49,13 @@ public class MachineResource {
     @Context
     UriInfo uriInfo;
 
+    @Inject
+    SessionManagerResolver sessionManagerResolver;
+
     @POST
     @Path("/start")
     public void start() throws BWFLAException {
+        sessionManagerResolver.getSessionManager();
         final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
         emul.start();
     }

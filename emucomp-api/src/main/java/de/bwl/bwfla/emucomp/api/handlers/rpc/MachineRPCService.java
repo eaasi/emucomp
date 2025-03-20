@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bwl.bwfla.emucomp.NodeManager;
 import de.bwl.bwfla.emucomp.ProcessMonitorVID;
 import de.bwl.bwfla.emucomp.api.EmulatorComponent;
+import de.bwl.bwfla.emucomp.api.security.SessionManagerResolver;
 import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 import de.bwl.bwfla.emucomp.grpc.*;
 import io.grpc.stub.StreamObserver;
@@ -19,10 +20,14 @@ public class MachineRPCService extends MachineServiceGrpc.MachineServiceImplBase
     @Inject
     NodeManager nodeManager;
 
+    @Inject
+    SessionManagerResolver sessionManagerResolver;
+
     private static final ObjectMapper mapper = new ObjectMapper();
 
     @Override
     public void startMachine(EmptyRequest request, StreamObserver<EmptyResponse> responseObserver) {
+        sessionManagerResolver.getSessionManager();
         try {
             final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
             emul.start();

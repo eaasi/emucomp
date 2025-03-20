@@ -21,6 +21,7 @@ package de.bwl.bwfla.emucomp.api.handlers;
 
 import de.bwl.bwfla.emucomp.NodeManager;
 import de.bwl.bwfla.emucomp.api.dto.ComponentRequest;
+import de.bwl.bwfla.emucomp.api.security.SessionManagerResolver;
 import de.bwl.bwfla.emucomp.components.AbstractEaasComponent;
 import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 
@@ -46,11 +47,15 @@ public class ComponentResource {
     @Context
     UriInfo uriInfo;
 
+    @Inject
+    SessionManagerResolver sessionManagerResolver;
+
     @POST
     @Path("/initialize")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public String initialize(ComponentRequest componentRequest) throws BWFLAException {
+        sessionManagerResolver.getSessionManager();
         return nodeManager.allocateComponent(componentRequest.getComponentId(), componentRequest.getConfig());
     }
 

@@ -2,6 +2,7 @@ package de.bwl.bwfla.emucomp.api.handlers;
 
 import de.bwl.bwfla.emucomp.NodeManager;
 import de.bwl.bwfla.emucomp.api.NetworkSwitchComponent;
+import de.bwl.bwfla.emucomp.api.security.SessionManagerResolver;
 import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 
 import javax.inject.Inject;
@@ -26,10 +27,14 @@ public class NetworkSwitchResource {
     @Context
     UriInfo uriInfo;
 
+    @Inject
+    SessionManagerResolver sessionManagerResolver;
+
     @POST
     @Path("/{componentId}/connect")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response connect(@PathParam("componentId") String componentId, @QueryParam("url") String url) throws BWFLAException {
+        sessionManagerResolver.getSessionManager();
         final NetworkSwitchComponent comp = nodeManager.getComponentById(componentId, NetworkSwitchComponent.class);
         comp.connect(url);
         return Response.ok().build();

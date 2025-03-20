@@ -2,6 +2,7 @@ package de.bwl.bwfla.emucomp.api.handlers.rpc;
 
 import de.bwl.bwfla.emucomp.NodeManager;
 import de.bwl.bwfla.emucomp.api.ContainerComponent;
+import de.bwl.bwfla.emucomp.api.security.SessionManagerResolver;
 import de.bwl.bwfla.emucomp.components.AbstractEaasComponent;
 import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 import de.bwl.bwfla.emucomp.grpc.*;
@@ -20,8 +21,12 @@ public class ContainerRPCService extends ContainerServiceGrpc.ContainerServiceIm
     @Inject
     NodeManager nodeManager;
 
+    @Inject
+    SessionManagerResolver sessionManagerResolver;
+
     @Override
     public void startContainer(EmptyRequest request, StreamObserver<EmptyResponse> responseObserver) {
+        sessionManagerResolver.getSessionManager();
         try {
             final ContainerComponent component = nodeManager.getComponentTransformed(ContainerComponent.class);
             component.start();
