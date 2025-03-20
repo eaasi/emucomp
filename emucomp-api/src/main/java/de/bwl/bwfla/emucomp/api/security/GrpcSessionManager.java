@@ -1,7 +1,6 @@
 package de.bwl.bwfla.emucomp.api.security;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.servlet.http.HttpSession;
 import java.util.concurrent.atomic.AtomicReference;
 
 @ApplicationScoped
@@ -14,12 +13,15 @@ public class GrpcSessionManager implements SessionManager {
 
     @Override
     public boolean registerSession(String sessionId) {
-        return activeSessionId.compareAndSet(sessionId, null);
+        if (activeSessionId.get() != null) {
+            throw new IllegalStateException("Session already registered");
+        }
+        return activeSessionId.compareAndSet(null, sessionId);
     }
 
     @Override
     public boolean unregisterSession(String sessionId) {
-        return activeSessionId.compareAndSet(null, sessionId);
+        return activeSessionId.compareAndSet(sessionId, null);
     }
 
     @Override

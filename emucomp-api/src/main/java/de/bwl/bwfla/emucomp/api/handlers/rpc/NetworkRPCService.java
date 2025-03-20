@@ -54,9 +54,4 @@ public class NetworkRPCService extends NetworkSwitchServiceGrpc.NetworkSwitchSer
             throw new RuntimeException(e);
         }
     }
-
-    @Override
-    public ServerServiceDefinition bindService() {
-        return super.bindService();
-    }
 }

@@ -18,6 +18,9 @@ public class HttpSessionManager implements SessionManager {
     }
 
     public boolean registerSession(HttpSession session) {
+        if (isSessionActive()) {
+            throw new IllegalStateException("Session already active");
+        }
         activeSession.set(session);
         return registerSession(session.getId());
     }
@@ -28,12 +31,12 @@ public class HttpSessionManager implements SessionManager {
 
     @Override
     public boolean registerSession(String sessionId) {
-        return activeSessionId.compareAndSet(sessionId, null);
+        return activeSessionId.compareAndSet(null, sessionId);
     }
 
     @Override
     public boolean unregisterSession(String sessionId) {
-        return activeSessionId.compareAndSet(null, sessionId);
+        return activeSessionId.compareAndSet(sessionId, null);
     }
 
     @Override
