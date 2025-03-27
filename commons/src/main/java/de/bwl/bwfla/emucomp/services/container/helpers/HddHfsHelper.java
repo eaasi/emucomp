@@ -42,11 +42,15 @@ import java.util.logging.Logger;
 public class HddHfsHelper extends ContainerHelper
 {
 	private static final Logger LOG = Logger.getLogger(HddHfsHelper.class.getSimpleName());
-	private File createScript = new File(CommonSingleton.helpersConf.hddHfsCreate);
-	private File ioScript = new File(CommonSingleton.helpersConf.hddHfsIo);
+	private final CommonSingleton commonSingleton = CommonSingleton.getInstance();
+
+	private File createScript;
+	private File ioScript;
 	
 	public HddHfsHelper()
-	{	
+	{
+		this.createScript = new File(commonSingleton.getHelpersConf().hddHfsCreate);
+		this.ioScript = new File(commonSingleton.getHelpersConf().hddHfsIo);
 		if(!this.createScript.isFile() || !this.createScript.canExecute())
 		{
 			LOG.severe("exiting, make sure the block device creation script exists and is executable:" + createScript.getAbsolutePath());

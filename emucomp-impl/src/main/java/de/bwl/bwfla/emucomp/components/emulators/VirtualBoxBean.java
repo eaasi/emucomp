@@ -23,7 +23,6 @@ package de.bwl.bwfla.emucomp.components.emulators;
 import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 import de.bwl.bwfla.emucomp.*;
 import de.bwl.bwfla.emucomp.exceptions.IllegalEmulatorStateException;
-import org.apache.tamaya.inject.api.Config;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.activation.DataHandler;

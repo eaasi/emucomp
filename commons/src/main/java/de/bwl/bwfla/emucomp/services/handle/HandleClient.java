@@ -42,16 +42,6 @@ public class HandleClient
 	public static final int TTL_ADMIN_RECORD = (int) TimeUnit.SECONDS.convert(24L, TimeUnit.HOURS);
 	public static final int TTL_URL_RECORD = (int) TimeUnit.SECONDS.convert(1L, TimeUnit.HOURS);
 
-
-	public HandleClient() throws BWFLAException {
-		this(HandleUtils.getHandlePrefix(), HandleUtils.preparePublicKeyAuthentication());
-	}
-
-	public HandleClient(PublicKeyAuthenticationInfo pubKeyAuthInfo)
-	{
-		this(HandleUtils.getHandlePrefix(), pubKeyAuthInfo);
-	}
-
 	public HandleClient(String prefix, PublicKeyAuthenticationInfo pubKeyAuthInfo)
 	{
 		if (prefix == null || prefix.isEmpty())

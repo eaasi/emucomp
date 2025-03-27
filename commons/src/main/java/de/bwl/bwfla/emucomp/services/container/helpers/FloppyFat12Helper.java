@@ -43,10 +43,12 @@ import java.util.logging.Logger;
 public class FloppyFat12Helper extends ContainerHelper {
     Logger LOG = Logger.getLogger(this.getClass().getName());
 
+    private final CommonSingleton commonSingleton = CommonSingleton.getInstance();
+
     @Override
     public Container createEmptyContainer() {
         // acquire floppy_create.sh script location
-        File floppyCreateScript = new File(CommonSingleton.helpersConf.floppyFat12Create);
+        File floppyCreateScript = new File(commonSingleton.getHelpersConf().floppyFat12Create);
 
         File floppy = null;
         FloppyContainer floppyContainer = null;
@@ -89,7 +91,7 @@ public class FloppyFat12Helper extends ContainerHelper {
             return false;
 
         // acquire floppy_io.sh script location
-        File floppyIoScript = new File(CommonSingleton.helpersConf.floppyFat12Io);
+        File floppyIoScript = new File(commonSingleton.getHelpersConf().floppyFat12Io);
         DeprecatedProcessRunner runner = new DeprecatedProcessRunner();
 
         // iteratively inject files into floppy
@@ -114,7 +116,7 @@ public class FloppyFat12Helper extends ContainerHelper {
         if (!floppyFile.exists())
             return null;
 
-        File floppyIoScript = new File(CommonSingleton.helpersConf.floppyFat12Io);
+        File floppyIoScript = new File(commonSingleton.getHelpersConf().floppyFat12Io);
         File result = null;
 
         boolean success = false;

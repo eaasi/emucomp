@@ -28,7 +28,6 @@ import de.bwl.bwfla.emucomp.control.connectors.EthernetConnector;
 import de.bwl.bwfla.emucomp.control.connectors.Socks4Connector;
 import de.bwl.bwfla.emucomp.net.ConfigKey;
 import de.bwl.bwfla.emucomp.net.PortRangeProvider;
-import org.apache.tamaya.inject.api.Config;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.enterprise.inject.spi.CDI;

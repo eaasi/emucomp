@@ -50,6 +50,8 @@ public class HddFat16Helper extends ContainerHelper {
 
     Logger LOG = Logger.getLogger(this.getClass().getName());
 
+    private final CommonSingleton commonSingleton = CommonSingleton.getInstance();
+
     @Override
     public HddContainer createEmptyContainer() {
         return createEmptyContainer(DEFAULT_HDD_SIZE);
@@ -64,7 +66,7 @@ public class HddFat16Helper extends ContainerHelper {
             sizeMB = MAX_HDD_SIZE_MB;
 
         // acquire hdd_create.sh script location
-        File hddCreateScript = new File(CommonSingleton.helpersConf.hddFat16Create);
+        File hddCreateScript = new File(commonSingleton.getHelpersConf().hddFat16Create);
         File hddFile = null;
         HddContainer hddContainer = null;
 
@@ -104,7 +106,7 @@ public class HddFat16Helper extends ContainerHelper {
             return false;
 
         // acquire hdd_io.sh script location
-        File hddIoScript = new File(CommonSingleton.helpersConf.hddFat16Io);
+        File hddIoScript = new File(commonSingleton.getHelpersConf().hddFat16Io);
         DeprecatedProcessRunner runner = new DeprecatedProcessRunner();
 
         // iteratively inject files into hdd
@@ -130,7 +132,7 @@ public class HddFat16Helper extends ContainerHelper {
         if (!hddFile.exists())
             return null;
 
-        File hddIoScript = new File(CommonSingleton.helpersConf.hddFat16Io);
+        File hddIoScript = new File(commonSingleton.getHelpersConf().hddFat16Io);
         File result = null;
         boolean success = false;
 

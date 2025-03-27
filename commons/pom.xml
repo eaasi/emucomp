@@ -14,12 +14,6 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>de.bwl.bwfla</groupId>
-            <artifactId>eaas-configuration</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
         <!-- Jackson dependencies -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>

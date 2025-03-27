@@ -20,10 +20,9 @@
 package de.bwl.bwfla.emucomp.services.handle;
 
 import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
-import de.bwl.bwfla.emucomp.services.ConfigHelpers;
 import net.handle.hdllib.*;
-import org.apache.tamaya.Configuration;
-import org.apache.tamaya.ConfigurationProvider;
+import org.eclipse.microprofile.config.Config;
+import org.eclipse.microprofile.config.ConfigProvider;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -36,18 +35,6 @@ public class HandleUtils
 	public static int timestamp()
 	{
 		return (int) (System.currentTimeMillis() / 1000L);
-	}
-
-	/** Returns handle.net prefix, as defined in configuration */
-	public static String getHandlePrefix()
-	{
-		return HandleUtils.getHandlePrefix(ConfigurationProvider.getConfiguration());
-	}
-
-	/** Returns handle.net prefix, as defined in configuration */
-	public static String getHandlePrefix(Configuration config)
-	{
-		return config.get("handle.prefix", String.class);
 	}
 
 	public static PublicKeyAuthenticationInfo preparePublicKeyAuthentication(String authHandle, int authIndex, Path privKeyFile)
@@ -81,10 +68,10 @@ public class HandleUtils
 			throws BWFLAException
 	{
 		// Prepare authentication using configuration file
-		final Configuration config = ConfigHelpers.filter(ConfigurationProvider.getConfiguration(), "handle.authentication.");
-		final Path keyfile = config.get("private_key_file", Path.class);
-		final String authHandle = config.get("handle", String.class);
-		final int authIndex = config.get("index", Integer.class);
+		final Config config = ConfigProvider.getConfig();
+		final Path keyfile = config.getValue("handle.authentication.private_key_file", Path.class);
+		final String authHandle = config.getValue("handle.authentication.handle", String.class);
+		final int authIndex = config.getValue("handle.authentication.index", Integer.class);
 		return HandleUtils.preparePublicKeyAuthentication(authHandle, authIndex, keyfile);
 	}
 

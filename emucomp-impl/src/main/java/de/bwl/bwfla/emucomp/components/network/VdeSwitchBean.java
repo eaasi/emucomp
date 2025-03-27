@@ -26,7 +26,6 @@ import de.bwl.bwfla.emucomp.control.IPCWebsocketProxy;
 import de.bwl.bwfla.emucomp.control.connectors.EthernetConnector;
 import de.bwl.bwfla.emucomp.control.connectors.IConnector;
 import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
-import org.apache.tamaya.inject.api.Config;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.enterprise.concurrent.ManagedThreadFactory;

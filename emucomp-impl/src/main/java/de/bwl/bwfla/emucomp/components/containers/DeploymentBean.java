@@ -27,12 +27,8 @@ import de.bwl.bwfla.emucomp.components.EaasComponentBean;
 import de.bwl.bwfla.emucomp.data.BlobDescription;
 import de.bwl.bwfla.emucomp.data.BlobHandle;
 import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
-import org.apache.tamaya.inject.api.Config;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-import javax.annotation.Resource;
-import javax.enterprise.concurrent.ManagedThreadFactory;
-import javax.enterprise.inject.spi.CDI;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.nio.file.CopyOption;
@@ -44,382 +40,355 @@ import java.util.logging.Level;
 import java.util.stream.Stream;
 
 
-public abstract class DeploymentBean extends EaasComponentBean implements ContainerComponent
-{
-	protected final ContainerBeanState conBeanState = new ContainerBeanState(ContainerState.UNDEFINED);
+public abstract class DeploymentBean extends EaasComponentBean implements ContainerComponent {
+    protected final ContainerBeanState conBeanState = new ContainerBeanState(ContainerState.UNDEFINED);
 
-	protected ContainerConfiguration config;
+    protected ContainerConfiguration config;
 
-	protected final DeprecatedProcessRunner conRunner = new DeprecatedProcessRunner();
+    protected final DeprecatedProcessRunner conRunner = new DeprecatedProcessRunner();
 
-	protected final BindingsManager bindings = new BindingsManager();
+    protected final BindingsManager bindings = new BindingsManager();
 
-	@Inject
-	protected ThreadFactory workerThreadFactory;
+    @Inject
+    protected ThreadFactory workerThreadFactory;
 
-	@Inject
-	@ConfigProperty(name = "components.containers.blobstore")
-	private String blobStoreAddress = null;
+    @Inject
+    @ConfigProperty(name = "components.containers.blobstore")
+    private String blobStoreAddress = null;
 
-	@Inject
-	@ConfigProperty(name = "components.containers.usernamespace.enabled")
-	private boolean conUserNamespaceEnabled = false;
+    @Inject
+    @ConfigProperty(name = "components.containers.usernamespace.enabled")
+    private boolean conUserNamespaceEnabled = false;
 
-	@Inject
-	@ConfigProperty(name = "components.containers.usernamespace.user")
-	private String conRuntimeUser = null;
+    @Inject
+    @ConfigProperty(name = "components.containers.usernamespace.user")
+    private String conRuntimeUser = null;
 
-	@Inject
-	@ConfigProperty(name = "components.containers.usernamespace.group")
-	private String conRuntimeGroup = null;
-
-
-	public Path getDataDir()
-	{
-		return this.getWorkingDir().resolve("data");
-	}
-
-	public Path getBindingsDir()
-	{
-		return this.getDataDir().resolve("bindings");
-	}
-
-	public Path getOutputDir()
-	{
-		return this.getDataDir().resolve("output");
-	}
-
-	@Override
-	public String getComponentType()
-	{
-	    return "container";
-	}
-
-	@Override
-	public ComponentState getState()
-	{
-		final ContainerState state = conBeanState.fetch();
-		switch (state) {
-			case FAILED:
-				return ComponentState.FAILED;
-
-			case STOPPED:
-				return ComponentState.STOPPED;
-
-			default:
-				return ComponentState.OK;
-		}
-	}
-
-	public static void sync() throws BWFLAException
-	{
-		final DeprecatedProcessRunner process = new DeprecatedProcessRunner();
-		process.setCommand("sync");
-		if (!process.execute())
-			throw new BWFLAException("Syncing filesystem failed!");
-	}
+    @Inject
+    @ConfigProperty(name = "components.containers.usernamespace.group")
+    private String conRuntimeGroup = null;
 
 
-	@Override
-	public void initialize(ComponentConfiguration compConfig) throws BWFLAException
-	{
-		synchronized (conBeanState) {
-			final ContainerState curstate = conBeanState.get();
-			if (curstate != ContainerState.UNDEFINED)
-				this.abort("Cannot initialize ContainerBean! Wrong state detected: " + curstate.value());
+    public Path getDataDir() {
+        return this.getWorkingDir().resolve("data");
+    }
 
-			conBeanState.set(ContainerState.BUSY);
-		}
+    public Path getBindingsDir() {
+        return this.getDataDir().resolve("bindings");
+    }
 
-		try {
-			this.createWorkingSubDirs();
-		}
-		catch (IOException error) {
-			this.fail("Creating working subdirs failed!", error);
-		}
+    public Path getOutputDir() {
+        return this.getDataDir().resolve("output");
+    }
 
-		conRunner.setLogger(LOG);
+    @Override
+    public String getComponentType() {
+        return "container";
+    }
 
-		try {
-			this.config = (ContainerConfiguration) compConfig;
-		}
-		catch (Exception error) {
-			this.fail("Parsing container's configuration failed!", error);
-		}
+    @Override
+    public ComponentState getState() {
+        final ContainerState state = conBeanState.fetch();
+        switch (state) {
+            case FAILED:
+                return ComponentState.FAILED;
 
-		try {
-			// Register all specified resources
-			for (AbstractDataResource resource : config.getDataResources())
-				bindings.register(resource);
+            case STOPPED:
+                return ComponentState.STOPPED;
 
-			final EmulatorUtils.XmountOutputFormat format = EmulatorUtils.XmountOutputFormat.RAW;
-			final Path outdir = this.getBindingsDir();
+            default:
+                return ComponentState.OK;
+        }
+    }
 
-			// Resolve and mount all bindings
-			if (config.hasInputs()) {
-				for (ContainerConfiguration.Input input : config.getInputs())
-					bindings.mount(input.getBinding(), outdir, format);
-			}
+    public static void sync() throws BWFLAException {
+        final DeprecatedProcessRunner process = new DeprecatedProcessRunner();
+        process.setCommand("sync");
+        if (!process.execute())
+            throw new BWFLAException("Syncing filesystem failed!");
+    }
 
-			this.prepare();
-		}
-		catch (Exception error) {
-			this.fail("Preparing container's resources failed!", error);
-			error.printStackTrace();
-		}
 
-		final String compid = this.getComponentId();
-		LOG.info("Container session '" + compid + "' initialized");
-		LOG.info("Working directory for session '" + compid + "' created at: " + this.getWorkingDir());
-		conBeanState.update(ContainerState.READY);
-	}
+    @Override
+    public void initialize(ComponentConfiguration compConfig) throws BWFLAException {
+        synchronized (conBeanState) {
+            final ContainerState curstate = conBeanState.get();
+            if (curstate != ContainerState.UNDEFINED)
+                this.abort("Cannot initialize ContainerBean! Wrong state detected: " + curstate.value());
 
-	@Override
-	public void start() throws BWFLAException
-	{
-		synchronized (conBeanState) {
-			final ContainerState curstate = conBeanState.get();
-			if (curstate != ContainerState.READY && curstate != ContainerState.STOPPED)
-				this.abort("Cannot start container! Wrong state detected: " + curstate.value());
+            conBeanState.set(ContainerState.BUSY);
+        }
 
-			conBeanState.set(ContainerState.BUSY);
-		}
+        try {
+            this.createWorkingSubDirs();
+        } catch (IOException error) {
+            this.fail("Creating working subdirs failed!", error);
+        }
 
-		if (!conRunner.start())
-			this.fail("Starting container failed!");
+        conRunner.setLogger(LOG);
 
-		LOG.info("Container started in process " + conRunner.getProcessId());
+        try {
+            this.config = (ContainerConfiguration) compConfig;
+        } catch (Exception error) {
+            this.fail("Parsing container's configuration failed!", error);
+        }
 
-		final Thread conObserver = workerThreadFactory.newThread(() -> {
+        try {
+            // Register all specified resources
+            for (AbstractDataResource resource : config.getDataResources())
+                bindings.register(resource);
 
-				conRunner.waitUntilFinished();
+            final EmulatorUtils.XmountOutputFormat format = EmulatorUtils.XmountOutputFormat.RAW;
+            final Path outdir = this.getBindingsDir();
 
-				LOG.info("Preparing container's output...");
-				try {
-					final String name = "output";
-					final String extention = ".tar.gz";
+            // Resolve and mount all bindings
+            if (config.hasInputs()) {
+                for (ContainerConfiguration.Input input : config.getInputs())
+                    bindings.mount(input.getBinding(), outdir, format);
+            }
 
-					final Path outdir = this.getOutputDir();
-					final Path workdir = this.getWorkingDir();
-					final Path archive = workdir.resolve(name + extention);
+            this.prepare();
+        } catch (Exception error) {
+            this.fail("Preparing container's resources failed!", error);
+            error.printStackTrace();
+        }
 
-					// Always include container's stdout/err to output archive!
-					DeploymentBean.copy(conRunner.getStdOutPath(), outdir);
-					DeploymentBean.copy(conRunner.getStdErrPath(), outdir);
+        final String compid = this.getComponentId();
+        LOG.info("Container session '" + compid + "' initialized");
+        LOG.info("Working directory for session '" + compid + "' created at: " + this.getWorkingDir());
+        conBeanState.update(ContainerState.READY);
+    }
 
-					// Create an archive file
-					final DeprecatedProcessRunner tar = new DeprecatedProcessRunner("tar");
-					tar.addArguments("--create", "--auto-compress", "--totals");
-					tar.addArguments("--file", archive.toString());
-					tar.addArguments("--directory", outdir.toString());
-					try (Stream<Path> stream = Files.list(outdir)) {
-						// Add each file to the archive...
-						stream.forEach((path) -> {
-							final Path file = path.getFileName();
-							tar.addArgument(file.toString());
-						});
-					}
+    @Override
+    public void start() throws BWFLAException {
+        synchronized (conBeanState) {
+            final ContainerState curstate = conBeanState.get();
+            if (curstate != ContainerState.READY && curstate != ContainerState.STOPPED)
+                this.abort("Cannot start container! Wrong state detected: " + curstate.value());
 
-					sync();
+            conBeanState.set(ContainerState.BUSY);
+        }
 
-					tar.setWorkingDirectory(outdir);
-					tar.setLogger(LOG);
-					if (!tar.execute())
-						throw new IOException("Creating output archive failed!");
+        if (!conRunner.start())
+            this.fail("Starting container failed!");
 
-					LOG.info("Uploading container's output to blobstore at " + blobStoreAddress + "...");
+        LOG.info("Container started in process " + conRunner.getProcessId());
 
-					// Create a BLOB description for the created archive
-					final BlobDescription blob = new BlobDescription()
-							.setDescription("Container's output for session " + this.getComponentId())
-							.setNamespace("container-outputs")
-							.setAccessToken(UUID.randomUUID().toString())
-							.setDataFromFile(archive)
-							.setType(extention)
-							.setName(name);
+        final Thread conObserver = workerThreadFactory.newThread(() -> {
 
-					// Upload the archive to the BlobStore
+                    conRunner.waitUntilFinished();
+
+                    LOG.info("Preparing container's output...");
+                    try {
+                        final String name = "output";
+                        final String extention = ".tar.gz";
+
+                        final Path outdir = this.getOutputDir();
+                        final Path workdir = this.getWorkingDir();
+                        final Path archive = workdir.resolve(name + extention);
+
+                        // Always include container's stdout/err to output archive!
+                        DeploymentBean.copy(conRunner.getStdOutPath(), outdir);
+                        DeploymentBean.copy(conRunner.getStdErrPath(), outdir);
+
+                        // Create an archive file
+                        final DeprecatedProcessRunner tar = new DeprecatedProcessRunner("tar");
+                        tar.addArguments("--create", "--auto-compress", "--totals");
+                        tar.addArguments("--file", archive.toString());
+                        tar.addArguments("--directory", outdir.toString());
+                        try (Stream<Path> stream = Files.list(outdir)) {
+                            // Add each file to the archive...
+                            stream.forEach((path) -> {
+                                final Path file = path.getFileName();
+                                tar.addArgument(file.toString());
+                            });
+                        }
+
+                        sync();
+
+                        tar.setWorkingDirectory(outdir);
+                        tar.setLogger(LOG);
+                        if (!tar.execute())
+                            throw new IOException("Creating output archive failed!");
+
+                        LOG.info("Uploading container's output to blobstore at " + blobStoreAddress + "...");
+
+                        // Create a BLOB description for the created archive
+                        final BlobDescription blob = new BlobDescription()
+                                .setDescription("Container's output for session " + this.getComponentId())
+                                .setNamespace("container-outputs")
+                                .setAccessToken(UUID.randomUUID().toString())
+                                .setDataFromFile(archive)
+                                .setType(extention)
+                                .setName(name);
+
+                        // Upload the archive to the BlobStore
 //					final BlobHandle handle = BlobStoreClient.get()
 //							.getBlobStorePort(blobStoreAddress)
 //							.put(blob);
-					BlobHandle handle = new BlobHandle();
+                        BlobHandle handle = new BlobHandle();
 
-					LOG.info("Container's output uploaded to blobstore");
+                        LOG.info("Container's output uploaded to blobstore");
 
-					result.complete(handle);
-				}
-				catch (Exception error) {
-					this.failNoThrow("Preparing container's output failed!\n", error);
-					return;
-				}
+                        result.complete(handle);
+                    } catch (Exception error) {
+                        this.failNoThrow("Preparing container's output failed!\n", error);
+                        return;
+                    }
 
-				// cleanup will be performed later by ContainerBean.destroy()
+                    // cleanup will be performed later by ContainerBean.destroy()
 
-				synchronized (conBeanState) {
-					final ContainerState curstate = conBeanState.get();
-					if (curstate != ContainerState.RUNNING)
-						return;
+                    synchronized (conBeanState) {
+                        final ContainerState curstate = conBeanState.get();
+                        if (curstate != ContainerState.RUNNING)
+                            return;
 
-					if (conRunner.getReturnCode() == 0) {
-						LOG.info("Container stopped normally");
-						conBeanState.set(ContainerState.STOPPED);
-					}
-					else {
-						LOG.warning("Container stopped unexpectedly, returning code: " + conRunner.getReturnCode());
-						conBeanState.set(ContainerState.FAILED);
-					}
-				}
-			}
-		);
+                        if (conRunner.getReturnCode() == 0) {
+                            LOG.info("Container stopped normally");
+                            conBeanState.set(ContainerState.STOPPED);
+                        } else {
+                            LOG.warning("Container stopped unexpectedly, returning code: " + conRunner.getReturnCode());
+                            conBeanState.set(ContainerState.FAILED);
+                        }
+                    }
+                }
+        );
 
-		conObserver.start();
-		conBeanState.update(ContainerState.RUNNING);
-	}
+        conObserver.start();
+        conBeanState.update(ContainerState.RUNNING);
+    }
 
-	@Override
-	public void stop() throws BWFLAException
-	{
-		synchronized (conBeanState) {
-			final ContainerState curstate = conBeanState.get();
-			if (curstate != ContainerState.RUNNING)
-				this.abort("Cannot stop container! Wrong state detected: " + curstate.value());
+    @Override
+    public void stop() throws BWFLAException {
+        synchronized (conBeanState) {
+            final ContainerState curstate = conBeanState.get();
+            if (curstate != ContainerState.RUNNING)
+                this.abort("Cannot stop container! Wrong state detected: " + curstate.value());
 
-			conBeanState.set(ContainerState.BUSY);
-		}
+            conBeanState.set(ContainerState.BUSY);
+        }
 
-		this.stopInternal();
+        this.stopInternal();
 
-		conBeanState.update(ContainerState.STOPPED);
-	}
+        conBeanState.update(ContainerState.STOPPED);
+    }
 
-	@Override
-	public void destroy()
-	{
-		synchronized (conBeanState) {
-			final ContainerState curstate = conBeanState.get();
-			if (curstate == ContainerState.UNDEFINED)
-				return;
+    @Override
+    public void destroy() {
+        synchronized (conBeanState) {
+            final ContainerState curstate = conBeanState.get();
+            if (curstate == ContainerState.UNDEFINED)
+                return;
 
-			if (curstate == ContainerState.BUSY) {
-				LOG.severe("Destroying ContainerBean while other operation is in-flight!");
-				return;
-			}
+            if (curstate == ContainerState.BUSY) {
+                LOG.severe("Destroying ContainerBean while other operation is in-flight!");
+                return;
+            }
 
-			conBeanState.set(ContainerState.UNDEFINED);
-		}
+            conBeanState.set(ContainerState.UNDEFINED);
+        }
 
-		this.stopInternal();
-		bindings.cleanup();
+        this.stopInternal();
+        bindings.cleanup();
 
-		// Cleanup container's runner here
-		conRunner.printStdOut();
-		conRunner.printStdErr();
-		conRunner.cleanup();
+        // Cleanup container's runner here
+        conRunner.printStdOut();
+        conRunner.printStdErr();
+        conRunner.cleanup();
 
-		{
-			DeprecatedProcessRunner runner = new DeprecatedProcessRunner("sudo");
-			runner.addArguments("--non-interactive", "--", "rm", "-r", "-f");
-			runner.addArgument(this.getOutputDir().toString());
-			if(!runner.execute()){
-				LOG.warning("Deleting of output dir failed!");
-			}
-		}
+        {
+            DeprecatedProcessRunner runner = new DeprecatedProcessRunner("sudo");
+            runner.addArguments("--non-interactive", "--", "rm", "-r", "-f");
+            runner.addArgument(this.getOutputDir().toString());
+            if (!runner.execute()) {
+                LOG.warning("Deleting of output dir failed!");
+            }
+        }
 
-		LOG.info("ContainerBean for session " + this.getComponentId() + " destroyed.");
+        LOG.info("ContainerBean for session " + this.getComponentId() + " destroyed.");
 
-		// Destroy base class!
-		super.destroy();
+        // Destroy base class!
+        super.destroy();
 
-		// Collect garbage
-		System.gc();
-	}
+        // Collect garbage
+        System.gc();
+    }
 
 
-	/* =============== Internal Helpers =============== */
+    /* =============== Internal Helpers =============== */
 
-	protected void abort(String message) throws BWFLAException
-	{
-		LOG.warning(message);
-		throw new BWFLAException(message);
-	}
+    protected void abort(String message) throws BWFLAException {
+        LOG.warning(message);
+        throw new BWFLAException(message);
+    }
 
-	protected void abort(String message, Exception error) throws BWFLAException
-	{
-		LOG.log(Level.WARNING, message + "\n", error);
-		throw new BWFLAException(message, error);
-	}
+    protected void abort(String message, Exception error) throws BWFLAException {
+        LOG.log(Level.WARNING, message + "\n", error);
+        throw new BWFLAException(message, error);
+    }
 
-	protected void fail(String message) throws BWFLAException
-	{
-		conBeanState.update(ContainerState.FAILED);
-		this.abort(message);
-	}
+    protected void fail(String message) throws BWFLAException {
+        conBeanState.update(ContainerState.FAILED);
+        this.abort(message);
+    }
 
-	protected void fail(String message, Exception error) throws BWFLAException
-	{
-		conBeanState.update(ContainerState.FAILED);
-		this.abort(message, error);
-	}
+    protected void fail(String message, Exception error) throws BWFLAException {
+        conBeanState.update(ContainerState.FAILED);
+        this.abort(message, error);
+    }
 
-	protected void failNoThrow(String message, Exception error)
-	{
-		conBeanState.update(ContainerState.FAILED);
-		LOG.log(Level.WARNING, message + "\n", error);
-	}
+    protected void failNoThrow(String message, Exception error) {
+        conBeanState.update(ContainerState.FAILED);
+        LOG.log(Level.WARNING, message + "\n", error);
+    }
 
-	protected String getContainerId()
-	{
-		final String compid = this.getComponentId();
-		return compid.substring(1 + compid.lastIndexOf("+"));
-	}
+    protected String getContainerId() {
+        final String compid = this.getComponentId();
+        return compid.substring(1 + compid.lastIndexOf("+"));
+    }
 
-	protected String getContainerRuntimeUser()
-	{
-		return conRuntimeUser;
-	}
+    protected String getContainerRuntimeUser() {
+        return conRuntimeUser;
+    }
 
-	protected String getContainerRuntimeGroup()
-	{
-		return conRuntimeGroup;
-	}
+    protected String getContainerRuntimeGroup() {
+        return conRuntimeGroup;
+    }
 
-	protected boolean isUserNamespaceEnabled()
-	{
-		return conUserNamespaceEnabled;
-	}
+    protected boolean isUserNamespaceEnabled() {
+        return conUserNamespaceEnabled;
+    }
 
-	/** Prepare container runtime. Should be overridden by subclasses. */
-	protected void prepare() throws Exception
-	{
-		// Do nothing!
-	}
+    /**
+     * Prepare container runtime. Should be overridden by subclasses.
+     */
+    protected void prepare() throws Exception {
+        // Do nothing!
+    }
 
-	private void createWorkingSubDirs() throws IOException
-	{
-		// Currently, working directory is structured as follows:
-		//
-		// <workdir>/
-		//     data/           -> Session specific data
-		//         bindings/   -> Object/image bindings
-		//         output/     -> Output files
+    private void createWorkingSubDirs() throws IOException {
+        // Currently, working directory is structured as follows:
+        //
+        // <workdir>/
+        //     data/           -> Session specific data
+        //         bindings/   -> Object/image bindings
+        //         output/     -> Output files
 
-		Files.createDirectories(this.getDataDir());
-		Files.createDirectories(this.getBindingsDir());
-		Files.createDirectories(this.getOutputDir());
-	}
+        Files.createDirectories(this.getDataDir());
+        Files.createDirectories(this.getBindingsDir());
+        Files.createDirectories(this.getOutputDir());
+    }
 
-	private void stopInternal()
-	{
-		if (conRunner.isProcessRunning()) {
-			final String cid = this.getContainerId();
-			LOG.info("Stopping container " + cid + "...");
-			conRunner.stop();
-			LOG.info("Container " + cid + " stopped");
-		}
-	}
+    private void stopInternal() {
+        if (conRunner.isProcessRunning()) {
+            final String cid = this.getContainerId();
+            LOG.info("Stopping container " + cid + "...");
+            conRunner.stop();
+            LOG.info("Container " + cid + " stopped");
+        }
+    }
 
-	private static void copy(Path source, Path dstdir, CopyOption... options) throws IOException
-	{
-		Files.copy(source, dstdir.resolve(source.getFileName()), options);
-	}
+    private static void copy(Path source, Path dstdir, CopyOption... options) throws IOException {
+        Files.copy(source, dstdir.resolve(source.getFileName()), options);
+    }
 }

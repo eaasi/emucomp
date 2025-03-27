@@ -1,29 +1,24 @@
-FROM maven:3.8.6-eclipse-temurin-17 as build
+FROM maven:3.8.6-eclipse-temurin-17 AS build
 
 WORKDIR /app
 
-COPY commons/pom.xml commons/
-COPY emucomp-grpc-interface/pom.xml emucomp-grpc-interface/
-COPY emucomp-impl/pom.xml emucomp-impl/
-COPY emucomp-api/pom.xml emucomp-api/
-
-RUN mvn dependency:go-offline -B
+COPY pom.xml .
 
 COPY ./commons ./commons
 COPY ./emucomp-grpc-interface ./emucomp-grpc-interface
 COPY ./emucomp-impl ./emucomp-impl
 COPY ./emucomp-api ./emucomp-api
 
-RUN mvn clean install -DskipTests
+RUN mvn clean package -DskipTests
 
 FROM eclipse-temurin:17-jdk-jammy
 
 WORKDIR /app
 
-COPY --from=build /app/commons/target/commons-*.jar ./commons.jar
-COPY --from=build /app/emucomp-grpc-interface/target/emucomp-grpc-interface-*.jar ./emucomp-grpc-interface.jar
-COPY --from=build /app/emucomp-impl/target/emucomp-impl-*.jar ./emucomp-impl.jar
-COPY --from=build /app/emucomp-api/target/emucomp-api-*.jar ./emucomp-api.jar
+COPY --from=build /app/target/quarkus-app/quarkus-run.jar ./quarkus-run.jar
+COPY --from=build /app/target/quarkus-app/lib/ ./lib/
+COPY --from=build /app/target/quarkus-app/app/ ./app/
+COPY --from=build /app/target/quarkus-app/quarkus/ ./quarkus/
 
 EXPOSE 8080
 

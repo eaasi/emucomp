@@ -40,7 +40,7 @@ import de.bwl.bwfla.emucomp.ws.MockedCollection;
 import de.bwl.bwfla.emucomp.xpra.IAudioStreamer;
 import de.bwl.bwfla.emucomp.xpra.PulseAudioStreamer;
 import org.apache.commons.io.FileUtils;
-import org.apache.tamaya.ConfigurationProvider;
+import org.eclipse.microprofile.config.ConfigProvider;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.glyptodon.guacamole.GuacamoleException;
 import org.glyptodon.guacamole.net.GuacamoleTunnel;
@@ -169,7 +169,7 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
      */
     private ScreenShooter scrshooter = null;
 
-    final boolean isScreenshotEnabled = ConfigurationProvider.getConfiguration().get("emucomp.enable_screenshooter", Boolean.class);
+    final boolean isScreenshotEnabled = ConfigProvider.getConfig().getValue("emucomp.enable_screenshooter", Boolean.class);
 
     protected PostScriptPrinter printer = null;
 
@@ -389,7 +389,7 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
     }
 
     private String getEmulatorArchive() {
-        String archive = ConfigurationProvider.getConfiguration().get("emucomp.emulator_archive");
+        String archive = ConfigProvider.getConfig().getValue("emucomp.emulator_archive", String.class);
         if (archive == null || archive.isEmpty())
             return EMULATOR_DEFAULT_ARCHIVE;
         return archive;
@@ -604,8 +604,8 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
                         .setId(this.getComponentId());
             }
 
-            final boolean isGpuEnabled = ConfigurationProvider.getConfiguration()
-                    .get("components.xpra.enable_gpu", Boolean.class);
+            final boolean isGpuEnabled = ConfigProvider.getConfig()
+                    .getValue("components.xpra.enable_gpu", Boolean.class);
 
             if (isGpuEnabled) {
                 emuRunner.getCommand()

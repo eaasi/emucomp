@@ -20,10 +20,7 @@
 package de.bwl.bwfla.emucomp.conf;
 
 
-import de.bwl.bwfla.configuration.UserConfigurationPropertySourceProvider;
-import org.apache.tamaya.inject.ConfigurationInjection;
-import org.apache.tamaya.inject.ConfigurationInjector;
-
+import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -34,12 +31,17 @@ import java.util.logging.Logger;
 
 public class CommonSingleton {
     protected static final Logger LOG = Logger.getLogger(CommonSingleton.class.getName());
-    public static volatile boolean confValid = false;
-    public static volatile CommonConf CONF = new CommonConf();
-    public static HelpersConf helpersConf = new HelpersConf();
-    public static RunnerConf runnerConf = new RunnerConf();
 
-    public static Path configPath = UserConfigurationPropertySourceProvider.getConfigPath();
+    private static CommonSingleton instance;
+
+    @Inject
+    RunnerConf runnerConf;
+
+    @Inject
+    HelpersConf helpersConf;
+
+    @Inject
+    CommonConf commonConf;
 
     static {
         File tempBaseDir = new File(System.getProperty("java.io.tmpdir"));
@@ -49,13 +51,21 @@ public class CommonSingleton {
         } else if (tempBaseDir.canWrite()) {
             System.setProperty("java.io.tmpdir", "/tmp");
         }
-
-        loadConf();
     }
 
-    public static boolean validate(CommonConf conf) {
+    public static CommonSingleton getInstance() {
+        if (instance == null) {
+            synchronized (CommonSingleton.class) {
+                if (instance == null) {
+                    instance = new CommonSingleton();
+                }
+            }
+        }
+        return instance;
+    }
 
-        Path serverDir = Paths.get(conf.serverdatadir);
+    public boolean validate() {
+        Path serverDir = Paths.get(this.commonConf.serverdatadir);
         if (!Files.exists(serverDir)) {
             try {
                 Files.createDirectories(serverDir);
@@ -67,12 +77,15 @@ public class CommonSingleton {
         return true;
     }
 
-    synchronized public static void loadConf() {
-        ConfigurationInjector inj = ConfigurationInjection.getConfigurationInjector();
-        inj.configure(CONF);
-        inj.configure(helpersConf);
-        inj.configure(runnerConf);
-        confValid = validate(CONF);
+    public RunnerConf getRunnerConf() {
+        return runnerConf;
+    }
 
+    public HelpersConf getHelpersConf() {
+        return helpersConf;
+    }
+
+    public CommonConf getCommonConf() {
+        return commonConf;
     }
 }

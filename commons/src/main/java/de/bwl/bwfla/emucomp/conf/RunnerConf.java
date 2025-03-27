@@ -20,13 +20,11 @@
 package de.bwl.bwfla.emucomp.conf;
 
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
+import javax.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
 public class RunnerConf {
     @ConfigProperty(name = "runners.tmpdirprefix")
     public String tmpdirPrefix;
