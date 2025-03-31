@@ -6,26 +6,59 @@ on:
   pull_request:
     branches: [ "main" ]
 
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+
 jobs:
   build:
-    permissions:
-      packages: write
-      contents: read
-      attestations: write
-      id-token: write
     runs-on: ubuntu-latest
+    outputs:
+      image_tag: ${{ steps.meta.outputs.image_tag }}
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Log in to GitHub Container Registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-      
-      - name: Build the Docker image
-        run: |
-          docker build . --file Dockerfile --tag ghcr.io/${{ github.repository_owner }}/emucomp:latest
-          docker tag ghcr.io/${{ github.repository_owner }}/emucomp:latest ghcr.io/${{ github.repository_owner }}/emucomp:$(date +%s)
-      
-      - name: Push the Docker image
-        run: |
-          docker push ghcr.io/${{ github.repository_owner }}/emucomp:latest
-          docker push ghcr.io/${{ github.repository_owner }}/emucomp:$(date +%s)
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Extract metadata (tags, labels)
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/emucomp
+          tags: |
+            latest
+            type=raw,value=${{ github.run_number }}
+
+      - name: Build Docker image
+        id: build
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: Dockerfile
+          push: false
+          tags: ghcr.io/${{ github.repository_owner }}/emucomp:latest
+          labels: ${{ steps.meta.outputs.labels }}
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log in to GitHub Container Registry via OIDC
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+
+      - name: Push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/emucomp:latest
+            ghcr.io/${{ github.repository_owner }}/emucomp:${{ needs.build.outputs.image_tag }}
