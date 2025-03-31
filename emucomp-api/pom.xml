@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>de.bwl.bwfla</groupId>
+    <groupId>de.bwl.bwfla.emucomp</groupId>
     <artifactId>emucomp-api</artifactId>
     <version>1.0-SNAPSHOT</version>
 
@@ -219,7 +219,7 @@
 
         <!-- Project Dependencies -->
         <dependency>
-            <groupId>de.bwl.bwfla</groupId>
+            <groupId>de.bwl.bwfla.emucomp</groupId>
             <artifactId>emucomp-impl</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
@@ -230,7 +230,7 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>de.bwl.bwfla.emucomp.grpc</groupId>
+            <groupId>de.bwl.bwfla.emucomp</groupId>
             <artifactId>emucomp-grpc-interface</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>

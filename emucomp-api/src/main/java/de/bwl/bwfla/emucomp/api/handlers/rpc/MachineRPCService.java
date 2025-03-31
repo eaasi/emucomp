@@ -13,6 +13,7 @@ import io.quarkus.grpc.GrpcService;
 
 import javax.activation.DataHandler;
 import javax.inject.Inject;
+import java.util.stream.Collectors;
 
 @GrpcService
 public class MachineRPCService extends MachineServiceGrpc.MachineServiceImplBase {
@@ -153,7 +154,7 @@ public class MachineRPCService extends MachineServiceGrpc.MachineServiceImplBase
                                                     throw new RuntimeException(e);
                                                 }
                                             })
-                                            .toList()
+                                            .collect(Collectors.toList())
                             )
                             .build()
             );
@@ -384,7 +385,7 @@ public class MachineRPCService extends MachineServiceGrpc.MachineServiceImplBase
             responseObserver.onNext(ListResponse.newBuilder()
                     .addAllResponseList(emul.getMonitorValues(request.getReqsList()
                             .stream().map(e -> ProcessMonitorVID.valueOf(e.getEnumVal()))
-                            .toList()))
+                            .collect(Collectors.toList())))
                     .build());
             responseObserver.onCompleted();
         } catch (BWFLAException e) {
@@ -425,7 +426,7 @@ public class MachineRPCService extends MachineServiceGrpc.MachineServiceImplBase
                                         } catch (JsonProcessingException ex) {
                                             throw new RuntimeException(ex);
                                         }
-                                    }).toList()).build());
+                                    }).collect(Collectors.toList())).build());
             responseObserver.onCompleted();
         } catch (BWFLAException e) {
             responseObserver.onError(e);
