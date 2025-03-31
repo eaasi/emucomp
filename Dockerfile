@@ -12,6 +12,30 @@ RUN mvn clean package -DskipTests
 
 FROM eclipse-temurin:11-jdk-jammy
 
+
+RUN apt-get update && apt-get install -y \
+    xpra \
+    socat \
+    vde2 \
+    qemu \
+    qemu-system-x86 \
+    qemu-utils \
+    fuse \
+    primus \
+    ntfs-3g \
+    dosbox \
+    fs-uae \
+    mono-complete \
+    sudo \
+    gawk \
+    coreutils \
+    util-linux \
+    fuse \
+    dosfstools \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /linapple-pie /minivmac /usr/local/bin
+
 WORKDIR /app
 
 COPY --from=build /app/emucomp-api/target/quarkus-app/quarkus-run.jar ./quarkus-run.jar
