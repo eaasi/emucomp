@@ -19,10 +19,10 @@
 
 package de.bwl.bwfla.emucomp.common.services.guacplay.png;
 
-import de.bwl.bwfla.common.services.guacplay.util.MathUtils;
 
-import static de.bwl.bwfla.common.services.guacplay.util.MathUtils.MASK_UNSIGNED_BYTE;
+import de.bwl.bwfla.emucomp.common.services.guacplay.util.MathUtils;
 
+import static de.bwl.bwfla.emucomp.common.services.guacplay.util.MathUtils.MASK_UNSIGNED_BYTE;
 
 /** A common interface for all stateless scanline's filters. */
 interface IScanlineFilter

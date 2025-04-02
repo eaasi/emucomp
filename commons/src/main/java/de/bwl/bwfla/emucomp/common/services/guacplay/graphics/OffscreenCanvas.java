@@ -19,7 +19,8 @@
 
 package de.bwl.bwfla.emucomp.common.services.guacplay.graphics;
 
-import de.bwl.bwfla.common.services.guacplay.protocol.handler.ISizeInstrListener;
+
+import de.bwl.bwfla.emucomp.common.services.guacplay.protocol.handler.ISizeInstrListener;
 
 import java.awt.*;
 import java.awt.geom.Arc2D;

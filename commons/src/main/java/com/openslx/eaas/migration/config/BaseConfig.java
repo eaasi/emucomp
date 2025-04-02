@@ -19,26 +19,22 @@
 
 package com.openslx.eaas.migration.config;
 
-import de.bwl.bwfla.common.utils.ConfigHelpers;
-import org.apache.tamaya.ConfigException;
-import org.apache.tamaya.Configuration;
-import org.apache.tamaya.ConfigurationProvider;
+
+import de.bwl.bwfla.emucomp.common.utils.ConfigHelpers;
+import org.eclipse.microprofile.config.Config;
+import org.eclipse.microprofile.config.ConfigProvider;
 
 import java.util.logging.Logger;
 
+public abstract class BaseConfig<D extends BaseConfig<D>> {
 
-public abstract class BaseConfig<D extends BaseConfig<D>>
-{
-	protected D load(Logger log)
-	{
-		return this.load(ConfigurationProvider.getConfiguration(), log);
-	}
+    protected D load(Logger log) {
+        return this.load(ConfigProvider.getConfig(), log);
+    }
 
-	protected D load(Configuration config, Logger log) throws ConfigException
-	{
-		final var self = (D) this;
+    protected D load(Config config, Logger log) {
+        final var self = (D) this;
 
-		// Configure annotated members of this instance
-		return ConfigHelpers.configure(self, config);
-	}
+        return ConfigHelpers.configure(self, config);
+    }
 }

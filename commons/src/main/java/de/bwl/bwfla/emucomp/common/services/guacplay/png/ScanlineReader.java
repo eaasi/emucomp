@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
 
-import static de.bwl.bwfla.common.services.guacplay.png.PngDefs.*;
+import static de.bwl.bwfla.emucomp.common.services.guacplay.png.PngDefs.*;
 
 
 /** Helper class for decompression and reconstruction of scanlines in an IDAT chunk. */

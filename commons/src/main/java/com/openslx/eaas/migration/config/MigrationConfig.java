@@ -20,10 +20,11 @@
 package com.openslx.eaas.migration.config;
 
 import com.openslx.eaas.migration.MigrationManager;
-import de.bwl.bwfla.common.utils.ConfigHelpers;
-import org.apache.tamaya.ConfigException;
-import org.apache.tamaya.Configuration;
-import org.apache.tamaya.inject.api.Config;
+import de.bwl.bwfla.emucomp.common.exceptions.ConfigException;
+import de.bwl.bwfla.emucomp.common.utils.ConfigHelpers;
+import org.eclipse.microprofile.config.Config;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
 
 import java.util.logging.Logger;
 
@@ -32,12 +33,12 @@ public class MigrationConfig extends BaseConfig<MigrationConfig>
 {
 	private String name = null;
 	private boolean force = false;
-	private Configuration args = null;
+	private Config args = null;
 
 
 	// ===== Getters and Setters ====================
 
-	@Config("name")
+	@ConfigProperty(name = "name")
 	public void setName(String name)
 	{
 		ConfigHelpers.check(name, "Name is invalid!");
@@ -50,7 +51,7 @@ public class MigrationConfig extends BaseConfig<MigrationConfig>
 		return name;
 	}
 
-	@Config(value = "force", defaultValue = "false")
+	@ConfigProperty(name = "force", defaultValue = "false")
 	public void setForceFlag(boolean force)
 	{
 		this.force = force;
@@ -61,13 +62,13 @@ public class MigrationConfig extends BaseConfig<MigrationConfig>
 		return force;
 	}
 
-	public void setArguments(Configuration args)
+	public void setArguments(Config args)
 	{
 		ConfigHelpers.check(args, "Arguments are invalid!");
 		this.args = args;
 	}
 
-	public Configuration getArguments()
+	public Config getArguments()
 	{
 		return args;
 	}
@@ -76,7 +77,7 @@ public class MigrationConfig extends BaseConfig<MigrationConfig>
 	// ===== Internal Helpers ====================
 
 	@Override
-	protected MigrationConfig load(Configuration config, Logger log) throws ConfigException
+	protected MigrationConfig load(Config config, Logger log) throws ConfigException
 	{
 		this.setArguments(ConfigHelpers.filter(config,"args."));
 		return super.load(config, log);

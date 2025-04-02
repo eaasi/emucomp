@@ -19,7 +19,8 @@
 
 package de.bwl.bwfla.emucomp.common.services.guacplay;
 
-import de.bwl.bwfla.common.services.guacplay.util.TimeUtils;
+
+import de.bwl.bwfla.emucomp.common.services.guacplay.util.TimeUtils;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;

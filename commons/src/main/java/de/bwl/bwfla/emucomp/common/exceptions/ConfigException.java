@@ -1,6 +1,5 @@
 package de.bwl.bwfla.emucomp.common.exceptions;
 
-import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 
 public class ConfigException extends RuntimeException {
     public ConfigException(String message) {
