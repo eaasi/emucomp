@@ -19,7 +19,7 @@
 
 package de.bwl.bwfla.emucomp.common.datatypes;
 
-import de.bwl.bwfla.common.utils.jaxb.JaxbType;
+import de.bwl.bwfla.emucomp.common.utils.jaxb.JaxbType;
 
 import javax.xml.bind.annotation.*;
 import java.time.Instant;

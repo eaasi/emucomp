@@ -1,6 +1,6 @@
 package de.bwl.bwfla.emucomp.common.datatypes.identification;
 
-import de.bwl.bwfla.common.utils.jaxb.JaxbType;
+import de.bwl.bwfla.emucomp.common.utils.jaxb.JaxbType;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

@@ -1,7 +1,8 @@
 package de.bwl.bwfla.emucomp.common.services.security;
 
 
-import org.apache.tamaya.inject.api.Config;
+
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -17,7 +18,7 @@ import java.io.IOException;
 public class AuthenticationFilterApi extends AbstractAuthenticationFilter {
 
     @Inject
-    @Config(value = "rest.apiSecret")
+    @ConfigProperty(name = "rest.apiSecret")
     private String apiSecret;
 
     @Override

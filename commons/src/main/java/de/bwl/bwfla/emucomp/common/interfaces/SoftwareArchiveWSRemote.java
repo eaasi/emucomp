@@ -1,7 +1,7 @@
 package de.bwl.bwfla.emucomp.common.interfaces;
 
-import de.bwl.bwfla.common.datatypes.SoftwareDescription;
-import de.bwl.bwfla.common.datatypes.SoftwarePackage;
+import de.bwl.bwfla.emucomp.common.datatypes.SoftwareDescription;
+import de.bwl.bwfla.emucomp.common.datatypes.SoftwarePackage;
 import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
 
 import javax.activation.DataHandler;

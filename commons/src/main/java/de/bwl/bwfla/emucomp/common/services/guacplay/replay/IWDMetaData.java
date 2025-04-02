@@ -19,11 +19,11 @@
 
 package de.bwl.bwfla.emucomp.common.services.guacplay.replay;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.MetadataTag;
-import de.bwl.bwfla.common.services.guacplay.io.Metadata;
-import de.bwl.bwfla.common.services.guacplay.io.MetadataChunk;
-import de.bwl.bwfla.common.services.guacplay.io.TraceFile;
-import de.bwl.bwfla.common.services.guacplay.io.TraceFileReader;
+import de.bwl.bwfla.emucomp.common.services.guacplay.GuacDefs.MetadataTag;
+import de.bwl.bwfla.emucomp.common.services.guacplay.io.Metadata;
+import de.bwl.bwfla.emucomp.common.services.guacplay.io.MetadataChunk;
+import de.bwl.bwfla.emucomp.common.services.guacplay.io.TraceFile;
+import de.bwl.bwfla.emucomp.common.services.guacplay.io.TraceFileReader;
 
 import java.io.File;
 import java.io.IOException;

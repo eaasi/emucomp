@@ -19,9 +19,9 @@
 
 package de.bwl.bwfla.emucomp.common.services.guacplay.graphics;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.CompositeMode;
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.LineCapStyle;
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.LineJoinStyle;
+import de.bwl.bwfla.emucomp.common.services.guacplay.GuacDefs.CompositeMode;
+import de.bwl.bwfla.emucomp.common.services.guacplay.GuacDefs.LineCapStyle;
+import de.bwl.bwfla.emucomp.common.services.guacplay.GuacDefs.LineJoinStyle;
 
 import java.awt.*;
 import java.util.HashMap;

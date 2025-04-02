@@ -19,14 +19,14 @@
 
 package de.bwl.bwfla.emucomp.common.services.guacplay.io;
 
-import de.bwl.bwfla.common.services.guacplay.util.StringBuffer;
+import de.bwl.bwfla.emucomp.common.services.guacplay.util.StringBuffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 
-import static de.bwl.bwfla.common.services.guacplay.io.TraceFileDefs.*;
+import static de.bwl.bwfla.emucomp.common.services.guacplay.io.TraceFileDefs.*;
 
 
 /** A writer for writing to the {@link TraceFile}. */

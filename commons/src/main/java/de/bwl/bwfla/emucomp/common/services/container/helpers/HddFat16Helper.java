@@ -23,10 +23,10 @@
 // TODO: add exception throwing/handling
 package de.bwl.bwfla.emucomp.common.services.container.helpers;
 
-import de.bwl.bwfla.common.services.container.types.Container;
-import de.bwl.bwfla.common.services.container.types.HddContainer;
-import de.bwl.bwfla.common.utils.ProcessRunner;
-import de.bwl.bwfla.conf.CommonSingleton;
+import de.bwl.bwfla.emucomp.common.services.container.types.Container;
+import de.bwl.bwfla.emucomp.common.services.container.types.HddContainer;
+import de.bwl.bwfla.emucomp.common.utils.ProcessRunner;
+import de.bwl.bwfla.emucomp.conf.CommonSingleton;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -50,6 +50,8 @@ public class HddFat16Helper extends ContainerHelper
 
 	Logger LOG = Logger.getLogger(this.getClass().getName());
 
+	private static final CommonSingleton instance = CommonSingleton.getInstance();
+
 	@Override
 	public HddContainer createEmptyContainer()
 	{
@@ -66,7 +68,7 @@ public class HddFat16Helper extends ContainerHelper
 			sizeMB = MAX_HDD_SIZE_MB;	
 		
 		// acquire hdd_create.sh script location
-		File hddCreateScript = new File(CommonSingleton.helpersConf.hddFat16Create); 
+		File hddCreateScript = new File(instance.getHelpersConf().hddFat16Create);
 		File hddFile = null;
 		HddContainer hddContainer = null;
 		
@@ -114,7 +116,7 @@ public class HddFat16Helper extends ContainerHelper
 			return false;
 		
 		// acquire hdd_io.sh script location
-		File hddIoScript = new File(CommonSingleton.helpersConf.hddFat16Io);
+		File hddIoScript = new File(instance.getHelpersConf().hddFat16Io);
 		ProcessRunner runner = new ProcessRunner();
 	
 		// iteratively inject files into hdd
@@ -142,7 +144,7 @@ public class HddFat16Helper extends ContainerHelper
 		if(!hddFile.exists())
 			return null;
 		
-		File hddIoScript = new File(CommonSingleton.helpersConf.hddFat16Io);
+		File hddIoScript = new File(instance.getHelpersConf().hddFat16Io);
 		File result = null;
 		boolean success = false;
 		

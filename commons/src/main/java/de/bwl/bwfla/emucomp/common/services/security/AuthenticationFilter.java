@@ -1,7 +1,7 @@
 package de.bwl.bwfla.emucomp.common.services.security;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
-import org.apache.tamaya.inject.api.Config;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.annotation.Priority;
 import javax.enterprise.event.Event;
@@ -18,11 +18,11 @@ import java.io.IOException;
 public class AuthenticationFilter extends AbstractAuthenticationFilter {
 
     @Inject
-    @Config(value = "authentication.authEnabled")
+    @ConfigProperty(name = "authentication.authEnabled")
     private boolean authEnabled;
 
     @Inject
-    @Config(value = "authentication.authAudience")
+    @ConfigProperty(name = "authentication.authAudience")
     private String authAudience;
 
     @Inject

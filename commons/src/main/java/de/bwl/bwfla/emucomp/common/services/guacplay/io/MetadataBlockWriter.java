@@ -22,7 +22,7 @@ package de.bwl.bwfla.emucomp.common.services.guacplay.io;
 import java.io.IOException;
 import java.util.Map.Entry;
 
-import static de.bwl.bwfla.common.services.guacplay.io.TraceFileDefs.*;
+import static de.bwl.bwfla.emucomp.common.services.guacplay.io.TraceFileDefs.*;
 
 
 /** A writer for blocks, containing the {@link Metadata} entries. */

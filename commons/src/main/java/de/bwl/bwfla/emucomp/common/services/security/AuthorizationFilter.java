@@ -1,7 +1,7 @@
 package de.bwl.bwfla.emucomp.common.services.security;
 
 import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
-import org.apache.tamaya.inject.api.Config;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -29,16 +29,16 @@ public class AuthorizationFilter implements ContainerRequestFilter {
 
     @Inject
     @AuthenticatedUser
-    private UserContext authenticatedUser = null;
+    private UserContext authenticatedUser;
 
     @Inject
-    @Config(value = "authentication.authEnabled")
+    @ConfigProperty(name = "authentication.authEnabled")
     private boolean authEnabled;
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
 
-        if(!authEnabled)
+        if (!authEnabled)
             return;
 
         // Get the resource class which matches with the requested URL
@@ -86,10 +86,10 @@ public class AuthorizationFilter implements ContainerRequestFilter {
         if (authenticatedUser == null || authenticatedUser.getRole() == null)
             throw new BWFLAException("no auth context");
 
-        if(allowedRoles.size() < 1)
+        if (allowedRoles.size() < 1)
             throw new BWFLAException("no minimum role provided");
 
-       //  System.out.println("authentication user " + authenticatedUser.getRole() + " " + authenticatedUser.getRole().ordinal());
+        //  System.out.println("authentication user " + authenticatedUser.getRole() + " " + authenticatedUser.getRole().ordinal());
 
         // Try to find at least one whitelisted role,
         // that permits access for the current user...

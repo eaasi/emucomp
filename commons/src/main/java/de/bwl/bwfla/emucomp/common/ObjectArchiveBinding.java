@@ -1,5 +1,9 @@
 package de.bwl.bwfla.emucomp.common;
 
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
+
+import javax.xml.bind.annotation.*;
+
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "objectArchiveBinding", namespace = "http://bwfla.bwl.de/common/datatypes", propOrder = {
 	    "archiveHost",

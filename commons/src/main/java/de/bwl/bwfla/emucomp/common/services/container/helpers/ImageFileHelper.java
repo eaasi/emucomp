@@ -22,8 +22,8 @@
  */
 package de.bwl.bwfla.emucomp.common.services.container.helpers;
 
-import de.bwl.bwfla.common.services.container.types.Container;
-import de.bwl.bwfla.common.services.container.types.ImageFileContainer;
+import de.bwl.bwfla.emucomp.common.services.container.types.Container;
+import de.bwl.bwfla.emucomp.common.services.container.types.ImageFileContainer;
 
 import java.io.File;
 import java.util.List;

@@ -1,8 +1,8 @@
 package de.bwl.bwfla.emucomp.common.utils;
 
-import de.bwl.bwfla.common.datatypes.QemuImage;
+import de.bwl.bwfla.emucomp.common.datatypes.QemuImage;
 import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
-import de.bwl.bwfla.common.services.net.HttpUtils;
+import de.bwl.bwfla.emucomp.common.services.net.HttpUtils;
 
 import java.io.IOException;
 import java.util.logging.Logger;

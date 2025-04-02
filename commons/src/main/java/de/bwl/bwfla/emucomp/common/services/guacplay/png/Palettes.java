@@ -19,12 +19,12 @@
 
 package de.bwl.bwfla.emucomp.common.services.guacplay.png;
 
-import de.bwl.bwfla.common.services.guacplay.util.MathUtils;
+import de.bwl.bwfla.emucomp.common.services.guacplay.util.MathUtils;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-import static de.bwl.bwfla.common.services.guacplay.png.PngDefs.ALPHA_OPAQUE;
+import static de.bwl.bwfla.emucomp.common.services.guacplay.png.PngDefs.ALPHA_OPAQUE;
 
 
 /** A base class for Color/Alpha palettes in an PNG image. */

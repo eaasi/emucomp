@@ -6,8 +6,9 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
-import org.apache.tamaya.Configuration;
-import org.apache.tamaya.ConfigurationProvider;
+import de.bwl.bwfla.emucomp.conf.CommonSingleton;
+import org.eclipse.microprofile.config.Config;
+import org.eclipse.microprofile.config.ConfigProvider;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -34,10 +35,11 @@ public class ServletAuthenticationFilter  implements Filter {
     private List<String> excludePaths;
 
     @Override
-    public void init( FilterConfig filterConfig ) throws ServletException {
+    public void init( FilterConfig filterConfig ) {
         LOG.info( "JwtAuthenticationFilter initialized" );
 
-        final Configuration config = ConfigurationProvider.getConfiguration();
+        Config config = ConfigProvider.getConfig();
+        CommonSingleton.getInstance();
 
         String excludePattern = filterConfig.getInitParameter("excludedUrls");
         if(excludePattern == null)
