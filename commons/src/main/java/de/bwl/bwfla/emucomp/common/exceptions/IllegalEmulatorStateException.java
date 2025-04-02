@@ -19,8 +19,8 @@
 
 package de.bwl.bwfla.emucomp.common.exceptions;
 
-import de.bwl.bwfla.common.datatypes.EmuCompState;
 
+import de.bwl.bwfla.emucomp.common.datatypes.EmuCompState;
 
 public class IllegalEmulatorStateException extends BWFLAException
 {

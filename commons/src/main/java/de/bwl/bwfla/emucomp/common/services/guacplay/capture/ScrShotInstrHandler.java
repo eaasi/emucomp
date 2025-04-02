@@ -19,65 +19,70 @@
 
 package de.bwl.bwfla.emucomp.common.services.guacplay.capture;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.ExtOpCode;
-import de.bwl.bwfla.common.services.guacplay.graphics.OffscreenCanvas;
-import de.bwl.bwfla.common.services.guacplay.protocol.Instruction;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionDescription;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionHandler;
+import de.bwl.bwfla.emucomp.common.services.guacplay.graphics.OffscreenCanvas;
+import de.bwl.bwfla.emucomp.common.services.guacplay.protocol.Instruction;
+import de.bwl.bwfla.emucomp.common.services.guacplay.protocol.InstructionDescription;
+import de.bwl.bwfla.emucomp.common.services.guacplay.protocol.InstructionHandler;
 
 import javax.imageio.ImageIO;
 import java.io.ByteArrayOutputStream;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import static de.bwl.bwfla.emucomp.common.services.guacplay.GuacDefs.ExtOpCode;
+
 /* Internal class (package-private) */
 
 
-/** Handler for the internal screenshot-instruction. */
-class ScrShotInstrHandler extends InstructionHandler
-{
-	// Member fields
-	private final ConcurrentLinkedQueue<byte[]> screenshots;
-	private final ByteArrayOutputStream outbuf;
-	private final OffscreenCanvas canvas;
-	
-	/** Format of the generated screenshot */
-	private static final String OUTPUT_FORMAT = "png";
-	
-	/** Constructor */
-	public ScrShotInstrHandler(OffscreenCanvas canvas)
-	{
-		super(ExtOpCode.SCREENSHOT);
-		
-		this.screenshots = new ConcurrentLinkedQueue<byte[]>();
-		this.canvas = canvas;
-		
-		final int size = 4 * canvas.getWidth() * canvas.getHeight();
-		this.outbuf = new ByteArrayOutputStream(size);
-	}
+/**
+ * Handler for the internal screenshot-instruction.
+ */
+class ScrShotInstrHandler extends InstructionHandler {
+    // Member fields
+    private final ConcurrentLinkedQueue<byte[]> screenshots;
+    private final ByteArrayOutputStream outbuf;
+    private final OffscreenCanvas canvas;
 
-	@Override
-	public void execute(InstructionDescription desc, Instruction instruction) throws Exception
-	{
-		synchronized (canvas)
-		{
-			canvas.render();
-			outbuf.reset();
-			
-			// Create the final output-image
-			ImageIO.write(canvas.getBufferedImage(), OUTPUT_FORMAT, outbuf);
-			screenshots.add(outbuf.toByteArray());
-		}
-	}
-	
-	/** Returns true when next screenshot is available, else false. */
-	public boolean hasNextScreenshot()
-	{
-		return !screenshots.isEmpty();
-	}
-	
-	/** Returns the next screenshot-data if available, else null. */
-	public byte[] getNextScreenshot()
-	{
-		return screenshots.poll();
-	}
+    /**
+     * Format of the generated screenshot
+     */
+    private static final String OUTPUT_FORMAT = "png";
+
+    /**
+     * Constructor
+     */
+    public ScrShotInstrHandler(OffscreenCanvas canvas) {
+        super(ExtOpCode.SCREENSHOT);
+
+        this.screenshots = new ConcurrentLinkedQueue<byte[]>();
+        this.canvas = canvas;
+
+        final int size = 4 * canvas.getWidth() * canvas.getHeight();
+        this.outbuf = new ByteArrayOutputStream(size);
+    }
+
+    @Override
+    public void execute(InstructionDescription desc, Instruction instruction) throws Exception {
+        synchronized (canvas) {
+            canvas.render();
+            outbuf.reset();
+
+            // Create the final output-image
+            ImageIO.write(canvas.getBufferedImage(), OUTPUT_FORMAT, outbuf);
+            screenshots.add(outbuf.toByteArray());
+        }
+    }
+
+    /**
+     * Returns true when next screenshot is available, else false.
+     */
+    public boolean hasNextScreenshot() {
+        return !screenshots.isEmpty();
+    }
+
+    /**
+     * Returns the next screenshot-data if available, else null.
+     */
+    public byte[] getNextScreenshot() {
+        return screenshots.poll();
+    }
 }

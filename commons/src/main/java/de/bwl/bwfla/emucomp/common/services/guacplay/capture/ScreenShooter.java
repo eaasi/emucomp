@@ -19,20 +19,21 @@
 
 package de.bwl.bwfla.emucomp.common.services.guacplay.capture;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.ExtOpCode;
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.OpCode;
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.SourceType;
-import de.bwl.bwfla.common.services.guacplay.graphics.OffscreenCanvas;
-import de.bwl.bwfla.common.services.guacplay.net.IGuacInterceptor;
-import de.bwl.bwfla.common.services.guacplay.protocol.BufferedMessageProcessor;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionBuilder;
-import de.bwl.bwfla.common.services.guacplay.protocol.handler.*;
-import de.bwl.bwfla.common.services.guacplay.util.CharArrayWrapper;
-import de.bwl.bwfla.common.services.guacplay.util.StopWatch;
+
+import de.bwl.bwfla.emucomp.common.services.guacplay.GuacDefs;
+import de.bwl.bwfla.emucomp.common.services.guacplay.graphics.OffscreenCanvas;
+import de.bwl.bwfla.emucomp.common.services.guacplay.net.IGuacInterceptor;
+import de.bwl.bwfla.emucomp.common.services.guacplay.protocol.BufferedMessageProcessor;
+import de.bwl.bwfla.emucomp.common.services.guacplay.protocol.InstructionBuilder;
+import de.bwl.bwfla.emucomp.common.services.guacplay.protocol.handler.*;
+import de.bwl.bwfla.emucomp.common.services.guacplay.util.CharArrayWrapper;
+import de.bwl.bwfla.emucomp.common.services.guacplay.util.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+
+import static de.bwl.bwfla.emucomp.common.services.guacplay.GuacDefs.*;
 
 
 /** A helper class for capturing screenshots on the server-side. */

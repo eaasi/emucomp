@@ -19,11 +19,11 @@
 
 package de.bwl.bwfla.emucomp.common.services.guacplay.protocol.handler;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.OpCode;
-import de.bwl.bwfla.common.services.guacplay.graphics.OffscreenCanvas;
-import de.bwl.bwfla.common.services.guacplay.protocol.Instruction;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionDescription;
+import de.bwl.bwfla.emucomp.common.services.guacplay.graphics.OffscreenCanvas;
+import de.bwl.bwfla.emucomp.common.services.guacplay.protocol.Instruction;
+import de.bwl.bwfla.emucomp.common.services.guacplay.protocol.InstructionDescription;
 
+import static de.bwl.bwfla.emucomp.common.services.guacplay.GuacDefs.*;
 
 /**
  * Handler for Guacamole's <i>rect-</i> instruction.

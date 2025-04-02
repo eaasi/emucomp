@@ -22,10 +22,11 @@
  */
 package de.bwl.bwfla.emucomp.common.services.container.helpers;
 
-import de.bwl.bwfla.common.services.container.types.Container;
-import de.bwl.bwfla.common.services.container.types.FloppyContainer;
-import de.bwl.bwfla.common.utils.ProcessRunner;
-import de.bwl.bwfla.conf.CommonSingleton;
+
+import de.bwl.bwfla.emucomp.common.services.container.types.Container;
+import de.bwl.bwfla.emucomp.common.services.container.types.FloppyContainer;
+import de.bwl.bwfla.emucomp.common.utils.ProcessRunner;
+import de.bwl.bwfla.emucomp.conf.CommonSingleton;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -45,11 +46,13 @@ public class FloppyFat12Helper extends ContainerHelper
 {
 	Logger LOG = Logger.getLogger(this.getClass().getName());
 
+	private static final CommonSingleton instance = CommonSingleton.getInstance();
+
 	@Override
 	public Container createEmptyContainer()
 	{
 		// acquire floppy_create.sh script location
-		File floppyCreateScript = new File(CommonSingleton.helpersConf.floppyFat12Create); 
+		File floppyCreateScript = new File(instance.getHelpersConf().floppyFat12Create);
 
 		File floppy = null;
 		FloppyContainer floppyContainer = null;
@@ -101,7 +104,7 @@ public class FloppyFat12Helper extends ContainerHelper
 			return false;
 
 		// acquire floppy_io.sh script location
-		File floppyIoScript = new File(CommonSingleton.helpersConf.floppyFat12Io);
+		File floppyIoScript = new File(instance.getHelpersConf().floppyFat12Io);
 		ProcessRunner runner = new ProcessRunner();
 
 		// iteratively inject files into floppy
@@ -128,7 +131,7 @@ public class FloppyFat12Helper extends ContainerHelper
 		if(!floppyFile.exists())
 			return null;
 
-		File floppyIoScript = new File(CommonSingleton.helpersConf.floppyFat12Io);
+		File floppyIoScript = new File(instance.getHelpersConf().floppyFat12Io);
 		File result = null;
 		
 		boolean success = false;

@@ -19,8 +19,10 @@
 
 package de.bwl.bwfla.emucomp.common.services.guacplay.protocol;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.SourceType;
 
+import de.bwl.bwfla.emucomp.common.services.guacplay.GuacDefs;
+
+import static de.bwl.bwfla.emucomp.common.services.guacplay.GuacDefs.*;
 
 /** A simple class representing a Guacamole's message. */
 public final class Message

@@ -26,7 +26,7 @@ import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
-import de.bwl.bwfla.common.utils.TaskStack;
+import de.bwl.bwfla.emucomp.common.utils.TaskStack;
 
 import javax.ws.rs.core.Response;
 import java.io.IOException;

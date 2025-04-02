@@ -19,8 +19,10 @@
 
 package de.bwl.bwfla.emucomp.common.utils;
 
-import de.bwl.bwfla.common.datatypes.MonitorValueMap;
-import de.bwl.bwfla.common.datatypes.ProcessMonitorVID;
+
+
+import de.bwl.bwfla.emucomp.common.datatypes.MonitorValueMap;
+import de.bwl.bwfla.emucomp.common.datatypes.ProcessMonitorVID;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

@@ -19,8 +19,8 @@
 
 package de.bwl.bwfla.emucomp.common.services.guacplay.net;
 
-import de.bwl.bwfla.common.services.guacplay.util.CharArrayWrapper;
 
+import de.bwl.bwfla.emucomp.common.services.guacplay.util.CharArrayWrapper;
 
 /**
  * Classes, that implement this interface, are allowed to intercept and modify

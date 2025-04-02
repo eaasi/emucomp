@@ -19,8 +19,8 @@
 
 package de.bwl.bwfla.emucomp.common.services.guacplay.events;
 
-import de.bwl.bwfla.common.services.guacplay.util.AbstractSink;
 
+import de.bwl.bwfla.emucomp.common.services.guacplay.util.AbstractSink;
 
 /** This class represents a collection of event listeners/consumers. */
 public class EventSink extends AbstractSink<IGuacEventListener>

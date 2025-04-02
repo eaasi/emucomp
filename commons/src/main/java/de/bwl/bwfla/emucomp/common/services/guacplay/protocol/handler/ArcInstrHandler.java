@@ -19,41 +19,41 @@
 
 package de.bwl.bwfla.emucomp.common.services.guacplay.protocol.handler;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.OpCode;
-import de.bwl.bwfla.common.services.guacplay.graphics.OffscreenCanvas;
-import de.bwl.bwfla.common.services.guacplay.protocol.Instruction;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionDescription;
 
+import de.bwl.bwfla.emucomp.common.services.guacplay.graphics.OffscreenCanvas;
+import de.bwl.bwfla.emucomp.common.services.guacplay.protocol.Instruction;
+import de.bwl.bwfla.emucomp.common.services.guacplay.protocol.InstructionDescription;
+
+import static de.bwl.bwfla.emucomp.common.services.guacplay.GuacDefs.OpCode;
 
 /**
  * Handler for Guacamole's <i>arc-</i> instruction.
- * 
+ *
  * @see <a href="http://guac-dev.org/doc/gug/protocol-reference.html#arc-instruction">
- *          Guacamole's protocol reference
- *      </a>
+ * Guacamole's protocol reference
+ * </a>
  */
-public class ArcInstrHandler extends DrawingInstrHandler
-{
-	/** Constructor */
-	public ArcInstrHandler(OffscreenCanvas canvas)
-	{
-		super(OpCode.ARC, canvas);
-	}
+public class ArcInstrHandler extends DrawingInstrHandler {
+    /**
+     * Constructor
+     */
+    public ArcInstrHandler(OffscreenCanvas canvas) {
+        super(OpCode.ARC, canvas);
+    }
 
-	@Override
-	public void execute(InstructionDescription desc, Instruction instr) throws Exception
-	{
-		// Parse instruction's arguments
-		final int layer = instr.argAsInt(0);
-		final int xpos = instr.argAsInt(1);
-		final int ypos = instr.argAsInt(2);
-		final int radius = instr.argAsInt(3);
-		final double start = instr.argAsDouble(4);
-		final double end = instr.argAsDouble(5);
-		final int negative = instr.argAsInt(6);
-		
-		synchronized (canvas) {
-			canvas.addArcSubpath(layer, xpos, ypos, radius, start, end, negative);
-		}
-	}
+    @Override
+    public void execute(InstructionDescription desc, Instruction instr) throws Exception {
+        // Parse instruction's arguments
+        final int layer = instr.argAsInt(0);
+        final int xpos = instr.argAsInt(1);
+        final int ypos = instr.argAsInt(2);
+        final int radius = instr.argAsInt(3);
+        final double start = instr.argAsDouble(4);
+        final double end = instr.argAsDouble(5);
+        final int negative = instr.argAsInt(6);
+
+        synchronized (canvas) {
+            canvas.addArcSubpath(layer, xpos, ypos, radius, start, end, negative);
+        }
+    }
 }

@@ -19,7 +19,8 @@
 
 package de.bwl.bwfla.emucomp.common.utils;
 
-import de.bwl.bwfla.conf.CommonSingleton;
+
+import de.bwl.bwfla.emucomp.conf.CommonSingleton;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -86,11 +87,12 @@ public class ProcessRunner
 	private static final Predicate<String> ENVIRONMENT_VARNAME_MATCHER = Pattern.compile("^[a-zA-Z_][a-zA-Z_0-9]*$")
 			.asMatchPredicate();
 
+	private static final CommonSingleton instance = CommonSingleton.getInstance();
 	// Initialize the constants from property file
-	private static final Path PROPERTY_TMPDIR_BASE = Paths.get(CommonSingleton.runnerConf.tmpBaseDir);
-	private static final String PROPERTY_TMPDIR_PREFIX = CommonSingleton.runnerConf.tmpdirPrefix;
-	private static final String PROPERTY_STDOUT_FILENAME = CommonSingleton.runnerConf.stdoutFilename;
-	private static final String PROPERTY_STDERR_FILENAME = CommonSingleton.runnerConf.stderrFilename;
+	private static final Path PROPERTY_TMPDIR_BASE = Paths.get(instance.getRunnerConf().tmpBaseDir);
+	private static final String PROPERTY_TMPDIR_PREFIX = instance.getRunnerConf().tmpdirPrefix;
+	private static final String PROPERTY_STDOUT_FILENAME = instance.getRunnerConf().stdoutFilename;
+	private static final String PROPERTY_STDERR_FILENAME = instance.getRunnerConf().stderrFilename;
 
 
 	/** Create a new ProcessRunner. */
