@@ -19,7 +19,7 @@
 
 package de.bwl.bwfla.emucomp.common.services.rest.filters;
 
-import de.bwl.bwfla.common.services.rest.ErrorInformation;
+import de.bwl.bwfla.emucomp.common.services.rest.ErrorInformation;
 
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;

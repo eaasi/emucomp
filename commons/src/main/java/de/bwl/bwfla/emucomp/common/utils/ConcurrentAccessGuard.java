@@ -19,7 +19,8 @@
 
 package de.bwl.bwfla.emucomp.common.utils;
 
-import de.bwl.bwfla.common.exceptions.ConcurrentAccessException;
+
+import de.bwl.bwfla.emucomp.common.exceptions.ConcurrentAccessException;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;

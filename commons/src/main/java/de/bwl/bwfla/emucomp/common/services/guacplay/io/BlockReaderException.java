@@ -19,7 +19,7 @@
 
 package de.bwl.bwfla.emucomp.common.services.guacplay.io;
 
-import de.bwl.bwfla.common.services.guacplay.util.CharUtils;
+import de.bwl.bwfla.emucomp.common.services.guacplay.util.CharUtils;
 
 import java.io.IOException;
 import java.nio.CharBuffer;

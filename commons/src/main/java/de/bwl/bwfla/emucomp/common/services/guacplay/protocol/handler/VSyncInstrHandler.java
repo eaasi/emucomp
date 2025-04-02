@@ -19,18 +19,18 @@
 
 package de.bwl.bwfla.emucomp.common.services.guacplay.protocol.handler;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs;
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.*;
-import de.bwl.bwfla.common.services.guacplay.events.EventSink;
-import de.bwl.bwfla.common.services.guacplay.events.GuacEvent;
-import de.bwl.bwfla.common.services.guacplay.events.IGuacEventListener;
-import de.bwl.bwfla.common.services.guacplay.graphics.OffscreenCanvas;
-import de.bwl.bwfla.common.services.guacplay.graphics.ScreenObserver;
-import de.bwl.bwfla.common.services.guacplay.protocol.*;
-import de.bwl.bwfla.common.services.guacplay.util.Base64;
-import de.bwl.bwfla.common.services.guacplay.util.CharArrayBuffer;
-import de.bwl.bwfla.common.services.guacplay.util.ConditionVariable;
-import de.bwl.bwfla.common.services.guacplay.util.ICharArrayConsumer;
+import de.bwl.bwfla.emucomp.common.services.guacplay.GuacDefs;
+import de.bwl.bwfla.emucomp.common.services.guacplay.GuacDefs.*;
+import de.bwl.bwfla.emucomp.common.services.guacplay.events.EventSink;
+import de.bwl.bwfla.emucomp.common.services.guacplay.events.GuacEvent;
+import de.bwl.bwfla.emucomp.common.services.guacplay.events.IGuacEventListener;
+import de.bwl.bwfla.emucomp.common.services.guacplay.graphics.OffscreenCanvas;
+import de.bwl.bwfla.emucomp.common.services.guacplay.graphics.ScreenObserver;
+import de.bwl.bwfla.emucomp.common.services.guacplay.protocol.*;
+import de.bwl.bwfla.emucomp.common.services.guacplay.util.Base64;
+import de.bwl.bwfla.emucomp.common.services.guacplay.util.CharArrayBuffer;
+import de.bwl.bwfla.emucomp.common.services.guacplay.util.ConditionVariable;
+import de.bwl.bwfla.emucomp.common.services.guacplay.util.ICharArrayConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

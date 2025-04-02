@@ -19,10 +19,10 @@
 
 package de.bwl.bwfla.emucomp.common.services.guacplay.replay;
 
-import de.bwl.bwfla.common.services.guacplay.protocol.AsyncWorker;
-import de.bwl.bwfla.common.services.guacplay.protocol.BufferedMessageProcessor;
-import de.bwl.bwfla.common.services.guacplay.protocol.Message;
-import de.bwl.bwfla.common.services.guacplay.util.RingBufferSPSC;
+import de.bwl.bwfla.emucomp.common.services.guacplay.protocol.AsyncWorker;
+import de.bwl.bwfla.emucomp.common.services.guacplay.protocol.BufferedMessageProcessor;
+import de.bwl.bwfla.emucomp.common.services.guacplay.protocol.Message;
+import de.bwl.bwfla.emucomp.common.services.guacplay.util.RingBufferSPSC;
 
 // Internal class (package-private)
 

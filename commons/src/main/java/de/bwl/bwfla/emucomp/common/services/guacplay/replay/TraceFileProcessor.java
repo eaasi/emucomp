@@ -19,14 +19,14 @@
 
 package de.bwl.bwfla.emucomp.common.services.guacplay.replay;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.EventType;
-import de.bwl.bwfla.common.services.guacplay.events.EventSink;
-import de.bwl.bwfla.common.services.guacplay.events.GuacEvent;
-import de.bwl.bwfla.common.services.guacplay.io.TraceBlockReader;
-import de.bwl.bwfla.common.services.guacplay.protocol.AsyncWorker;
-import de.bwl.bwfla.common.services.guacplay.protocol.Message;
-import de.bwl.bwfla.common.services.guacplay.protocol.MessageProcessor;
-import de.bwl.bwfla.common.services.guacplay.util.StopWatch;
+import de.bwl.bwfla.emucomp.common.services.guacplay.GuacDefs.EventType;
+import de.bwl.bwfla.emucomp.common.services.guacplay.events.EventSink;
+import de.bwl.bwfla.emucomp.common.services.guacplay.events.GuacEvent;
+import de.bwl.bwfla.emucomp.common.services.guacplay.io.TraceBlockReader;
+import de.bwl.bwfla.emucomp.common.services.guacplay.protocol.AsyncWorker;
+import de.bwl.bwfla.emucomp.common.services.guacplay.protocol.Message;
+import de.bwl.bwfla.emucomp.common.services.guacplay.protocol.MessageProcessor;
+import de.bwl.bwfla.emucomp.common.services.guacplay.util.StopWatch;
 
 // Internal class (package-private)
 

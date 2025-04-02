@@ -19,7 +19,7 @@
 
 package de.bwl.bwfla.emucomp.common.taskmanager;
 
-import de.bwl.bwfla.common.logging.PrefixLogger;
+import de.bwl.bwfla.emucomp.common.logging.PrefixLogger;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;

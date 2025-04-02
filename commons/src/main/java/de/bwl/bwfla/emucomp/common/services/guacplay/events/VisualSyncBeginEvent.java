@@ -19,8 +19,8 @@
 
 package de.bwl.bwfla.emucomp.common.services.guacplay.events;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.EventType;
-import de.bwl.bwfla.common.services.guacplay.protocol.Instruction;
+import de.bwl.bwfla.emucomp.common.services.guacplay.GuacDefs.EventType;
+import de.bwl.bwfla.emucomp.common.services.guacplay.protocol.Instruction;
 
 
 /**

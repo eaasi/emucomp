@@ -19,10 +19,10 @@
 
 package de.bwl.bwfla.emucomp.common.services.guacplay.net;
 
-import de.bwl.bwfla.common.services.guacplay.util.CharArrayWrapper;
-import de.bwl.bwfla.common.services.guacplay.util.ConditionVariable;
-import de.bwl.bwfla.common.services.guacplay.util.ICharArrayConsumer;
-import de.bwl.bwfla.common.services.guacplay.util.RingBufferSPSC;
+import de.bwl.bwfla.emucomp.common.services.guacplay.util.CharArrayWrapper;
+import de.bwl.bwfla.emucomp.common.services.guacplay.util.ConditionVariable;
+import de.bwl.bwfla.emucomp.common.services.guacplay.util.ICharArrayConsumer;
+import de.bwl.bwfla.emucomp.common.services.guacplay.util.RingBufferSPSC;
 import org.glyptodon.guacamole.GuacamoleException;
 import org.glyptodon.guacamole.GuacamoleServerException;
 import org.glyptodon.guacamole.io.GuacamoleReader;

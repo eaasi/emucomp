@@ -20,9 +20,9 @@
 package de.bwl.bwfla.emucomp.common.services.net;
 
 
-import de.bwl.bwfla.common.utils.ByteRange;
-import de.bwl.bwfla.common.utils.ByteRangeChannel;
-import de.bwl.bwfla.common.utils.ByteRangeIterator;
+import de.bwl.bwfla.emucomp.common.utils.ByteRange;
+import de.bwl.bwfla.emucomp.common.utils.ByteRangeChannel;
+import de.bwl.bwfla.emucomp.common.utils.ByteRangeIterator;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;

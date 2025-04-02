@@ -19,12 +19,12 @@
 
 package de.bwl.bwfla.emucomp.common.services.guacplay.protocol.handler;
 
-import de.bwl.bwfla.common.datatypes.ProcessMonitorVID;
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.ExtOpCode;
-import de.bwl.bwfla.common.services.guacplay.protocol.Instruction;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionDescription;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionHandler;
-import de.bwl.bwfla.common.utils.ProcessMonitor;
+import de.bwl.bwfla.emucomp.common.datatypes.ProcessMonitorVID;
+import de.bwl.bwfla.emucomp.common.services.guacplay.GuacDefs.ExtOpCode;
+import de.bwl.bwfla.emucomp.common.services.guacplay.protocol.Instruction;
+import de.bwl.bwfla.emucomp.common.services.guacplay.protocol.InstructionDescription;
+import de.bwl.bwfla.emucomp.common.services.guacplay.protocol.InstructionHandler;
+import de.bwl.bwfla.emucomp.common.utils.ProcessMonitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
