@@ -19,43 +19,42 @@
 package com.openslx.eaas.migration;
 
 import com.openslx.eaas.migration.config.MigrationConfig;
-import org.apache.tamaya.ConfigurationProvider;
+import org.eclipse.microprofile.config.ConfigProvider;
 
 
-public class MigrationUtils
-{
-	public static final float DEFAULT_FAILURE_RATE = MigrationUtils.getDefaultFailureRate();
+public class MigrationUtils {
+    public static final float DEFAULT_FAILURE_RATE = MigrationUtils.getDefaultFailureRate();
 
-	/** Look up migration's acceptable failure-rate */
-	public static float getFailureRate(MigrationConfig config)
-	{
-		return MigrationUtils.getFailureRate(config, DEFAULT_FAILURE_RATE);
-	}
+    /**
+     * Look up migration's acceptable failure-rate
+     */
+    public static float getFailureRate(MigrationConfig config) {
+        return MigrationUtils.getFailureRate(config, DEFAULT_FAILURE_RATE);
+    }
 
-	/** Look up migration's acceptable failure-rate */
-	public static float getFailureRate(MigrationConfig config, float defvalue)
-	{
-		final var value = config.getArguments()
-				.get("failure_rate");
+    /**
+     * Look up migration's acceptable failure-rate
+     */
+    public static float getFailureRate(MigrationConfig config, float defvalue) {
+        final var value = config.getArguments().getValue("failure_rate", String.class);
 
-		return (value != null) ? Float.parseFloat(value) : defvalue;
-	}
+        return (value != null) ? Float.parseFloat(value) : defvalue;
+    }
 
-	/** Check if current failure-rate is acceptable */
-	public static boolean acceptable(int numTotal, int numFailures, float maxFailureRate)
-	{
-		final float threshold = maxFailureRate * ((float) numTotal);
-		return (float) numFailures <= threshold;
-	}
+    /**
+     * Check if current failure-rate is acceptable
+     */
+    public static boolean acceptable(int numTotal, int numFailures, float maxFailureRate) {
+        final float threshold = maxFailureRate * ((float) numTotal);
+        return (float) numFailures <= threshold;
+    }
 
 
-	// ===== Internal Helpers ====================
+    // ===== Internal Helpers ====================
 
-	private static float getDefaultFailureRate()
-	{
-		final var value = ConfigurationProvider.getConfiguration()
-				.get("migration.failure_rate");
+    private static float getDefaultFailureRate() {
+        final var value = ConfigProvider.getConfig().getValue("migration.failure_rate", String.class);
 
-		return (value == null) ? 0.0F : Float.parseFloat(value);
-	}
+        return (value == null) ? 0.0F : Float.parseFloat(value);
+    }
 }
