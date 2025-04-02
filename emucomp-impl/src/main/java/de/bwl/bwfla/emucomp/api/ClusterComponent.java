@@ -19,31 +19,30 @@
 
 package de.bwl.bwfla.emucomp.api;
 
-
-import de.bwl.bwfla.emucomp.data.BlobHandle;
-import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 import de.bwl.bwfla.emucomp.ComponentConfiguration;
 import de.bwl.bwfla.emucomp.ComponentState;
+import de.bwl.bwfla.emucomp.data.BlobHandle;
+import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 
 import java.net.URI;
 import java.util.Map;
 
 public interface ClusterComponent {
-    void initialize(ComponentConfiguration config) throws BWFLAException;
+    public void initialize(ComponentConfiguration config) throws BWFLAException;
 
-    void destroy();
+    public void destroy();
 
-    String getComponentType() throws BWFLAException;
+    public String getComponentType() throws BWFLAException;
 
-    ComponentState getState() throws BWFLAException;
+    public ComponentState getState() throws BWFLAException;
 
-    Map<String, URI> getControlUrls();
+    public Map<String, URI> getControlUrls();
 
-    URI getEventSourceUrl();
+    public URI getEventSourceUrl();
 
-    void setKeepaliveTimestamp(long timestamp);
+    public void setKeepaliveTimestamp(long timestamp);
 
-    long getKeepaliveTimestamp();
+    public long getKeepaliveTimestamp();
 
-    BlobHandle getResult() throws BWFLAException;
+    public BlobHandle getResult() throws BWFLAException;
 }

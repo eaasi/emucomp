@@ -1,9 +1,10 @@
 package de.bwl.bwfla.emucomp.components.emulators;
 
-import de.bwl.bwfla.emucomp.EmuCompState;
-import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
-import de.bwl.bwfla.emucomp.Drive;
-import de.bwl.bwfla.emucomp.Nic;
+import de.bwl.bwfla.common.datatypes.EmuCompState;
+import de.bwl.bwfla.common.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.api.Drive;
+import de.bwl.bwfla.emucomp.api.Drive.DriveType;
+import de.bwl.bwfla.emucomp.api.Nic;
 import de.bwl.bwfla.emucomp.control.ResumableSocket;
 import de.bwl.bwfla.emucomp.control.ResumableSocket.MessageHandlerBoth;
 import de.bwl.bwfla.emucomp.control.connectors.WebEmulatorConnector;
@@ -23,8 +24,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
-
-import static de.bwl.bwfla.emucomp.Drive.DriveType.*;
 
 /**
  * @author rafael@gieschke.de
@@ -96,9 +95,9 @@ public class WebEmulatorBean extends EmulatorBean implements MessageHandlerBoth 
 	@Override
 	public Set<String> getHotplugableDrives() {
 		HashSet<String> set = new HashSet<String>();
-		set.add(CDROM.name());
-		set.add(DISK.name());
-		set.add(FLOPPY.name());
+		set.add(DriveType.CDROM.name());
+		set.add(DriveType.DISK.name());
+		set.add(DriveType.FLOPPY.name());
 		return set;
 	}
 

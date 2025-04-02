@@ -1,73 +1,91 @@
 package de.bwl.bwfla.emucomp.components.network;
 
-
-import de.bwl.bwfla.emucomp.DeprecatedProcessRunner;
-import de.bwl.bwfla.emucomp.NetworkUtils;
-import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
-import de.bwl.bwfla.emucomp.ComponentConfiguration;
-import de.bwl.bwfla.emucomp.NodeTcpConfiguration;
+import de.bwl.bwfla.common.exceptions.BWFLAException;
+import de.bwl.bwfla.common.utils.NetworkUtils;
+import de.bwl.bwfla.common.utils.ProcessRunner;
+import de.bwl.bwfla.common.utils.net.ConfigKey;
+import de.bwl.bwfla.common.utils.net.PortRangeProvider;
+import de.bwl.bwfla.emucomp.api.ComponentConfiguration;
+import de.bwl.bwfla.emucomp.api.NodeTcpConfiguration;
 import de.bwl.bwfla.emucomp.components.EaasComponentBean;
 import de.bwl.bwfla.emucomp.control.connectors.EthernetConnector;
 import de.bwl.bwfla.emucomp.control.connectors.InfoDummyConnector;
-import de.bwl.bwfla.emucomp.net.PortRangeProvider;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.apache.tamaya.inject.api.Config;
 
 import javax.enterprise.inject.spi.CDI;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+
 
 public class NodeTcpBean extends EaasComponentBean {
 
-    protected DeprecatedProcessRunner runner = new DeprecatedProcessRunner();
-    private ArrayList<DeprecatedProcessRunner> vdeProcesses = new ArrayList<DeprecatedProcessRunner>();
+    protected ProcessRunner runner = new ProcessRunner();
+    private ArrayList<ProcessRunner> vdeProcesses = new ArrayList<ProcessRunner>();
 
     @Inject
-    @ConfigProperty(name = "components.tcpNode.ports")
+    @ConfigKey("components.tcpNode.ports")
     private PortRangeProvider.Port tcpPorts;
 
     @Inject
-    @ConfigProperty(name = "components.binary.nodetcprunner")
+    @Config("components.binary.nodetcprunner")
     private String nodeTcpRunner;
 
     @Inject
-    @ConfigProperty(name = "components.binary.nodetcpscript")
+    @Config("components.binary.nodetcpscript")
     private String nodeTcpScript;
 
     @Override
     public void destroy() {
-        tcpPorts.release();
-        for (DeprecatedProcessRunner process : this.vdeProcesses) {
-            process.stop();
-            process.cleanup();
+        LOG.info("Stopping node-tcp instance...");
+        while (!vdeProcesses.isEmpty()) {
+            final var process = vdeProcesses.remove(vdeProcesses.size() - 1);
+            try {
+                process.stop();
+                process.printStdOut();
+                process.printStdErr();
+            }
+            catch (Throwable error) {
+                LOG.log(Level.WARNING, "Stopping subprocess failed!", error);
+            }
+            finally {
+                process.cleanup();
+            }
         }
+
+        tcpPorts.release();
         super.destroy();
+
+        LOG.info("Stopped node-tcp instance");
     }
 
     @Override
     public void initialize(ComponentConfiguration config) throws BWFLAException {
 
+        LOG.info("Initializing node-tcp instance...");
+
         NodeTcpConfiguration nodeConfig = (NodeTcpConfiguration) config;
-
-
 
         String hwAddress = nodeConfig.getHwAddress();
         String switchName = "nic_" + hwAddress;
+        final var vdeSocketsPath = this.getWorkingDir()
+                .resolve(switchName);
 
         int extPort;
         try {
              extPort = tcpPorts.get();
-             System.out.println("connection on port: " + extPort);
+             LOG.info("Connection on port: " + extPort);
         } catch (IOException e) {
-            e.printStackTrace();
             throw new BWFLAException(e);
         }
 
-        DeprecatedProcessRunner process = new DeprecatedProcessRunner("vde_switch");
+        ProcessRunner process = new ProcessRunner("vde_switch");
         process.addArgument("-hub");
         process.addArgument("-s");
-        process.addArgument(this.getWorkingDir().resolve(switchName).toString());
-        if(!process.start())
+        process.addArgument(vdeSocketsPath.toString());
+        process.setLogger(LOG);
+        if (!process.start(false))
             throw new BWFLAException("Cannot create vde_switch hub for VdeSlirpBean");
         vdeProcesses.add(process);
 
@@ -77,9 +95,10 @@ public class NodeTcpBean extends EaasComponentBean {
         {
             // Usage: ./eaas-proxy "" /tmp/switch1 "" 10.0.0.1/24 dhcpd
             runner.addArgument("");
-            runner.addArgument(this.getWorkingDir().resolve(switchName).toString());
+            runner.addArgument(vdeSocketsPath.toString());
             runner.addArgument("");
-            runner.addArgument("10.0.2.10/24");
+
+            runner.addArgument(nodeConfig.getDhcpNetworkAddress() + "/" + nodeConfig.getDhcpNetworkMask());
             runner.addArgument("dhcpd");
         }
         else {
@@ -90,7 +109,7 @@ public class NodeTcpBean extends EaasComponentBean {
             // arg5 privateDestIp (internal server)
             // arg6 privateDestIpPort
             runner.addArgument(extPort + "");
-            runner.addArgument(this.getWorkingDir().resolve(switchName).toString());
+            runner.addArgument(vdeSocketsPath.toString());
             runner.addArgument(NetworkUtils.getRandomHWAddress());
             runner.addArgument("dhcp");
             // runner.addArgument(nodeConfig.getPrivateNetIp() + "/" + nodeConfig.getPrivateNetMask());
@@ -112,11 +131,14 @@ public class NodeTcpBean extends EaasComponentBean {
             this.addControlConnector(new InfoDummyConnector(info));
         }
 
-        if (!runner.start())
+        runner.setLogger(LOG);
+        if (!runner.start(false))
             throw new BWFLAException("Cannot start node process");
         vdeProcesses.add(runner);
 
-        this.addControlConnector(new EthernetConnector(hwAddress, this.getWorkingDir().resolve(switchName)));
+        this.addControlConnector(new EthernetConnector(hwAddress, vdeSocketsPath, LOG));
+
+        LOG.info("Initialized node-tcp instance");
     }
 
     @Override

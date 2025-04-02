@@ -20,7 +20,6 @@ RUN apt-get update && apt-get install -y \
     qemu \
     qemu-system-x86 \
     qemu-utils \
-    fuse \
     primus \
     ntfs-3g \
     dosbox \
@@ -30,7 +29,6 @@ RUN apt-get update && apt-get install -y \
     gawk \
     coreutils \
     util-linux \
-    fuse \
     dosfstools \
     && rm -rf /var/lib/apt/lists/*
 

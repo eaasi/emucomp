@@ -19,7 +19,7 @@
 
 package de.bwl.bwfla.emucomp.api;
 
-import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
 
 
 public interface ContainerComponent

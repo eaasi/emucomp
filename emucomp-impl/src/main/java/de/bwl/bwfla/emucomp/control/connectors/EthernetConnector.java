@@ -19,30 +19,46 @@
 
 package de.bwl.bwfla.emucomp.control.connectors;
 
-import de.bwl.bwfla.emucomp.DeprecatedProcessRunner;
+import de.bwl.bwfla.common.exceptions.BWFLAException;
+import de.bwl.bwfla.common.utils.ProcessRunner;
+import de.bwl.bwfla.emucomp.api.EthernetAlreadyConnectedException;
 import de.bwl.bwfla.emucomp.components.emulators.EmulatorBean;
 
 import java.net.URI;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.logging.Logger;
 
 
 public class EthernetConnector implements IConnector {
     public final static String PROTOCOL = "ws+ethernet";
 
+    private final Logger log;
     private final EmulatorBean emubean;
     private final String hwAddress;
     private final Path vdeSocket;
-    private DeprecatedProcessRunner runner = null;
+    private ProcessRunner runner = null;
+
+    static {
+        final var workdir = Path.of("/tmp/eaas/vde/");
+        try {
+            Files.createDirectories(workdir);
+        }
+        catch (Exception error) {
+            throw new RuntimeException("Creating working directory for ethernet-connectors failed!", error);
+        }
+    }
     
     public static String getProtocolForHwaddress(final String hwAddress) {
         return EthernetConnector.PROTOCOL + "+" + hwAddress;
     }
 
-    public EthernetConnector(final String hwAddress, final Path vdeSocket) {
-        this(hwAddress, vdeSocket, null);
+    public EthernetConnector(final String hwAddress, final Path vdeSocket, Logger log) {
+        this(hwAddress, vdeSocket, log, null);
     }
 
-    public EthernetConnector(final String hwAddress, final Path vdeSocket, EmulatorBean emubean) {
+    public EthernetConnector(final String hwAddress, final Path vdeSocket, Logger log, EmulatorBean emubean) {
+        this.log = log;
         this.emubean = emubean;
         this.hwAddress = hwAddress;
         this.vdeSocket = vdeSocket;
@@ -58,21 +74,20 @@ public class EthernetConnector implements IConnector {
         return getProtocolForHwaddress(this.hwAddress);
     }
 
-    public synchronized void connect(String id) {
+    public synchronized String connect(String id)
+            throws EthernetAlreadyConnectedException, BWFLAException
+    {
+        log.info("Starting ethernet-connector for '" + hwAddress + "'...");
         if (this.runner != null)
-            return;
+            throw new EthernetAlreadyConnectedException();
 
-        if (emubean == null) {
-            System.out.println("NULL");
-        }
-
+        final var sockpath = "/tmp/eaas/vde/" + id + ".sock";
 
         // Start a new VDE plug instance that connects to the emulator's switch
-        this.runner = new DeprecatedProcessRunner();
-
+        this.runner = new ProcessRunner();
+        runner.setLogger(log);
         runner.setCommand("socat");
-        runner.addArguments("unix-listen:/tmp/" + id + ".sock");
-
+        runner.addArgument("unix-listen:" + sockpath);
 
         String socatExec = "exec ";
         if (emubean != null && emubean.isContainerModeEnabled()) {
@@ -83,22 +98,27 @@ public class EthernetConnector implements IConnector {
 
         runner.addEnvVariable("SOCATCMD", socatExec);
         runner.addArgument("exec:sh -c $SOCATCMD");
+        if (!runner.start())
+            throw new BWFLAException("Running emulator-side vde-plug failed!");
 
-        /*
-        if (emubean != null && emubean.isContainerModeEnabled()) {
-            // Run the process inside of the running emulator-container!
-            runner.addArguments("sudo", "runc", "exec");
-            runner.addArguments("--user", emubean.getContainerUserId() + ":" + emubean.getContainerGroupId());
-            runner.addArguments(emubean.getContainerId());
-        }
-
-        runner.addArguments("vde_plug", "-s", this.vdeSocket.toString());
-
-         */
-        runner.start();
+        log.info("Started ethernet-connector for '" + hwAddress + "' (" + sockpath + "')");
+        return sockpath;
     }
     
     public void close() {
-        this.runner.stop();
+        if (runner == null)
+            return;
+
+        try {
+            runner.stop();
+            runner.printStdOut();
+            runner.printStdErr();
+        }
+        finally {
+            runner.cleanup();
+            this.runner = null;
+        }
+
+        log.info("Stopped ethernet-connector for '" + hwAddress + "'");
     }
 }

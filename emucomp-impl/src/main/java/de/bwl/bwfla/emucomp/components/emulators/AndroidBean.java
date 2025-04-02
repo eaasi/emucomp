@@ -19,10 +19,9 @@
 
 package de.bwl.bwfla.emucomp.components.emulators;
 
-import de.bwl.bwfla.emucomp.Drive;
-import de.bwl.bwfla.emucomp.MachineConfiguration;
-import de.bwl.bwfla.emucomp.Nic;
-import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.api.Drive;
+import de.bwl.bwfla.emucomp.api.Nic;
 
 import java.io.File;
 
@@ -44,22 +43,17 @@ public class AndroidBean extends EmulatorBean
 	}
 
 	@Override
-	protected boolean addDrive(Drive drive) {
-		// TODO Auto-generated method stub
-		return false;
+	protected boolean addDrive(Drive drive) throws BWFLAException {
+		throw this.newNotImplementedException();
 	}
 
 	@Override
-	protected boolean connectDrive(Drive drive, boolean attach) {
-		// TODO Auto-generated method stub
-		return false;
+	protected boolean connectDrive(Drive drive, boolean attach) throws BWFLAException {
+		throw this.newNotImplementedException();
 	}
 
 	@Override
-	protected boolean addNic(Nic nic) {
-		// TODO Auto-generated method stub
-		return false;
+	protected boolean addNic(Nic nic) throws BWFLAException {
+		throw this.newNotImplementedException();
 	}
-
-	
 }

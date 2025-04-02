@@ -1,9 +1,10 @@
 package de.bwl.bwfla.emucomp.components.emulators;
 
-import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
-import de.bwl.bwfla.emucomp.Drive;
-import de.bwl.bwfla.emucomp.Nic;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
+
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.api.Drive;
+import de.bwl.bwfla.emucomp.api.Nic;
+import org.apache.tamaya.inject.api.Config;
 
 import javax.inject.Inject;
 
@@ -11,7 +12,7 @@ import javax.inject.Inject;
 public class DebugBean extends EmulatorBean
 {
 	@Inject
-	@ConfigProperty(name = "emucomp.debug_bean_enabled")
+	@Config("emucomp.debug_bean_enabled")
 	public boolean isEnabled;
 
 	@Override

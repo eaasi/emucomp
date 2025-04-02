@@ -26,6 +26,8 @@ import javax.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class RunnerConf {
+    @ConfigProperty(name = "runners.tmpbasedir")
+    public String tmpBaseDir;
     @ConfigProperty(name = "runners.tmpdirprefix")
     public String tmpdirPrefix;
     @ConfigProperty(name = "runners.stdoutfilename")

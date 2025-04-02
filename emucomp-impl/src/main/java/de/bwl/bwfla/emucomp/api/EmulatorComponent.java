@@ -19,11 +19,11 @@
 
 package de.bwl.bwfla.emucomp.api;
 
-
+import de.bwl.bwfla.emucomp.BindingDataHandler;
+import de.bwl.bwfla.emucomp.EmuCompState;
+import de.bwl.bwfla.emucomp.PrintJob;
 import de.bwl.bwfla.emucomp.ProcessMonitorVID;
 import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
-import de.bwl.bwfla.emucomp.BindingDataHandler;
-import de.bwl.bwfla.emucomp.PrintJob;
 
 import javax.activation.DataHandler;
 import java.util.Collection;
@@ -33,79 +33,62 @@ import java.util.Set;
 
 /**
  * @author iv1004
+ * 
  */
-public interface EmulatorComponent extends ClusterComponent {
-    void start() throws BWFLAException;
+public interface EmulatorComponent extends ClusterComponent 
+{	
+	public void start() throws BWFLAException;
+	public String stop() throws BWFLAException;
+	public List<BindingDataHandler> snapshot() throws BWFLAException;
+	public int changeMedium(int containerId, String objReference) throws BWFLAException;
+	public int attachMedium(DataHandler data, String mediumType) throws BWFLAException;
+	public DataHandler detachMedium(int containerId) throws BWFLAException;
+	
+	public String getRuntimeConfiguration() throws BWFLAException;
+	
+	public Set<String> getColdplugableDrives();
+	public Set<String> getHotplugableDrives();
+	
+	public EmuCompState getEmulatorState();
 
-    String stop() throws BWFLAException;
+	/* ==================== EmuCon API ==================== */
 
-    List<BindingDataHandler> snapshot() throws BWFLAException;
+	public DataHandler checkpoint() throws BWFLAException;
 
-    int changeMedium(int containerId, String objReference) throws BWFLAException;
-
-    int attachMedium(DataHandler data, String mediumType) throws BWFLAException;
-
-    DataHandler detachMedium(int containerId) throws BWFLAException;
-
-    String getRuntimeConfiguration() throws BWFLAException;
-
-    Set<String> getColdplugableDrives();
-
-    Set<String> getHotplugableDrives();
-
-    String getEmulatorState();
-
-    /* ==================== EmuCon API ==================== */
-
-    DataHandler checkpoint() throws BWFLAException;
-
-
-    /* =============== Session recording API =============== */
-
-    boolean prepareSessionRecorder() throws BWFLAException;
-
-    void startSessionRecording() throws BWFLAException;
-
-    void stopSessionRecording() throws BWFLAException;
-
-    boolean isRecordModeEnabled() throws BWFLAException;
-
-    void addActionFinishedMark() throws BWFLAException;
-
-    void defineTraceMetadataChunk(String tag, String comment) throws BWFLAException;
-
-    void addTraceMetadataEntry(String ctag, String key, String value) throws BWFLAException;
-
-    String getSessionTrace() throws BWFLAException;
-
-
-    /* =============== Session replay API =============== */
-
-    boolean prepareSessionPlayer(String trace, boolean headless) throws BWFLAException;
-
-    int getSessionPlayerProgress() throws BWFLAException;
-
-    boolean isReplayModeEnabled() throws BWFLAException;
+	
+	/* =============== Session recording API =============== */
+	
+	public boolean prepareSessionRecorder() throws BWFLAException;
+	public void startSessionRecording() throws BWFLAException;
+	public void stopSessionRecording() throws BWFLAException;
+	public boolean isRecordModeEnabled() throws BWFLAException;
+	public void addActionFinishedMark() throws BWFLAException;
+	public void defineTraceMetadataChunk(String tag, String comment) throws BWFLAException;
+	public void addTraceMetadataEntry(String ctag, String key, String value) throws BWFLAException;
+	public String getSessionTrace() throws BWFLAException;
+	
+	
+	/* =============== Session replay API =============== */
+	
+	public boolean prepareSessionPlayer(String trace, boolean headless) throws BWFLAException;
+	public int getSessionPlayerProgress() throws BWFLAException;
+	public boolean isReplayModeEnabled() throws BWFLAException;
+	
+	
+	/* ==================== Monitoring API ==================== */
+	
+	public boolean updateMonitorValues() throws BWFLAException;
+	public String getMonitorValue(ProcessMonitorVID id) throws BWFLAException;
+	public List<String> getMonitorValues(Collection<ProcessMonitorVID> ids) throws BWFLAException;
+	public List<String> getAllMonitorValues() throws BWFLAException;
+	
+	
+	/* ==================== Print  API ==================== */
+	public List<PrintJob> getPrintJobs() throws BWFLAException;
 
 
-    /* ==================== Monitoring API ==================== */
+	/* ==================== Screenshot API ==================== */
 
-    boolean updateMonitorValues() throws BWFLAException;
-
-    String getMonitorValue(ProcessMonitorVID id) throws BWFLAException;
-
-    List<String> getMonitorValues(Collection<ProcessMonitorVID> ids) throws BWFLAException;
-
-    List<String> getAllMonitorValues() throws BWFLAException;
-
-
-    /* ==================== Print  API ==================== */
-    List<PrintJob> getPrintJobs() throws BWFLAException;
-
-
-    /* ==================== Screenshot API ==================== */
-
-    void takeScreenshot() throws BWFLAException;
-
-    DataHandler getNextScreenshot() throws BWFLAException;
+	public void takeScreenshot() throws BWFLAException;
+	public DataHandler getNextScreenshot() throws BWFLAException;
 }

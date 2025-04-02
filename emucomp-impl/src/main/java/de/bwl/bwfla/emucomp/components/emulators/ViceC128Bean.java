@@ -19,8 +19,8 @@
 
 package de.bwl.bwfla.emucomp.components.emulators;
 
-import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
+import de.bwl.bwfla.common.exceptions.BWFLAException;
+import org.apache.tamaya.inject.api.Config;
 
 import javax.inject.Inject;
 
@@ -28,7 +28,7 @@ import javax.inject.Inject;
 public class ViceC128Bean extends ViceBean
 {
     @Inject
-    @ConfigProperty(name = "components.binary.vice.c128")
+    @Config("components.binary.vice.c128")
     private String c128;
 
 	@Override

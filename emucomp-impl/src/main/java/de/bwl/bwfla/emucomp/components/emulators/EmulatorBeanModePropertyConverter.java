@@ -20,26 +20,29 @@
 package de.bwl.bwfla.emucomp.components.emulators;
 
 
+import org.apache.tamaya.ConfigException;
+import org.apache.tamaya.spi.ConversionContext;
+import org.apache.tamaya.spi.PropertyConverter;
 
-public class EmulatorBeanModePropertyConverter
-//		implements PropertyConverter<EmulatorBeanMode>
+
+public class EmulatorBeanModePropertyConverter implements PropertyConverter<EmulatorBeanMode>
 {
-//	@Override
-//	public EmulatorBeanMode convert(String value, ConversionContext context)
-//	{
-//		switch (value)
-//		{
-//			case "sdlonp":
-//				return EmulatorBeanMode.SDLONP;
-//
-//			case "xpra":
-//				return EmulatorBeanMode.XPRA;
-//
-//			case "y11":
-//				return EmulatorBeanMode.Y11;
-//
-//			default:
-//				throw new ConfigException("Invalid emulator mode:  " + value);
-//		}
-//	}
+	@Override
+	public EmulatorBeanMode convert(String value, ConversionContext context)
+	{
+		switch (value)
+		{
+			case "sdlonp":
+				return EmulatorBeanMode.SDLONP;
+
+			case "xpra":
+				return EmulatorBeanMode.XPRA;
+
+			case "y11":
+				return EmulatorBeanMode.Y11;
+
+			default:
+				throw new ConfigException("Invalid emulator mode:  " + value);
+		}
+	}
 }

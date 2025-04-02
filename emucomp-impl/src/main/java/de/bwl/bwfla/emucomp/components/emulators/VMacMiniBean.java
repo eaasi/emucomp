@@ -1,9 +1,9 @@
 package de.bwl.bwfla.emucomp.components.emulators;
 
-import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
-import de.bwl.bwfla.emucomp.Drive;
-import de.bwl.bwfla.emucomp.MachineConfiguration;
-import de.bwl.bwfla.emucomp.Nic;
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.api.Drive;
+import de.bwl.bwfla.emucomp.api.MachineConfiguration;
+import de.bwl.bwfla.emucomp.api.Nic;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,8 +19,9 @@ public class VMacMiniBean extends EmulatorBean {
         String config = this.getNativeConfig();
         if (config != null && !config.isEmpty()) {
             String[] tokens = config.trim().split("\\s+");
-            for (String token : tokens) {
-                if (token.isEmpty())
+            for (String token : tokens)
+            {
+                if(token.isEmpty())
                     continue;
 
                 emuRunner.addArgument(token.trim());
@@ -29,12 +30,14 @@ public class VMacMiniBean extends EmulatorBean {
     }
 
     @Override
-    protected String getEmulatorWorkdir() {
+    protected String getEmulatorWorkdir()
+    {
         return "/minivmac";
     }
 
     @Override
-    protected String getEmuContainerName(MachineConfiguration env) {
+    protected String getEmuContainerName(MachineConfiguration env)
+    {
         return "vmacmini";
     }
 
@@ -58,13 +61,12 @@ public class VMacMiniBean extends EmulatorBean {
     }
 
     @Override
-    protected boolean connectDrive(Drive drive, boolean attach) {
-        return false;
+    protected boolean connectDrive(Drive drive, boolean attach) throws BWFLAException {
+        throw this.newNotSupportedException();
     }
 
     @Override
-    protected boolean addNic(Nic nic) {
-        return false;
+    protected boolean addNic(Nic nic) throws BWFLAException {
+        throw this.newNotSupportedException();
     }
 }
-

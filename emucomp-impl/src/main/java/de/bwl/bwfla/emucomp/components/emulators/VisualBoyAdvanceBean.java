@@ -1,8 +1,9 @@
 package de.bwl.bwfla.emucomp.components.emulators;
 
-import de.bwl.bwfla.emucomp.Drive;
-import de.bwl.bwfla.emucomp.MachineConfiguration;
-import de.bwl.bwfla.emucomp.Nic;
+import de.bwl.bwfla.common.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.api.Drive;
+import de.bwl.bwfla.emucomp.api.MachineConfiguration;
+import de.bwl.bwfla.emucomp.api.Nic;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -53,12 +54,12 @@ public class VisualBoyAdvanceBean extends EmulatorBean {
     }
 
     @Override
-    protected boolean connectDrive(Drive drive, boolean attach) {
-        return false;
+    protected boolean connectDrive(Drive drive, boolean attach) throws BWFLAException {
+        throw this.newNotSupportedException();
     }
 
     @Override
-    protected boolean addNic(Nic nic) {
-        return false;
+    protected boolean addNic(Nic nic) throws BWFLAException {
+        throw this.newNotSupportedException();
     }
 }

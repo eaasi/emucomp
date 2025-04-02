@@ -18,12 +18,12 @@
  */
 
 package de.bwl.bwfla.emucomp.components.emulators;
-import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
-import de.bwl.bwfla.emucomp.Drive;
-import de.bwl.bwfla.emucomp.EmulatorUtils;
-import de.bwl.bwfla.emucomp.MachineConfiguration;
-import de.bwl.bwfla.emucomp.Nic;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.api.Drive;
+import de.bwl.bwfla.emucomp.api.EmulatorUtils.XmountOutputFormat;
+import de.bwl.bwfla.emucomp.api.MachineConfiguration;
+import de.bwl.bwfla.emucomp.api.Nic;
+import org.apache.tamaya.inject.api.Config;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -37,7 +37,7 @@ import java.util.logging.Level;
 public class BeebemBean extends EmulatorBean
 {	
     @Inject
-	@ConfigProperty(name = "components.binary.beebem")
+    @Config("components.binary.beebem")
     public String beebemBean;
 
 	@Override
@@ -63,7 +63,7 @@ public class BeebemBean extends EmulatorBean
 		{
 			LOG.info("mounting: " + b);
 			try {
-				Path imagePath = Paths.get(lookupResource("binding://" + b, EmulatorUtils.XmountOutputFormat.RAW));
+				Path imagePath = Paths.get(lookupResource("binding://" + b, XmountOutputFormat.RAW));
 				Path link = discsDir.resolve(imagePath.getFileName().toString() + ".ssd");
 				Path link2 = discsDir.resolve(imagePath.getFileName().toString() + ".dsd");
 				Files.createSymbolicLink(link, imagePath);
@@ -129,16 +129,14 @@ public class BeebemBean extends EmulatorBean
 	}
 
 	@Override
-	public boolean connectDrive(Drive drive, boolean connect)
+	public boolean connectDrive(Drive drive, boolean connect) throws BWFLAException
 	{
-		LOG.severe("operation unsupported yet: " + this.getClass().getEnclosingMethod().getName());
-		return false;
+		throw this.newNotSupportedException();
 	}
 
 
-	protected boolean addNic(Nic nic)
+	protected boolean addNic(Nic nic) throws BWFLAException
 	{
-		LOG.severe("operation unsupported yet: " + this.getClass().getEnclosingMethod().getName());
-		return false;
+		throw this.newNotSupportedException();
 	}
 }

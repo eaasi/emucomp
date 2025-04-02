@@ -22,14 +22,19 @@ package de.bwl.bwfla.emucomp.components.emulators;
 
 import de.bwl.bwfla.emucomp.EmuCompState;
 
+import java.util.logging.Logger;
+
+
 /** This class represents internal state of an EmulatorBean. */
 public final class EmulatorBeanState
 {
+	private final Logger log;
 	private EmuCompState state;
-	
+
 	/** Constructor */
-	public EmulatorBeanState(EmuCompState state)
+	public EmulatorBeanState(EmuCompState state, Logger log)
 	{
+		this.log = log;
 		this.state = state;
 	}
 	
@@ -43,6 +48,9 @@ public final class EmulatorBeanState
 	
 	public void set(EmuCompState newstate)
 	{
+		if (newstate != state)
+			log.info("Emulator state changed: " + state.value() + " -> " + newstate.value());
+
 		this.state = newstate;
 	}
 	

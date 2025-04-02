@@ -1,9 +1,9 @@
 package de.bwl.bwfla.emucomp.components.emulators;
 
+import de.bwl.bwfla.common.services.guacplay.util.FlagSet;
 import de.bwl.bwfla.emucomp.components.emulators.IpcDefs.ConfigID;
 import de.bwl.bwfla.emucomp.components.emulators.IpcDefs.ConfigType;
 import de.bwl.bwfla.emucomp.components.emulators.IpcDefs.MessageType;
-import de.bwl.bwfla.emucomp.services.guacplay.util.FlagSet;
 
 import java.io.IOException;
 

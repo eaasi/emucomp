@@ -19,8 +19,8 @@
 
 package de.bwl.bwfla.emucomp.components.emulators;
 
-import de.bwl.bwfla.emucomp.MachineConfiguration;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
+import de.bwl.bwfla.emucomp.api.MachineConfiguration;
+import org.apache.tamaya.inject.api.Config;
 
 import javax.inject.Inject;
 
@@ -29,7 +29,7 @@ import javax.inject.Inject;
 public class PceMacPlusBean extends PceBean
 {
     @Inject
-	@ConfigProperty(name = "components.binary.pce.macplus")
+    @Config("components.binary.pce.macplus")
     protected String emuExecPath;
 
 	/** Max. number of supported drives per type. */

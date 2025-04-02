@@ -26,17 +26,20 @@ import de.bwl.bwfla.emucomp.control.connectors.EthernetConnector;
 import de.bwl.bwfla.emucomp.control.connectors.IConnector;
 
 import javax.inject.Inject;
+import javax.websocket.CloseReason;
 import javax.websocket.EndpointConfig;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
-import java.nio.file.Paths;
+import javax.ws.rs.NotFoundException;
+import java.io.IOException;
 import java.util.UUID;
 import java.util.logging.Level;
 
+
 @ServerEndpoint("/components/{componentId}/ws+ethernet/{hwAddress}")
-public class EthernetWebsocketServlet extends IPCWebsocketProxy {
+public class EthernetWebsocketServlet extends IPCWebsocketProxy{
 
     @Inject
     protected NodeManager nodeManager;
@@ -45,8 +48,8 @@ public class EthernetWebsocketServlet extends IPCWebsocketProxy {
 
     @OnOpen
     public void open(Session session, EndpointConfig conf,
-                     @PathParam("componentId") String componentId,
-                     @PathParam("hwAddress") String hwAddress) {
+            @PathParam("componentId") String componentId,
+            @PathParam("hwAddress") String hwAddress) {
 
         try {
             final AbstractEaasComponent component = nodeManager
@@ -55,26 +58,46 @@ public class EthernetWebsocketServlet extends IPCWebsocketProxy {
             IConnector connector = component.getControlConnector(
                     EthernetConnector.getProtocolForHwaddress(hwAddress));
 
-            if (connector == null
-                || !(connector instanceof EthernetConnector)) {
-                session.close();
+            if (!(connector instanceof EthernetConnector)) {
+                final var message = "Ethernet-connector for component '" + componentId + "' (" + hwAddress + ") not found!";
+                throw new NotFoundException(message);
             }
+
             this.connector = (EthernetConnector) connector;
-            String id = UUID.randomUUID().toString();
-            this.connector.connect(id);
             this.componentId = componentId;
-            wait(Paths.get("/tmp/" + id + ".sock"));
-            this.iosock = IpcSocket.connect("/tmp/" + id + ".sock", IpcSocket.Type.STREAM);
+
+            final var sockpath = this.connector.connect(UUID.randomUUID().toString());
+            this.iosock = IpcSocket.connect(sockpath, IpcSocket.Type.STREAM);
 
             // Start background thread for streaming from io-socket to client
             {
                 this.streamer = new OutputStreamer(session, nodeManager.getWorkerThreadFactory());
                 streamer.start();
             }
-        } catch (Throwable error) {
+        }
+        catch (Throwable error) {
             log.log(Level.WARNING, "Setting up websocket proxy for component '" + componentId + "' failed!", error);
+            try {
+                session.close(new CloseReason(CloseReason.CloseCodes.GOING_AWAY, "component is gone"));
+            } catch (IOException ignore) { }
             this.stop(session);
         }
     }
+
+    @Override
+    protected void stop(Session session)
+    {
+        if (connector != null) {
+            try {
+                connector.close();
+            }
+            catch (Throwable error) {
+                log.log(Level.WARNING, "Closing ethernet-connector for component '" + componentId + "' failed!", error);
+            }
+        }
+
+        super.stop(session);
+    }
+
 
 }

@@ -19,9 +19,9 @@
 
 package de.bwl.bwfla.emucomp.components.network;
 
-import de.bwl.bwfla.emucomp.NetworkSwitchConfiguration;
 import de.bwl.bwfla.emucomp.api.ClusterComponent;
 import de.bwl.bwfla.emucomp.api.NetworkSwitchComponent;
+import de.bwl.bwfla.emucomp.api.NetworkSwitchConfiguration;
 import de.bwl.bwfla.emucomp.components.EaasComponentBean;
 
 import javax.enterprise.inject.spi.CDI;
@@ -32,7 +32,7 @@ import javax.enterprise.inject.spi.CDI;
  */
 public abstract class NetworkSwitchBean extends EaasComponentBean implements ClusterComponent, NetworkSwitchComponent 
 {
-	public static NetworkSwitchBean createNetworkSwitch(NetworkSwitchConfiguration config) throws ClassNotFoundException
+	public static NetworkSwitchBean createNetworkSwitch(NetworkSwitchConfiguration config) throws ClassNotFoundException 
 	{
 		// TODO: parse and use 'config' parameter
 		

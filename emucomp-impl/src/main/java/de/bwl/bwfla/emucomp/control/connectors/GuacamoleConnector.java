@@ -19,8 +19,8 @@
 
 package de.bwl.bwfla.emucomp.control.connectors;
 
-
 import de.bwl.bwfla.emucomp.services.guacplay.net.GuacTunnel;
+import org.glyptodon.guacamole.GuacamoleClientException;
 import org.glyptodon.guacamole.GuacamoleServerException;
 
 import java.net.URI;
@@ -31,41 +31,47 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
-public class GuacamoleConnector implements IConnector {
-    public final static String PROTOCOL = "guacamole";
+public class GuacamoleConnector implements IConnector
+{
+	public final static String PROTOCOL = "guacamole";
 
-    private final IThrowingSupplier<GuacTunnel> tunnelConstructor;
-    private GuacTunnel tunnel;
-    private final boolean pointerLock;
+	private final IThrowingSupplier<GuacTunnel> tunnelConstructor;
+	private GuacTunnel tunnel;
+	private final boolean pointerLock;
 
-    public GuacamoleConnector(IThrowingSupplier<GuacTunnel> tunnelConstructor, boolean pointerLock) {
-        this.tunnelConstructor = tunnelConstructor;
-        this.tunnel = null;
-        this.pointerLock = pointerLock;
-    }
+	public GuacamoleConnector(IThrowingSupplier<GuacTunnel> tunnelConstructor, boolean pointerLock)
+	{
+		this.tunnelConstructor = tunnelConstructor;
+		this.tunnel = null;
+		this.pointerLock = pointerLock;
+	}
 
-    public GuacTunnel newTunnel() throws GuacamoleServerException {
-        if (tunnel != null) {
-            try {
-                tunnel.disconnect();
-                tunnel.close();
-            } catch (Exception error) {
-                Logger log = Logger.getLogger(this.getClass().getName());
-                log.log(Level.WARNING, "Closing tunnel failed!", error);
-            }
-        }
+	public GuacTunnel newTunnel() throws GuacamoleClientException, GuacamoleServerException
+	{
+		if (tunnel != null && tunnel.isOpen()) {
+			try {
+				tunnel.disconnect();
+				tunnel.close();
+			}
+			catch (Exception error) {
+				Logger log = Logger.getLogger(this.getClass().getName());
+				log.log(Level.WARNING, "Closing tunnel failed!", error);
+			}
+		}
 
-        try {
-            tunnel = tunnelConstructor.get();
-            return tunnel;
-        } catch (Exception error) {
-            throw new GuacamoleServerException("Constructing tunnel failed!", error);
-        }
-    }
-
-    public GuacTunnel getTunnel() {
-        return tunnel;
-    }
+		try {
+			tunnel = tunnelConstructor.get();
+			return tunnel;
+		}
+		catch (Exception error) {
+			throw new GuacamoleServerException("Constructing tunnel failed!", error);
+		}
+	}
+	
+	public GuacTunnel getTunnel()
+	{
+		return tunnel;
+	}
 
     private String createFragment(SimpleEntry<?, ?>... entries) {
         return "#" + Stream.of(entries)
@@ -75,13 +81,14 @@ public class GuacamoleConnector implements IConnector {
 
     @Override
     public URI getControlPath(final URI resourcePath) {
-        final SimpleEntry<String, Boolean> entry = new SimpleEntry<>("pointerLock", this.pointerLock);
+		final SimpleEntry<String, Boolean> entry = new SimpleEntry<>("pointerLock", this.pointerLock);
         return resourcePath.resolve(GuacamoleConnector.PROTOCOL)
-                .resolve(this.createFragment(entry));
+				.resolve(this.createFragment(entry));
     }
 
-    @Override
-    public String getProtocol() {
-        return GuacamoleConnector.PROTOCOL;
-    }
+	@Override
+	public String getProtocol()
+	{
+		return GuacamoleConnector.PROTOCOL;
+	}
 }
