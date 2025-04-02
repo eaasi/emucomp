@@ -19,10 +19,11 @@
 
 package de.bwl.bwfla.emucomp.common.services.container.helpers;
 
-import de.bwl.bwfla.common.services.container.types.Container;
-import de.bwl.bwfla.common.services.container.types.HddHfsContainer;
-import de.bwl.bwfla.common.utils.ProcessRunner;
-import de.bwl.bwfla.conf.CommonSingleton;
+
+import de.bwl.bwfla.emucomp.common.services.container.types.Container;
+import de.bwl.bwfla.emucomp.common.services.container.types.HddHfsContainer;
+import de.bwl.bwfla.emucomp.common.utils.ProcessRunner;
+import de.bwl.bwfla.emucomp.conf.CommonSingleton;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -40,9 +41,10 @@ import java.util.logging.Logger;
  */
 public class HddHfsHelper extends ContainerHelper
 {
+	private final static CommonSingleton instance = CommonSingleton.getInstance();
 	private static final Logger LOG = Logger.getLogger(HddHfsHelper.class.getSimpleName());
-	private File createScript = new File(CommonSingleton.helpersConf.hddHfsCreate);
-	private File ioScript = new File(CommonSingleton.helpersConf.hddHfsIo);
+	private File createScript = new File(instance.getHelpersConf().hddHfsCreate);
+	private File ioScript = new File(instance.getHelpersConf().hddHfsIo);
 	
 	public HddHfsHelper()
 	{	

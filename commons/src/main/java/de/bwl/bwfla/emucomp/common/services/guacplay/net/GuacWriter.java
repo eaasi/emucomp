@@ -19,7 +19,7 @@
 
 package de.bwl.bwfla.emucomp.common.services.guacplay.net;
 
-import de.bwl.bwfla.common.services.guacplay.util.CharArrayWrapper;
+import de.bwl.bwfla.emucomp.common.services.guacplay.util.CharArrayWrapper;
 import org.glyptodon.guacamole.GuacamoleException;
 import org.glyptodon.guacamole.GuacamoleServerException;
 import org.glyptodon.guacamole.io.GuacamoleWriter;

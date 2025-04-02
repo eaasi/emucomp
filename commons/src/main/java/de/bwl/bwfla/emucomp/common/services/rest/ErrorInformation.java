@@ -19,8 +19,10 @@
 
 package de.bwl.bwfla.emucomp.common.services.rest;
 
-import de.bwl.bwfla.common.utils.ExceptionUtils;
-import de.bwl.bwfla.common.utils.jaxb.JaxbType;
+
+
+import de.bwl.bwfla.emucomp.common.utils.ExceptionUtils;
+import de.bwl.bwfla.emucomp.common.utils.jaxb.JaxbType;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;

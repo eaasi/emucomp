@@ -19,8 +19,8 @@
 
 package de.bwl.bwfla.emucomp.common.utils.net;
 
-import org.apache.tamaya.ConfigException;
-import org.apache.tamaya.ConfigurationProvider;
+import de.bwl.bwfla.emucomp.common.exceptions.ConfigException;
+import org.eclipse.microprofile.config.ConfigProvider;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Dependent;
@@ -94,7 +94,7 @@ public class PortRangeProvider {
         String value = null;
         String identifier = null;
         for (String s : config.value()) {
-            value = ConfigurationProvider.getConfiguration().get(s);
+            value = ConfigProvider.getConfig().getValue(s, String.class);
             if (value != null) {
                 identifier = s;
                 break;

@@ -19,9 +19,11 @@
 
 package com.openslx.eaas.migration.config;
 
-import de.bwl.bwfla.common.utils.ConfigHelpers;
-import org.apache.tamaya.ConfigException;
-import org.apache.tamaya.Configuration;
+
+
+import de.bwl.bwfla.emucomp.common.exceptions.ConfigException;
+import de.bwl.bwfla.emucomp.common.utils.ConfigHelpers;
+import org.eclipse.microprofile.config.Config;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -72,7 +74,7 @@ public class MigrationManagerConfig extends BaseConfig<MigrationManagerConfig>
 	// ===== Internal Helpers ====================
 
 	@Override
-	protected MigrationManagerConfig load(Configuration config, Logger log) throws ConfigException
+	protected MigrationManagerConfig load(Config config, Logger log) throws ConfigException
 	{
 		log.info("Loading migration-manager's configuration...");
 
@@ -80,7 +82,7 @@ public class MigrationManagerConfig extends BaseConfig<MigrationManagerConfig>
 
 		// Configure state directory
 		{
-			final var datadir = config.get("commonconf.serverdatadir");
+			final var datadir = config.getValue("commonconf.serverdatadir", String.class);
 			this.setStateDirectory(Path.of(datadir, "migrations"));
 		}
 
@@ -91,7 +93,7 @@ public class MigrationManagerConfig extends BaseConfig<MigrationManagerConfig>
 			while (true) {
 				final var prefix = ConfigHelpers.toListKey("migrations", migrations.size(), ".");
 				final var properties = ConfigHelpers.filter(config, prefix);
-				if (properties.get("name") == null)
+				if (properties.getValue("name", Object.class) == null)
 					break;  // No more migrations found!
 
 				final var migration = new MigrationConfig()

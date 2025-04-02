@@ -19,7 +19,8 @@
 
 package de.bwl.bwfla.emucomp.common.utils;
 
-import de.bwl.bwfla.common.services.container.types.ContainerFile;
+
+import de.bwl.bwfla.emucomp.common.services.container.types.ContainerFile;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

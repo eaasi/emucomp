@@ -19,10 +19,10 @@
 
 package de.bwl.bwfla.emucomp.common.services.guacplay.protocol;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs;
-import de.bwl.bwfla.common.services.guacplay.util.CharArrayBuffer;
-import de.bwl.bwfla.common.services.guacplay.util.IntegerUtils;
 
+import de.bwl.bwfla.emucomp.common.services.guacplay.GuacDefs;
+import de.bwl.bwfla.emucomp.common.services.guacplay.util.CharArrayBuffer;
+import de.bwl.bwfla.emucomp.common.services.guacplay.util.IntegerUtils;
 
 /** Parser for instructions in Guacamole's protocol format. */
 public class InstructionParser

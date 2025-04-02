@@ -74,6 +74,11 @@ public class ConfigHelpers {
 		return key + "[" + index + "]";
 	}
 
+	public static String toListKey(String key, int index, String suffix)
+	{
+		return (ConfigHelpers.toListKey(key, index) + suffix);
+	}
+
 	public static List<String> getAsList(Config config, String key) {
 		List<String> entries = new ArrayList<>();
 		int index = 0;

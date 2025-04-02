@@ -1,0 +1,184 @@
+package de.bwl.bwfla.emucomp.common;
+
+
+
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+
+public class EmulatorUtils {
+	protected static final Logger log = Logger.getLogger("EmulatorUtils");
+
+	public enum XmountOutputFormat {
+		RAW("raw"),
+		VDI("vdi"),
+		VHD("vhd"),
+		VMDK("vmdk");
+
+		private final String format;
+
+		private XmountOutputFormat(String s) {
+			this.format = s;
+		}
+
+		public String toString() {
+			return this.format;
+		}
+	}
+	public enum XmountInputFormat {
+		RAW("raw"),
+		QEMU("qemu");
+
+		private final String format;
+
+		private XmountInputFormat(String s) {
+			this.format = s;
+		}
+
+		public String toString() {
+			return this.format;
+		}
+	}
+
+	public static void copyRemoteUrl(Binding resource, Path dest) throws BWFLAException {
+		EmulatorUtils.copyRemoteUrl(resource, dest, log);
+	}
+
+	public static void copyRemoteUrl(Binding resource, Path dest, Logger log) throws BWFLAException {
+		String resUrl = resource.getUrl();
+		// hack until qemu-img is fixed
+		if (HttpUtils.isAbsoluteUrl(resUrl)) {
+			ProcessRunner process = new ProcessRunner("curl");
+			if(log != null)
+				process.setLogger(log);
+			process.addArgument(resUrl);
+			process.addArgument("-s");
+			process.addArgument("-k"); // insecure, disables SSL check
+			process.addArgument("-g");
+			process.addArgument("-f"); // fail on 404
+			process.addArgument("-S");
+			process.addArgument("-L");
+			if (resource.getUsername() != null && resource.getPassword() != null) {
+				process.addArgument("-u");
+				process.addArgument(resource.getUsername() + ":" + resource.getPassword());
+			}
+			process.addArgument("-o");
+			process.addArgument(dest.toString());
+			if (!process.execute()) {
+				throw new BWFLAException(
+						"Cannot create local copy of " + resUrl + " the binding's data.");
+			}
+		}
+		else if(resUrl.startsWith("file:")) // shortcut to copy the file
+		{
+			// handle legacy 'file:/some/file' and new 'file:///some/file' URLs
+			final var prefix = (resUrl.startsWith("file://")) ? "file://" : "file:";
+			final var source = Path.of(resUrl.substring(prefix.length()));
+			try {
+				Files.copy(source, dest);
+			} catch (IOException e) {
+				log.log(Level.SEVERE, "Copying local file failed!", e);
+				throw new BWFLAException(e);
+			}
+		}
+		else {
+			throw new BWFLAException(
+					"Cannot create local copy of the binding's data, unsupported url schema: " + resUrl);
+		}
+	}
+
+	/**
+	 * Creates a copy-on-write wrapper (in qcow2 file format) for imgUrl at the
+	 * specified directory.
+	 *
+	 * @param cowPath Path where the qcow2 file will be created at.
+	 */
+	public static void createCowFile(Path cowPath, QcowOptions options) throws BWFLAException {
+		EmulatorUtils.createCowFile(cowPath, options, log);
+	}
+
+	public static void createCowFile(Path cowPath, QcowOptions options, Logger log) throws BWFLAException {
+
+		// we need to check if the subpath is there
+		Path parent = cowPath.getParent();
+		if(!Files.exists(parent)) {
+			try {
+				Files.createDirectories(parent);
+			} catch (IOException e) {
+				throw new BWFLAException(e);
+			}
+		}
+
+		ProcessRunner process = new ProcessRunner();
+		process.setLogger(log);
+		process.setCommand("qemu-img");
+		process.addArguments("create", "-f", "qcow2");
+		if(options != null && options.getBackingFile() != null)
+		{
+			final ImageInformation bfinfo;
+			try {
+				bfinfo = new ImageInformation(options.getBackingFile(), log);
+			}
+			catch (Exception error) {
+				throw new BWFLAException("Probing backing file format failed!", error);
+			}
+
+			process.addArguments("-F", bfinfo.getFileFormat().toString());
+			process.addArguments("-b", options.getBackingFile());
+		}
+		process.addArgument(cowPath.toString());
+		if(options != null && options.getSize() != null) {
+			process.addArgument(options.getSize());
+		}
+
+		if (!process.execute()) {
+			try {
+				Files.deleteIfExists(cowPath);
+			} catch (Exception e) {
+				log.severe("Created a temporary file but cannot delete it after error. This is bad.");
+			}
+			throw new BWFLAException("Could not create local COW file. See log output for more information (maybe).");
+		}
+	}
+
+
+	public static void changeBackingFile(Path image, String backingFile, ImageInformation.QemuImageFormat backingFileFormat, Logger log)
+			throws BWFLAException
+	{
+		ProcessRunner process = new ProcessRunner();
+		process.setLogger(log);
+		process.setCommand("qemu-img");
+		process.addArgument("rebase");
+		process.addArgument("-u");
+		process.addArguments("-F", backingFileFormat.toString());
+		process.addArguments("-b", backingFile);
+		process.addArguments("--", image.toString());
+
+		if (!process.execute()) {
+			throw new BWFLAException("qemu-img rebase " + image.toString() + " failed");
+		}
+	}
+
+	public static void convertImage(Path inFile, Path outFile, ImageInformation.QemuImageFormat fmt, Logger log) throws BWFLAException {
+		EmulatorUtils.convertImage(inFile.toString(), outFile, fmt, log);
+	}
+
+	public static void convertImage(String source, Path target, ImageInformation.QemuImageFormat fmt, Logger log)
+			throws BWFLAException
+	{
+		ProcessRunner process = new ProcessRunner();
+		process.setLogger(log);
+		process.setCommand("qemu-img");
+		process.addArguments("convert");
+		process.addArguments("-O", fmt.toString());
+		process.addArgument(source);
+		process.addArgument(target.toString());
+		if (!process.execute())
+			throw new BWFLAException("Converting '" + source + "' failed!");
+	}
+}

@@ -20,7 +20,7 @@
 package de.bwl.bwfla.emucomp.common.utils.jaxb;
 
 import com.openslx.eaas.common.databind.DataUtils;
-import de.bwl.bwfla.common.utils.PipedDataSource;
+import de.bwl.bwfla.emucomp.common.utils.PipedDataSource;
 
 import javax.activation.DataHandler;
 import javax.xml.bind.JAXBException;

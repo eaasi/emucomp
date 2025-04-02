@@ -19,17 +19,17 @@
 
 package de.bwl.bwfla.emucomp.common.services.guacplay.record;
 
-import de.bwl.bwfla.common.services.guacplay.GuacDefs;
-import de.bwl.bwfla.common.services.guacplay.GuacDefs.*;
-import de.bwl.bwfla.common.services.guacplay.events.EventSink;
-import de.bwl.bwfla.common.services.guacplay.events.GuacEvent;
-import de.bwl.bwfla.common.services.guacplay.events.SessionBeginEvent;
-import de.bwl.bwfla.common.services.guacplay.graphics.OffscreenCanvas;
-import de.bwl.bwfla.common.services.guacplay.io.*;
-import de.bwl.bwfla.common.services.guacplay.net.IGuacInterceptor;
-import de.bwl.bwfla.common.services.guacplay.protocol.*;
-import de.bwl.bwfla.common.services.guacplay.protocol.handler.*;
-import de.bwl.bwfla.common.services.guacplay.util.CharArrayWrapper;
+
+import de.bwl.bwfla.emucomp.common.services.guacplay.GuacDefs;
+import de.bwl.bwfla.emucomp.common.services.guacplay.events.EventSink;
+import de.bwl.bwfla.emucomp.common.services.guacplay.events.GuacEvent;
+import de.bwl.bwfla.emucomp.common.services.guacplay.events.SessionBeginEvent;
+import de.bwl.bwfla.emucomp.common.services.guacplay.graphics.OffscreenCanvas;
+import de.bwl.bwfla.emucomp.common.services.guacplay.io.*;
+import de.bwl.bwfla.emucomp.common.services.guacplay.net.IGuacInterceptor;
+import de.bwl.bwfla.emucomp.common.services.guacplay.protocol.*;
+import de.bwl.bwfla.emucomp.common.services.guacplay.protocol.handler.*;
+import de.bwl.bwfla.emucomp.common.services.guacplay.util.CharArrayWrapper;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +38,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.concurrent.atomic.AtomicLong;
+
+import static de.bwl.bwfla.emucomp.common.services.guacplay.GuacDefs.*;
 
 
 public class SessionRecorder implements IGuacInterceptor, IGuacInstructionConsumer
@@ -349,7 +351,7 @@ public class SessionRecorder implements IGuacInterceptor, IGuacInstructionConsum
 		// the begin of the last instruction...
 		while (index >= offset) {
 			final char c = array[index];
-			if (c == GuacDefs.INSTRUCTION_TERMINATOR)
+			if (c == INSTRUCTION_TERMINATOR)
 				break;
 			
 			--index;
@@ -427,8 +429,8 @@ public class SessionRecorder implements IGuacInterceptor, IGuacInstructionConsum
 		
 		final int width = canvas.getWidth();
 		final int height = canvas.getHeight();
-		final int ymargin = 5 + GuacDefs.VSYNC_RECT_HEIGHT / 2;
-		final int xmargin = 5 + GuacDefs.VSYNC_RECT_WIDTH  / 2;
+		final int ymargin = 5 + VSYNC_RECT_HEIGHT / 2;
+		final int xmargin = 5 + VSYNC_RECT_WIDTH  / 2;
 		final int dy = (height - ymargin - ymargin) / 4;
 		final int dx = (width  - xmargin - xmargin) / 4;
 		final int xstep = dx + dx;

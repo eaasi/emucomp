@@ -19,12 +19,9 @@
 
 package de.bwl.bwfla.emucomp.components;
 
-import com.openslx.eaas.resolver.DataResolvers;
 import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
-import de.bwl.bwfla.common.utils.ImageInformation;
-import de.bwl.bwfla.objectarchive.util.ObjectArchiveHelper;
-import org.apache.tamaya.ConfigurationProvider;
 
+import javax.naming.Binding;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;

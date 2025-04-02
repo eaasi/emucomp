@@ -20,7 +20,8 @@
 package de.bwl.bwfla.emucomp.components.emulators;
 
 
-import de.bwl.bwfla.emucomp.EmuCompState;
+
+import de.bwl.bwfla.emucomp.common.datatypes.EmuCompState;
 
 import java.util.logging.Logger;
 

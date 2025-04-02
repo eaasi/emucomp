@@ -19,12 +19,14 @@
 
 package de.bwl.bwfla.emucomp.common.services.guacplay.io;
 
-import de.bwl.bwfla.common.services.guacplay.util.CharToken;
-import de.bwl.bwfla.common.services.guacplay.util.IntegerToken;
+
+
+import de.bwl.bwfla.emucomp.common.services.guacplay.util.CharToken;
+import de.bwl.bwfla.emucomp.common.services.guacplay.util.IntegerToken;
 
 import java.io.IOException;
 
-import static de.bwl.bwfla.common.services.guacplay.io.TraceFileDefs.*;
+import static de.bwl.bwfla.emucomp.common.services.guacplay.io.TraceFileDefs.*;
 
 
 /** A reader for blocks, containing the {@link BlockIndex}. */

@@ -17,25 +17,52 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.bwl.bwfla.emucomp.common.datatypes.identification;
+package de.bwl.bwfla.emucomp.common;
+
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
+import javax.xml.bind.annotation.XmlType;
 
 
-import de.bwl.bwfla.emucomp.common.utils.jaxb.JaxbType;
+@XmlEnum
+@XmlType(namespace = "http://bwfla.bwl.de/components/datatypes")
+public enum FileSystemType
+{
+	@XmlEnumValue("raw")
+	RAW,
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import java.util.List;
+	@XmlEnumValue("fat16")
+	FAT16,
 
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.NONE)
-public class OperatingSystems extends JaxbType {
+	@XmlEnumValue("fat32")
+	FAT32,
 
-	@XmlElement
-	private List<OperatingSystemInformation> operatingSystemInformations;
+	@XmlEnumValue("vfat")
+	VFAT,
 
-	public List<OperatingSystemInformation> getOperatingSystemInformations() {
-		return operatingSystemInformations;
+	@XmlEnumValue("ntfs")
+	NTFS,
+
+	@XmlEnumValue("ext2")
+	EXT2,
+
+	@XmlEnumValue("ext3")
+	EXT3,
+
+	@XmlEnumValue("ext4")
+	EXT4,
+
+	@XmlEnumValue("hfs")
+	HFS,
+
+	@XmlEnumValue("iso9660")
+	ISO9660;
+
+	public static FileSystemType fromString(String str) {
+		for (FileSystemType type : FileSystemType.values()) {
+			if (type.name().equalsIgnoreCase(str))
+				return type;
+		}
+		throw new IllegalArgumentException();
 	}
 }

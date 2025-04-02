@@ -19,7 +19,7 @@
 
 package de.bwl.bwfla.emucomp.common.services.guacplay.io;
 
-import de.bwl.bwfla.common.services.guacplay.util.StringBuffer;
+import de.bwl.bwfla.emucomp.common.services.guacplay.util.StringBuffer;
 
 import java.io.Closeable;
 import java.io.Flushable;

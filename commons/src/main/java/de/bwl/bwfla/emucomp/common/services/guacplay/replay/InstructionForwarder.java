@@ -19,11 +19,11 @@
 
 package de.bwl.bwfla.emucomp.common.services.guacplay.replay;
 
-import de.bwl.bwfla.common.services.guacplay.protocol.Instruction;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionDescription;
-import de.bwl.bwfla.common.services.guacplay.protocol.InstructionHandler;
-import de.bwl.bwfla.common.services.guacplay.util.ICharArrayConsumer;
 
+import de.bwl.bwfla.emucomp.common.services.guacplay.protocol.Instruction;
+import de.bwl.bwfla.emucomp.common.services.guacplay.protocol.InstructionDescription;
+import de.bwl.bwfla.emucomp.common.services.guacplay.protocol.InstructionHandler;
+import de.bwl.bwfla.emucomp.common.services.guacplay.util.ICharArrayConsumer;
 
 public class InstructionForwarder extends InstructionHandler
 {
