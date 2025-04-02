@@ -20,7 +20,7 @@ package com.openslx.eaas.common.util;
 
 import com.openslx.eaas.common.databind.DataUtils;
 import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
-import de.bwl.bwfla.common.utils.ProcessRunner;
+import de.bwl.bwfla.emucomp.common.utils.ProcessRunner;
 
 import javax.ws.rs.core.MediaType;
 import java.io.InputStream;

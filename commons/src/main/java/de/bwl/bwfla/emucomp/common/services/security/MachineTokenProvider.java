@@ -3,7 +3,8 @@ package de.bwl.bwfla.emucomp.common.services.security;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
-import org.apache.tamaya.ConfigurationProvider;
+import org.eclipse.microprofile.config.Config;
+import org.eclipse.microprofile.config.ConfigProvider;
 
 import java.time.Duration;
 import java.util.Date;
@@ -14,7 +15,7 @@ public class MachineTokenProvider {
     private static String apiSecret;
 
     static {
-        apiSecret = ConfigurationProvider.getConfiguration().get("ws.apiSecret");
+        apiSecret = ConfigProvider.getConfig().getValue("ws.apiSecret", String.class);
         if(apiSecret != null && (apiSecret.isEmpty() || apiSecret.equals("null")))
             apiSecret = null;
     }
@@ -76,8 +77,7 @@ public class MachineTokenProvider {
     public static MachineToken getInternalToken(Duration lifetime)
     {
         final Function<Duration, String> refresher = (time) -> {
-            final var secret = ConfigurationProvider.getConfiguration()
-                    .get("rest.internalApiSecret");
+            final var secret = ConfigProvider.getConfig().getValue("rest.internalApiSecret", String.class);
 
             return MachineTokenProvider.getBearerToken(secret, time);
         };
@@ -97,19 +97,6 @@ public class MachineTokenProvider {
         };
 
         return new MachineToken(lifetime, refresher);
-    }
-
-    public static SOAPClientAuthenticationHandlerResolver getSoapAuthenticationResolver()
-    {
-        if (apiSecret == null)
-            return null;
-
-        final Function<Duration, String> refresher =
-                (time) -> MachineTokenProvider.getBearerToken(apiSecret, time);
-
-        final var lifetime = MachineTokenProvider.getDefaultLifetime();
-        final var token = new MachineToken(lifetime, refresher);
-        return new SOAPClientAuthenticationHandlerResolver(token);
     }
 
     public static Duration getDefaultLifetime()

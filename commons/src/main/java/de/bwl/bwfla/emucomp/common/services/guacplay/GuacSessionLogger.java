@@ -19,8 +19,8 @@
 
 package de.bwl.bwfla.emucomp.common.services.guacplay;
 
-import de.bwl.bwfla.common.services.guacplay.net.IGuacInterceptor;
-import de.bwl.bwfla.common.services.guacplay.util.CharArrayWrapper;
+import de.bwl.bwfla.emucomp.common.services.guacplay.net.IGuacInterceptor;
+import de.bwl.bwfla.emucomp.common.services.guacplay.util.CharArrayWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

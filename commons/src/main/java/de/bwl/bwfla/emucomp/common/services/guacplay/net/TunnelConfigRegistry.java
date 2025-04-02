@@ -19,7 +19,7 @@
 
 package de.bwl.bwfla.emucomp.common.services.guacplay.net;
 
-import de.bwl.bwfla.common.services.guacplay.util.ObjectRegistry;
+import de.bwl.bwfla.emucomp.common.services.guacplay.util.ObjectRegistry;
 
 
 /**

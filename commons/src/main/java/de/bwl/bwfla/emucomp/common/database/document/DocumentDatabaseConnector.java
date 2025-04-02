@@ -21,8 +21,8 @@ package de.bwl.bwfla.emucomp.common.database.document;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
-import org.apache.tamaya.Configuration;
-import org.apache.tamaya.ConfigurationProvider;
+import org.eclipse.microprofile.config.Config;
+import org.eclipse.microprofile.config.ConfigProvider;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -45,12 +45,12 @@ public class DocumentDatabaseConnector
 		Logger logger = Logger.getLogger("org.mongodb.driver");
 		logger.setLevel(Level.SEVERE);
 
-		final Configuration config = ConfigurationProvider.getConfiguration();
-		final String address = config.get("commonconf.mongodb.address");
+		final Config config = ConfigProvider.getConfig();
+		final String address = config.getValue("commonconf.mongodb.address", String.class);
 		this.mongo = MongoClients.create(address);
 
 		// validate main database and all collections!
-		final var dbname = config.get("commonconf.mongodb.dbname");
+		final var dbname = config.getValue("commonconf.mongodb.dbname", String.class);
 		this.database(dbname)
 				.validate();
 	}

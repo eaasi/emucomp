@@ -3,7 +3,7 @@ package com.openslx.eaas.common.util;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.openslx.eaas.common.databind.DataUtils;
 import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
-import de.bwl.bwfla.common.utils.ProcessRunner;
+import de.bwl.bwfla.emucomp.common.utils.ProcessRunner;
 
 
 /*

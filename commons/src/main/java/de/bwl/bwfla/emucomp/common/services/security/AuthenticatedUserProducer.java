@@ -2,7 +2,7 @@ package de.bwl.bwfla.emucomp.common.services.security;
 
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import org.apache.tamaya.inject.api.Config;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Observes;
@@ -20,11 +20,11 @@ public class AuthenticatedUserProducer {
     protected static final Logger LOG = Logger.getLogger("Authentication");
 
     @Inject
-    @Config(value = "authentication.adminRoleLabel")
+    @ConfigProperty(name = "authentication.adminRoleLabel")
     private String adminRoleLabel;
 
     @Inject
-    @Config(value = "authentication.userRoleLabel")
+    @ConfigProperty(name = "authentication.userRoleLabel")
     private String userRoleLabel;
 
     public AuthenticatedUserProducer() {}
