@@ -61,9 +61,10 @@ public class NodeManager {
     @Inject
     protected ExecutorService executor;
 
+    @Getter
     protected AbstractEaasComponent currentComponent;
 
-    private AtomicReference<String> currentComponentId = new AtomicReference<>();
+    private final AtomicReference<String> currentComponentId = new AtomicReference<>();
 
     private final ThreadLocal<ComponentConfiguration> usedComponentConfiguration = ThreadLocal.withInitial(() -> null);
 
