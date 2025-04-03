@@ -19,7 +19,7 @@
 
 package de.bwl.bwfla.emucomp.control.connectors;
 
-import de.bwl.bwfla.emucomp.services.guacplay.net.GuacTunnel;
+import de.bwl.bwfla.emucomp.common.services.guacplay.net.GuacTunnel;
 import org.glyptodon.guacamole.GuacamoleClientException;
 import org.glyptodon.guacamole.GuacamoleServerException;
 

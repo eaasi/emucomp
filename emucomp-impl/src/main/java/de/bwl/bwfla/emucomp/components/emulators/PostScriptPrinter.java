@@ -23,9 +23,9 @@ package de.bwl.bwfla.emucomp.components.emulators;
 import com.sun.jna.LastErrorException;
 import com.sun.jna.Native;
 import com.sun.jna.Platform;
-import de.bwl.bwfla.common.services.sse.EventSink;
-import de.bwl.bwfla.common.utils.ProcessRunner;
-import de.bwl.bwfla.emucomp.api.PrintJob;
+import de.bwl.bwfla.emucomp.common.PrintJob;
+import de.bwl.bwfla.emucomp.common.services.sse.EventSink;
+import de.bwl.bwfla.emucomp.common.utils.ProcessRunner;
 import de.bwl.bwfla.emucomp.components.AbstractEaasComponent;
 
 import javax.activation.DataHandler;

@@ -20,13 +20,16 @@
 package de.bwl.bwfla.emucomp;
 
 
+import de.bwl.bwfla.emucomp.common.*;
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.common.logging.PrefixLogger;
+import de.bwl.bwfla.emucomp.common.utils.ConfigHelpers;
 import de.bwl.bwfla.emucomp.components.AbstractEaasComponent;
 import de.bwl.bwfla.emucomp.components.emulators.EmulatorBean;
 import de.bwl.bwfla.emucomp.components.network.NetworkSwitchBean;
 import de.bwl.bwfla.emucomp.components.network.NodeTcpBean;
 import de.bwl.bwfla.emucomp.components.network.VdeSlirpBean;
-import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
-import de.bwl.bwfla.emucomp.logging.PrefixLogger;
+import org.eclipse.microprofile.config.ConfigProvider;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 
@@ -210,8 +213,8 @@ public class NodeManager {
                 throw new BWFLAException("(Valid) Configuration does not correspond to a component type. This is almost certainly a programming error!");
             }
 
-            // Explicitly run Tamaya's configuration injection
-            ConfigHelpers.configure(component, ConfigurationProvider.getConfiguration());
+            // Explicitly run Quarkus configuration injection
+            ConfigHelpers.configure(component, ConfigProvider.getConfig());
 
             component.setComponentId(componentId);
             component.setKeepaliveTimestamp(NodeManager.timestamp());

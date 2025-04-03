@@ -19,14 +19,12 @@
 
 package de.bwl.bwfla.emucomp.components.emulators;
 
-import de.bwl.bwfla.common.exceptions.BWFLAException;
-import de.bwl.bwfla.emucomp.api.Binding;
-import de.bwl.bwfla.emucomp.api.Drive;
-import de.bwl.bwfla.emucomp.api.Drive.DriveType;
-import de.bwl.bwfla.emucomp.api.EmulatorUtils.XmountOutputFormat;
-import de.bwl.bwfla.emucomp.api.MachineConfiguration;
-import de.bwl.bwfla.emucomp.api.Nic;
-import org.apache.tamaya.inject.api.Config;
+
+
+import de.bwl.bwfla.emucomp.common.*;
+import de.bwl.bwfla.emucomp.common.Drive.DriveType;
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -35,6 +33,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 import java.util.logging.Level;
+
+import static de.bwl.bwfla.emucomp.common.EmulatorUtils.*;
 
 
 public abstract class ViceBean extends EmulatorBean
@@ -45,7 +45,7 @@ public abstract class ViceBean extends EmulatorBean
 	private int numAttachedDrives = 0;
 
 	@Inject
-	@Config("components.vice_defaults_dir")
+	@ConfigProperty(name = "components.vice_defaults_dir")
 	protected String defaultsDirectory;
 
 	@Override

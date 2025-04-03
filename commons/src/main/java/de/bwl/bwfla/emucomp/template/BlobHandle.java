@@ -25,65 +25,96 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.UUID;
 
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
 public class BlobHandle
 {
-	@XmlElement(name = "bucket", required = true)
-	private String bucket;
+	@XmlElement(name = "namespace", required = true)
+	private String namespace;
 
-	@XmlElement(name = "name", required = true)
-	private String name;
+	@XmlElement(name = "id", required = true)
+	private String id;
 
+	@XmlElement(name = "access_token", required = true)
+	private String accessToken;
 
 	public BlobHandle()
 	{
-		this.bucket = "";
-		this.name = "";
+		this.namespace = "";
+		this.id = "";
+		this.accessToken = "";
 	}
 
-	public BlobHandle(String bucket, String name)
+	public BlobHandle(String namespace, String id, String accessToken)
 	{
-		this.bucket = bucket;
-		this.name = name;
+		this.setNamespace(namespace);
+		this.setId(id);
+		this.setAccessToken(accessToken);
 	}
 
-	public String bucket()
+	public String getNamespace()
 	{
-		return bucket;
+		return namespace;
 	}
 
-	public String name()
+	public BlobHandle setNamespace(String namespace)
 	{
-		return name;
+		Blob.checkNamespace(namespace);
+		this.namespace = namespace;
+		return this;
+	}
+
+	public String getId()
+	{
+		return id;
+	}
+
+	public BlobHandle setId(String id)
+	{
+		Blob.checkId(id);
+		this.id = id;
+		return this;
+	}
+
+	public String getAccessToken()
+	{
+		return accessToken;
+	}
+
+	public BlobHandle setAccessToken(String token)
+	{
+		Blob.checkAccessToken(token);
+		this.accessToken = token;
+		return this;
 	}
 
 	public boolean isValid()
 	{
-		return !(bucket.isEmpty() || name.isEmpty());
+		return !(namespace.isEmpty() || id.isEmpty() || accessToken.isEmpty());
 	}
 
-	public static BlobHandle fromUrl(String url) throws MalformedURLException
+	public String toRestUrl(String address)
 	{
-		return BlobHandle.fromUrl(new URL(url));
+		return this.toRestUrl(address, true);
 	}
 
-	public static BlobHandle fromUrl(URL url) throws IllegalArgumentException
+	public String toRestUrl(String address, boolean withAccessToken)
 	{
-		// We assume, that a blob URL has the following format:
-		// <scheme>://<domain-or-host>/<bucket>/<object-path>...
+		String url = address + '/' + namespace + '/' + id;
+		if (withAccessToken)
+			url += "?access_token=" + accessToken;
 
-		final Path path = Paths.get(url.getPath());
-		if (path.getNameCount() < 2)
-			throw new IllegalArgumentException("Blob's URL is invalid: " + url.toString());
+		return url;
+	}
 
-		final String bucket = path.getName(0).toString();
-		final String blobname = path.subpath(1, path.getNameCount()).toString();
-
-		return new BlobHandle(bucket, blobname);
+	public static BlobHandle fromUrl(String resturl) throws MalformedURLException
+	{
+		String[] segments = resturl.split("/");
+		String namespace = segments[segments.length-2];
+		String id = segments[segments.length-1];
+		return new BlobHandle(namespace, id, BlobDescription.DEFAULT_ACCESSTOKEN);
 	}
 }

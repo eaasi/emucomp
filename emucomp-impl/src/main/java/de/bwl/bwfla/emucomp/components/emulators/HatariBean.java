@@ -19,12 +19,14 @@
 
 package de.bwl.bwfla.emucomp.components.emulators;
 
-import de.bwl.bwfla.common.exceptions.BWFLAException;
-import de.bwl.bwfla.common.utils.Zip32Utils;
-import de.bwl.bwfla.emucomp.api.Drive;
-import de.bwl.bwfla.emucomp.api.MachineConfiguration;
-import de.bwl.bwfla.emucomp.api.Nic;
-import org.apache.tamaya.inject.api.Config;
+
+
+import de.bwl.bwfla.emucomp.common.Drive;
+import de.bwl.bwfla.emucomp.common.MachineConfiguration;
+import de.bwl.bwfla.emucomp.common.Nic;
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.common.utils.Zip32Utils;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -39,7 +41,7 @@ import java.util.logging.Level;
 public class HatariBean extends EmulatorBean
 {	
     @Inject
-    @Config("components.binary.hatari")
+    @ConfigProperty(name = "components.binary.hatari")
     public String hatariBean;
 
 	@Override

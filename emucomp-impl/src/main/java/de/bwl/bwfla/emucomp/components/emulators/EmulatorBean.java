@@ -20,12 +20,25 @@
 package de.bwl.bwfla.emucomp.components.emulators;
 
 
+import com.openslx.eaas.common.util.RuncStateInformation;
 import de.bwl.bwfla.emucomp.*;
 import de.bwl.bwfla.emucomp.api.EmulatorComponent;
-import de.bwl.bwfla.emucomp.common.MachineConfiguration;
+import de.bwl.bwfla.emucomp.common.*;
+import de.bwl.bwfla.emucomp.common.EmulatorUtils.XmountOutputFormat;
 import de.bwl.bwfla.emucomp.common.datatypes.EmuCompState;
+import de.bwl.bwfla.emucomp.common.datatypes.ProcessMonitorVID;
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.common.exceptions.IllegalEmulatorStateException;
+import de.bwl.bwfla.emucomp.common.services.guacplay.GuacDefs;
+import de.bwl.bwfla.emucomp.common.services.guacplay.GuacDefs.ExtOpCode;
+import de.bwl.bwfla.emucomp.common.services.guacplay.GuacDefs.SourceType;
+import de.bwl.bwfla.emucomp.common.services.guacplay.capture.ScreenShooter;
+import de.bwl.bwfla.emucomp.common.services.guacplay.net.GuacInterceptorChain;
+import de.bwl.bwfla.emucomp.common.services.guacplay.net.GuacTunnel;
 import de.bwl.bwfla.emucomp.common.services.guacplay.net.TunnelConfig;
-import de.bwl.bwfla.emucomp.common.utils.ProcessRunner;
+import de.bwl.bwfla.emucomp.common.services.guacplay.protocol.InstructionBuilder;
+import de.bwl.bwfla.emucomp.common.services.guacplay.record.SessionRecorder;
+import de.bwl.bwfla.emucomp.common.utils.*;
 import de.bwl.bwfla.emucomp.components.BindingsManager;
 import de.bwl.bwfla.emucomp.components.EaasComponentBean;
 import de.bwl.bwfla.emucomp.components.Tail;
@@ -33,6 +46,8 @@ import de.bwl.bwfla.emucomp.components.emulators.IpcDefs.EventID;
 import de.bwl.bwfla.emucomp.components.emulators.IpcDefs.MessageType;
 import de.bwl.bwfla.emucomp.control.IPCWebsocketProxy;
 import de.bwl.bwfla.emucomp.control.connectors.*;
+import de.bwl.bwfla.emucomp.template.BlobDescription;
+import de.bwl.bwfla.emucomp.template.BlobHandle;
 import de.bwl.bwfla.emucomp.xpra.IAudioStreamer;
 import de.bwl.bwfla.emucomp.xpra.PulseAudioStreamer;
 import org.apache.commons.io.FileUtils;
@@ -592,8 +607,8 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
 						.setId(this.getComponentId());
 			}
 
-			final boolean isGpuEnabled = ConfigurationProvider.getConfiguration()
-					.get("components.xpra.enable_gpu", Boolean.class);
+			final boolean isGpuEnabled = ConfigProvider.getConfig()
+					.getValue("components.xpra.enable_gpu", Boolean.class);
 
 			if (isGpuEnabled) {
 				emuRunner.getCommand()
@@ -1122,18 +1137,17 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
 				outputTar = getChangedFiles(Path.of(qcow));
 			}
 
-			final BlobDescription blob = new BlobDescription()
-				.setDescription("Output for session " + this.getComponentId())
-				.setNamespace("emulator-outputs")
-				.setName("output");
+//			final BlobDescription blob = new BlobDescription()
+//				.setDescription("Output for session " + this.getComponentId())
+//				.setNamespace("emulator-outputs")
+//				.setName("output");
+//
+//			blob.setDataFromFile(outputTar);
+//			blob.setType(".tgz");
 
-			blob.setDataFromFile(outputTar);
-			blob.setType(".tgz");
-
+			//TODO REPLACE WITH CLIENT CALL
 			// Upload archive to the BlobStore
-			BlobHandle handle = BlobStoreClient.get()
-                    .getBlobStorePort(blobStoreAddressSoap)
-                    .put(blob);
+			BlobHandle handle = new BlobHandle();
 
             if (handle == null) {
                 throw new BWFLAException("Output result is null").setId(this.getComponentId());
@@ -1366,13 +1380,14 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
 		this.sync();
 
 		// TODO: filter out all unchanged images with qemu-img compare!
+		// replace with client
 
-		final BlobStore blobstore = BlobStoreClient.get()
-				.getBlobStorePort(blobStoreAddressSoap);
+//		final BlobStore blobstore = BlobStoreClient.get()
+//				.getBlobStorePort(blobStoreAddressSoap);
 
 		// Create one DataHandler per image
 		final List<BindingDataHandler> handlers = new ArrayList<BindingDataHandler>();
-		try {
+//		try {
 			for (Map.Entry<String, String> entry : images.entrySet()) {
 				final String id = entry.getKey();
 				final String path = entry.getValue();
@@ -1385,15 +1400,16 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
 						.setName(id);
 
 				// Upload image to blobstore and register cleanup handler
-				final BlobHandle handle = blobstore.put(blob);
-				cleanups.push("delete-blob/" + handle.getId(), () -> {
-					try {
-						blobstore.delete(handle);
-					}
-					catch (Exception exception) {
-						LOG.log(Level.WARNING, "Removing snapshot-image from blobstore failed!", exception);
-					}
-				});
+				//TODO REPLACE WITH CLIENT
+				final BlobHandle handle = new BlobHandle();
+//				cleanups.push("delete-blob/" + handle.getId(), () -> {
+//					try {
+//						blobstore.delete(handle);
+//					}
+//					catch (Exception exception) {
+//						LOG.log(Level.WARNING, "Removing snapshot-image from blobstore failed!", exception);
+//					}
+//				});
 
 				final String location = handle.toRestUrl(blobStoreRestAddress);
 				final BindingDataHandler handler = new BindingDataHandler()
@@ -1402,12 +1418,12 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
 
 				handlers.add(handler);
 			}
-		}
-		catch (BWFLAException error) {
-			LOG.log(Level.WARNING, "Uploading images failed!", error);
-			error.setId(this.getComponentId());
-			throw error;
-		}
+//		}
+//		catch (BWFLAException error) {
+//			LOG.log(Level.WARNING, "Uploading images failed!", error);
+//			error.setId(this.getComponentId());
+//			throw error;
+//		}
 
 		return handlers;
 	}
@@ -1684,9 +1700,9 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
 	 * @param driveType The drive type
 	 * @return The desired image format for the specified drive type
 	 */
-	protected EmulatorUtils.XmountOutputFormat getImageFormatForDriveType(Drive.DriveType driveType) {
+	protected XmountOutputFormat getImageFormatForDriveType(Drive.DriveType driveType) {
 		// as default, we use raw images for everything
-		return EmulatorUtils.XmountOutputFormat.RAW;
+		return XmountOutputFormat.RAW;
 	}
 
 	/** Setups the emulator's backend */
@@ -2410,37 +2426,42 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
 
 	private ImageArchiveBinding findEmulatorImage(MachineConfiguration env) throws Exception
 	{
-		final var imageArchiveAddress = ConfigurationProvider.getConfiguration()
-				.get("rest.imagearchive");
+		final var imageArchiveAddress = ConfigProvider.getConfig()
+				.getValue("rest.imagearchive", String.class);
 
-		try (final var archive = ImageArchiveClient.create(imageArchiveAddress)) {
-			final var emuMetaHelper = new EmulatorMetaHelperV2(archive, LOG);
-			final var name = this.getEmuContainerName(env);
-			var version = env.getEmulator()
-					.getContainerVersion();
 
-			if (version == null || version.isEmpty())
-				version = EmulatorMetaData.DEFAULT_VERSION;
+		//TODO REPLACE WITH CLIENT
+		return new ImageArchiveBinding();
 
-			LOG.info("Looking up image for emulator '" + name + " (" + version + ")'...");
-			final var emulator = emuMetaHelper.fetch(name, version);
-			final var image = emulator.image();
-			final var binding = new ImageArchiveBinding();
-			binding.setId(EMUCON_ROOTFS_BINDING_ID);
-			binding.setAccess(Binding.AccessType.COW);
-			binding.setBackendName(this.getEmulatorArchive());
-			binding.setFileSystemType(image.fileSystemType());
-			binding.setType(image.category());
-			binding.setImageId(image.id());
-			binding.setUrl("");
 
-			LOG.info("Using emulator's image '" + image.id() + "'");
-			return binding;
-		}
-		catch (Exception error) {
-			throw new BWFLAException("Emulator's image not found!", error)
-					.setId(this.getComponentId());
-		}
+//		try (final var archive = ImageArchiveClient.create(imageArchiveAddress)) {
+//			final var emuMetaHelper = new EmulatorMetaHelperV2(archive, LOG);
+//			final var name = this.getEmuContainerName(env);
+//			var version = env.getEmulator()
+//					.getContainerVersion();
+//
+//			if (version == null || version.isEmpty())
+//				version = EmulatorMetaData.DEFAULT_VERSION;
+//
+//			LOG.info("Looking up image for emulator '" + name + " (" + version + ")'...");
+//			final var emulator = emuMetaHelper.fetch(name, version);
+//			final var image = emulator.image();
+//			final var binding = new ImageArchiveBinding();
+//			binding.setId(EMUCON_ROOTFS_BINDING_ID);
+//			binding.setAccess(Binding.AccessType.COW);
+//			binding.setBackendName(this.getEmulatorArchive());
+//			binding.setFileSystemType(image.fileSystemType());
+//			binding.setType(image.category());
+//			binding.setImageId(image.id());
+//			binding.setUrl("");
+//
+//			LOG.info("Using emulator's image '" + image.id() + "'");
+//			return binding;
+//		}
+//		catch (Exception error) {
+//			throw new BWFLAException("Emulator's image not found!", error)
+//					.setId(this.getComponentId());
+//		}
 	}
 
 
@@ -2477,7 +2498,7 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
 	}
 
 	@Deprecated
-	protected String lookupResource(String binding, DriveType driveType)
+	protected String lookupResource(String binding, Drive.DriveType driveType)
 			throws BWFLAException, IOException {
 		// this.getImageFormatForDriveType(driveType)
 		return this.lookupResource(binding);

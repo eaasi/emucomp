@@ -21,6 +21,7 @@ package de.bwl.bwfla.emucomp.components;
 
 import de.bwl.bwfla.emucomp.common.*;
 import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.common.resolvers.DataResolvers;
 
 import java.io.File;
 import java.io.IOException;

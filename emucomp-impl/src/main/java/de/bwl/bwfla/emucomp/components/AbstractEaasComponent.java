@@ -23,7 +23,7 @@ package de.bwl.bwfla.emucomp.components;
 import de.bwl.bwfla.emucomp.api.ClusterComponent;
 import de.bwl.bwfla.emucomp.common.ComponentState;
 import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
-import de.bwl.bwfla.emucomp.common.services.guacplay.events.EventSink;
+import de.bwl.bwfla.emucomp.common.services.sse.EventSink;
 import de.bwl.bwfla.emucomp.control.connectors.IConnector;
 import de.bwl.bwfla.emucomp.template.BlobHandle;
 

@@ -18,12 +18,13 @@
  */
 
 package de.bwl.bwfla.emucomp.components.emulators;
+import de.bwl.bwfla.emucomp.common.Drive;
+import de.bwl.bwfla.emucomp.common.EmulatorUtils;
+import de.bwl.bwfla.emucomp.common.MachineConfiguration;
+import de.bwl.bwfla.emucomp.common.Nic;
 import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
-import de.bwl.bwfla.emucomp.api.Drive;
-import de.bwl.bwfla.emucomp.api.EmulatorUtils.XmountOutputFormat;
-import de.bwl.bwfla.emucomp.api.MachineConfiguration;
-import de.bwl.bwfla.emucomp.api.Nic;
-import org.apache.tamaya.inject.api.Config;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -32,12 +33,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.logging.Level;
 
+import static de.bwl.bwfla.emucomp.common.EmulatorUtils.*;
 
 
 public class BeebemBean extends EmulatorBean
 {	
     @Inject
-    @Config("components.binary.beebem")
+    @ConfigProperty(name = "components.binary.beebem")
     public String beebemBean;
 
 	@Override

@@ -1,9 +1,10 @@
 package de.bwl.bwfla.emucomp.components.emulators;
 
-import de.bwl.bwfla.common.exceptions.BWFLAException;
-import de.bwl.bwfla.emucomp.api.Drive;
-import de.bwl.bwfla.emucomp.api.MachineConfiguration;
-import de.bwl.bwfla.emucomp.api.Nic;
+import de.bwl.bwfla.emucomp.common.Drive;
+import de.bwl.bwfla.emucomp.common.MachineConfiguration;
+import de.bwl.bwfla.emucomp.common.Nic;
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
+
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

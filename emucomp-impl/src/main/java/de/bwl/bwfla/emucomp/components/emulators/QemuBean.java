@@ -2,9 +2,12 @@ package de.bwl.bwfla.emucomp.components.emulators;
 
 
 
-import de.bwl.bwfla.emucomp.Drive;
-import de.bwl.bwfla.emucomp.MachineConfiguration;
-import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.common.Drive;
+import de.bwl.bwfla.emucomp.common.Drive.DriveType;
+import de.bwl.bwfla.emucomp.common.MachineConfiguration;
+import de.bwl.bwfla.emucomp.common.Nic;
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.common.utils.ProcessRunner;
 import org.eclipse.microprofile.config.ConfigProvider;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
@@ -19,7 +22,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import static de.bwl.bwfla.emucomp.Drive.*;
 
 /**
  * @author iv1004

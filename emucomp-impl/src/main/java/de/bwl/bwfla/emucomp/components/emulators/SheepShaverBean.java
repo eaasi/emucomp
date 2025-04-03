@@ -1,10 +1,10 @@
 package de.bwl.bwfla.emucomp.components.emulators;
 
-import de.bwl.bwfla.common.exceptions.BWFLAException;
-import de.bwl.bwfla.emucomp.api.Drive;
-import de.bwl.bwfla.emucomp.api.MachineConfiguration;
-import de.bwl.bwfla.emucomp.api.Nic;
-import org.apache.tamaya.inject.api.Config;
+import de.bwl.bwfla.emucomp.common.Drive;
+import de.bwl.bwfla.emucomp.common.MachineConfiguration;
+import de.bwl.bwfla.emucomp.common.Nic;
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.inject.Inject;
 import java.io.BufferedReader;
@@ -23,7 +23,7 @@ import java.util.HashMap;
 public class SheepShaverBean extends EmulatorBean
 {
     @Inject
-    @Config("components.binary.sheepshaver")
+    @ConfigProperty(name = "components.binary.sheepshaver")
     private String sheepShaverBean;
 
 	@Override

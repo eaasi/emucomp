@@ -20,7 +20,6 @@
 package de.bwl.bwfla.emucomp.common;
 
 import de.bwl.bwfla.emucomp.common.utils.jaxb.JaxbType;
-import de.bwl.bwfla.emucomp.api.ContainerConfiguration;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.*;

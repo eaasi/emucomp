@@ -2,6 +2,7 @@ package de.bwl.bwfla.emucomp.components.emulators;
 
 import de.bwl.bwfla.emucomp.common.Drive;
 import de.bwl.bwfla.emucomp.common.MachineConfiguration;
+import de.bwl.bwfla.emucomp.common.Nic;
 import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
 
 import de.bwl.bwfla.emucomp.components.emulators.EmulatorRunMetadata.DriveBinding;

@@ -1,6 +1,7 @@
 package de.bwl.bwfla.emucomp.components;
 
-import de.bwl.bwfla.common.utils.ProcessRunner;
+
+import de.bwl.bwfla.emucomp.common.utils.ProcessRunner;
 
 import java.io.IOException;
 import java.io.InputStream;

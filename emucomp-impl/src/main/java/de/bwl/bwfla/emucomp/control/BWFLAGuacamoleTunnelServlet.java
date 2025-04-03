@@ -20,10 +20,10 @@
 package de.bwl.bwfla.emucomp.control;
 
 import de.bwl.bwfla.emucomp.NodeManager;
+import de.bwl.bwfla.emucomp.common.services.guacplay.net.IGuacReader;
 import de.bwl.bwfla.emucomp.components.AbstractEaasComponent;
 import de.bwl.bwfla.emucomp.control.connectors.GuacamoleConnector;
 import de.bwl.bwfla.emucomp.control.connectors.IConnector;
-import de.bwl.bwfla.emucomp.services.guacplay.net.IGuacReader;
 import org.glyptodon.guacamole.GuacamoleClientException;
 import org.glyptodon.guacamole.GuacamoleException;
 import org.glyptodon.guacamole.GuacamoleResourceNotFoundException;

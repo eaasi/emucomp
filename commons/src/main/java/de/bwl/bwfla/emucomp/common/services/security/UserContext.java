@@ -1,8 +1,10 @@
 package de.bwl.bwfla.emucomp.common.services.security;
 
+import de.bwl.bwfla.emucomp.Context;
+
 import java.util.UUID;
 
-public class UserContext {
+public class UserContext implements Context {
 
     public final static String INVALID_USER = UUID.randomUUID().toString();
     private String token;
@@ -56,6 +58,7 @@ public class UserContext {
         this.username = username;
     }
 
+    @Override
     public String getToken() {
         return token;
     }

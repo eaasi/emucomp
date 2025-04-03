@@ -1,6 +1,6 @@
 package de.bwl.bwfla.emucomp.control;
 
-import de.bwl.bwfla.common.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
 import de.bwl.bwfla.emucomp.NodeManager;
 import de.bwl.bwfla.emucomp.components.AbstractEaasComponent;
 import de.bwl.bwfla.emucomp.components.Tail;

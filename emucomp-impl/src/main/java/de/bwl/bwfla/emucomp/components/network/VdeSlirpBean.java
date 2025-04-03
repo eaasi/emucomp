@@ -19,13 +19,13 @@
 
 package de.bwl.bwfla.emucomp.components.network;
 
-import de.bwl.bwfla.common.exceptions.BWFLAException;
-import de.bwl.bwfla.common.utils.ProcessRunner;
-import de.bwl.bwfla.emucomp.api.ComponentConfiguration;
-import de.bwl.bwfla.emucomp.api.VdeSlirpConfiguration;
+import org.apache.commons.net.util.SubnetUtils;
+import de.bwl.bwfla.emucomp.common.ComponentConfiguration;
+import de.bwl.bwfla.emucomp.common.VdeSlirpConfiguration;
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.common.utils.ProcessRunner;
 import de.bwl.bwfla.emucomp.components.EaasComponentBean;
 import de.bwl.bwfla.emucomp.control.connectors.EthernetConnector;
-import org.apache.commons.net.util.SubnetUtils;
 
 import javax.enterprise.inject.spi.CDI;
 import java.util.ArrayList;

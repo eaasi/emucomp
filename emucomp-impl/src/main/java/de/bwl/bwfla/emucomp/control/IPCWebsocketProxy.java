@@ -1,7 +1,8 @@
 package de.bwl.bwfla.emucomp.control;
 
-import de.bwl.bwfla.common.exceptions.BWFLAException;
-import de.bwl.bwfla.common.utils.ProcessRunner;
+
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.common.utils.ProcessRunner;
 import de.bwl.bwfla.emucomp.components.emulators.IpcSocket;
 
 import javax.enterprise.concurrent.ManagedThreadFactory;

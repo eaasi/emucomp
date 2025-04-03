@@ -1,7 +1,7 @@
 package de.bwl.bwfla.emucomp.components.emulators;
 
+import de.bwl.bwfla.emucomp.common.services.guacplay.util.StopWatch;
 import de.bwl.bwfla.emucomp.components.emulators.IpcDefs.EventID;
-import de.bwl.bwfla.emucomp.services.guacplay.util.StopWatch;
 
 
 /** This class represents a set of predefined events. */

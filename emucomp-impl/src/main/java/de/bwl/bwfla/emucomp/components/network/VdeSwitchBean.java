@@ -19,12 +19,14 @@
 
 package de.bwl.bwfla.emucomp.components.network;
 
-import de.bwl.bwfla.common.exceptions.BWFLAException;
-import de.bwl.bwfla.common.utils.NetworkUtils;
-import de.bwl.bwfla.common.utils.ProcessRunner;
-import de.bwl.bwfla.emucomp.api.ComponentConfiguration;
+
+
+import de.bwl.bwfla.emucomp.common.ComponentConfiguration;
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.common.utils.NetworkUtils;
+import de.bwl.bwfla.emucomp.common.utils.ProcessRunner;
 import de.bwl.bwfla.emucomp.control.connectors.EthernetConnector;
-import org.apache.tamaya.ConfigurationProvider;
+import org.eclipse.microprofile.config.ConfigProvider;
 
 import java.net.URI;
 import java.nio.file.Path;
@@ -59,8 +61,8 @@ public class VdeSwitchBean extends NetworkSwitchBean
 	{
 		LOG.info("Initializing vde-switch instance...");
 
-		final var vdeSwitchBinary = ConfigurationProvider.getConfiguration()
-						.get("components.binary.vdeswitch");
+		final var vdeSwitchBinary = ConfigProvider.getConfig()
+						.getValue("components.binary.vdeswitch", String.class);
 
 		runner.setCommand(vdeSwitchBinary);
 		runner.addArguments("-s", vdeSocketsPath.toString());

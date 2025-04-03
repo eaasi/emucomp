@@ -19,10 +19,11 @@
 
 package de.bwl.bwfla.emucomp.components.emulators;
 
-import de.bwl.bwfla.common.services.guacplay.net.GuacTunnel;
-import de.bwl.bwfla.common.services.guacplay.net.PlayerTunnel;
-import de.bwl.bwfla.common.services.guacplay.replay.SessionPlayer;
-import de.bwl.bwfla.common.utils.ProcessMonitor;
+
+import de.bwl.bwfla.emucomp.common.services.guacplay.net.GuacTunnel;
+import de.bwl.bwfla.emucomp.common.services.guacplay.net.PlayerTunnel;
+import de.bwl.bwfla.emucomp.common.services.guacplay.replay.SessionPlayer;
+import de.bwl.bwfla.emucomp.common.utils.ProcessMonitor;
 import org.glyptodon.guacamole.GuacamoleException;
 
 import java.io.IOException;

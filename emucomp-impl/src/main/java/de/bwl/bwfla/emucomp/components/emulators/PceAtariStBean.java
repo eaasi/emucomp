@@ -19,15 +19,17 @@
 
 package de.bwl.bwfla.emucomp.components.emulators;
 
-import de.bwl.bwfla.emucomp.api.MachineConfiguration;
-import org.apache.tamaya.inject.api.Config;
+
+
+import de.bwl.bwfla.emucomp.common.MachineConfiguration;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.inject.Inject;
 
 public class PceAtariStBean extends PceBean
 {
     @Inject
-    @Config("components.binary.pce.atarist")
+    @ConfigProperty(name = "components.binary.pce.atarist")
     protected String emuExecPath;
 
 	/** Max. number of supported drives per type. */

@@ -21,6 +21,7 @@ package de.bwl.bwfla.emucomp.api;
 
 
 
+import de.bwl.bwfla.emucomp.common.ComponentConfiguration;
 import de.bwl.bwfla.emucomp.common.ComponentState;
 import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
 import de.bwl.bwfla.emucomp.template.BlobHandle;

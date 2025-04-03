@@ -18,11 +18,12 @@
  */
 
 package de.bwl.bwfla.emucomp.components.emulators;
+import de.bwl.bwfla.emucomp.common.Drive;
+import de.bwl.bwfla.emucomp.common.MachineConfiguration;
+import de.bwl.bwfla.emucomp.common.Nic;
 import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
-import de.bwl.bwfla.emucomp.api.Drive;
-import de.bwl.bwfla.emucomp.api.MachineConfiguration;
-import de.bwl.bwfla.emucomp.api.Nic;
-import org.apache.tamaya.inject.api.Config;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
 
 import javax.inject.Inject;
 import java.nio.file.Path;
@@ -38,7 +39,7 @@ import java.nio.file.Paths;
 public class DosBoxBean extends EmulatorBean {
 
     @Inject
-    @Config("components.binary.dosbox")
+    @ConfigProperty(name = "components.binary.dosbox")
     private String dosBoxBean;
     
 	private char letter = 'c';

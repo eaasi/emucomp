@@ -19,41 +19,39 @@
 
 package de.bwl.bwfla.emucomp.components.emulators;
 
+import de.bwl.bwfla.emucomp.common.Drive;
+import de.bwl.bwfla.emucomp.common.Nic;
 import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
-import de.bwl.bwfla.emucomp.api.Drive;
-import de.bwl.bwfla.emucomp.api.Nic;
 
 import java.io.File;
 
-public class AndroidBean extends EmulatorBean
-{
-	String emulatorBinary = "/home/bwfla/emulator/run.sh";
-	
-	@Override
-	public void prepareEmulatorRunner() throws BWFLAException
-	{
-		File exec = new File(emulatorBinary);
-		if (exec == null || !exec.exists())
-			throw new BWFLAException("EmulatorContainer's executable not found! Make sure you have specified " + "a valid path to your executable in the corresponding 'properties' file");
-	
-		emuRunner.setCommand(exec.getAbsolutePath());
+public class AndroidBean extends EmulatorBean {
+    String emulatorBinary = "/home/bwfla/emulator/run.sh";
 
-		emuRunner.setWorkingDirectory(new File("/home/bwfla/emulator").toPath());
-		
-	}
+    @Override
+    public void prepareEmulatorRunner() throws BWFLAException {
+        File exec = new File(emulatorBinary);
+        if (exec == null || !exec.exists())
+            throw new BWFLAException("EmulatorContainer's executable not found! Make sure you have specified " + "a valid path to your executable in the corresponding 'properties' file");
 
-	@Override
-	protected boolean addDrive(Drive drive) throws BWFLAException {
-		throw this.newNotImplementedException();
-	}
+        emuRunner.setCommand(exec.getAbsolutePath());
 
-	@Override
-	protected boolean connectDrive(Drive drive, boolean attach) throws BWFLAException {
-		throw this.newNotImplementedException();
-	}
+        emuRunner.setWorkingDirectory(new File("/home/bwfla/emulator").toPath());
 
-	@Override
-	protected boolean addNic(Nic nic) throws BWFLAException {
-		throw this.newNotImplementedException();
-	}
+    }
+
+    @Override
+    protected boolean addDrive(Drive drive) throws BWFLAException {
+        throw this.newNotImplementedException();
+    }
+
+    @Override
+    protected boolean connectDrive(Drive drive, boolean attach) throws BWFLAException {
+        throw this.newNotImplementedException();
+    }
+
+    @Override
+    protected boolean addNic(Nic nic) throws BWFLAException {
+        throw this.newNotImplementedException();
+    }
 }

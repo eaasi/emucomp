@@ -1,10 +1,10 @@
 package de.bwl.bwfla.emucomp.components.emulators;
 
-import de.bwl.bwfla.common.datatypes.EmuCompState;
-import de.bwl.bwfla.common.exceptions.BWFLAException;
-import de.bwl.bwfla.emucomp.api.Drive;
-import de.bwl.bwfla.emucomp.api.Drive.DriveType;
-import de.bwl.bwfla.emucomp.api.Nic;
+
+import de.bwl.bwfla.emucomp.common.Drive;
+import de.bwl.bwfla.emucomp.common.Nic;
+import de.bwl.bwfla.emucomp.common.datatypes.EmuCompState;
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
 import de.bwl.bwfla.emucomp.control.ResumableSocket;
 import de.bwl.bwfla.emucomp.control.ResumableSocket.MessageHandlerBoth;
 import de.bwl.bwfla.emucomp.control.connectors.WebEmulatorConnector;
@@ -24,6 +24,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
+
+import static de.bwl.bwfla.emucomp.common.Drive.*;
 
 /**
  * @author rafael@gieschke.de

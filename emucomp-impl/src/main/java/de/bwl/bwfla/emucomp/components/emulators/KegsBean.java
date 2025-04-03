@@ -19,11 +19,12 @@
 
 package de.bwl.bwfla.emucomp.components.emulators;
 
-import de.bwl.bwfla.common.exceptions.BWFLAException;
-import de.bwl.bwfla.emucomp.api.Drive;
-import de.bwl.bwfla.emucomp.api.MachineConfiguration;
-import de.bwl.bwfla.emucomp.api.Nic;
-import org.apache.tamaya.inject.api.Config;
+
+import de.bwl.bwfla.emucomp.common.Drive;
+import de.bwl.bwfla.emucomp.common.MachineConfiguration;
+import de.bwl.bwfla.emucomp.common.Nic;
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.inject.Inject;
 import java.io.BufferedWriter;
@@ -41,7 +42,7 @@ import java.util.logging.Level;
 public class KegsBean extends EmulatorBean
 {
     @Inject
-    @Config("components.binary.kegs")
+    @ConfigProperty(name = "components.binary.kegs")
     public String kegsBean;
     
 	/** Virtual device ID of the drive with support for autostarting. */
