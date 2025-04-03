@@ -19,9 +19,6 @@
 
 package de.bwl.bwfla.emucomp.common;
 
-import de.bwl.bwfla.emucomp.api.Binding;
-import de.bwl.bwfla.emucomp.api.FileSystemType;
-
 import javax.xml.bind.annotation.*;
 
 

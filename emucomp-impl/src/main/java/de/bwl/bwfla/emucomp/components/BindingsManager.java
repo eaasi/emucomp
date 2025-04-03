@@ -19,9 +19,9 @@
 
 package de.bwl.bwfla.emucomp.components;
 
+import de.bwl.bwfla.emucomp.common.*;
 import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
 
-import javax.naming.Binding;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -40,13 +40,14 @@ public class BindingsManager
 	private final Map<String, String> paths;
 	private final ImageMounter imageMounter;
 
-	private static final ObjectArchiveHelper objectArchiveHelper;
-	static {
-		final var objectArchiveAddress = ConfigurationProvider.getConfiguration()
-				.get("ws.objectarchive");
-
-		objectArchiveHelper = new ObjectArchiveHelper(objectArchiveAddress);
-	}
+	//TODO REMOVE MOCKED
+	private static final Object objectArchiveHelper = null;
+//	static {
+//		final var objectArchiveAddress = ConfigurationProvider.getConfiguration()
+//				.get("ws.objectarchive");
+//
+//		objectArchiveHelper = new ObjectArchiveHelper(objectArchiveAddress);
+//	}
 
 	public enum EntryType
 	{
@@ -117,7 +118,8 @@ public class BindingsManager
 			// If the resource is an ArchiveBinding, query the archive
 			// and add all entries from the file collection
 			final ObjectArchiveBinding object = (ObjectArchiveBinding) resource;
-			final FileCollection fc = objectArchiveHelper.getObjectReference(object.getArchive(), object.getId());
+			final FileCollection fc = null;
+//					objectArchiveHelper.getObjectReference(object.getArchive(), object.getId());
 			if (fc == null || fc.id == null || fc.id.isEmpty())
 				throw new BWFLAException("Retrieving object meta data failed!");
 

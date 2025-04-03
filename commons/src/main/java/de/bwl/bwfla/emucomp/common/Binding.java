@@ -27,7 +27,6 @@
 
 package de.bwl.bwfla.emucomp.common;
 
-import de.bwl.bwfla.emucomp.api.AbstractDataResource;
 
 import javax.xml.bind.annotation.*;
 

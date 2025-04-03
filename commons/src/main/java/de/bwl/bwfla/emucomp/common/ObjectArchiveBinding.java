@@ -1,6 +1,7 @@
 package de.bwl.bwfla.emucomp.common;
 
-import de.bwl.bwfla.common.exceptions.BWFLAException;
+
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
 
 import javax.xml.bind.annotation.*;
 

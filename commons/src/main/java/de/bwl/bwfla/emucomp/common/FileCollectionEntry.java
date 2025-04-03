@@ -1,6 +1,5 @@
 package de.bwl.bwfla.emucomp.common;
 
-import de.bwl.bwfla.emucomp.api.Drive;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

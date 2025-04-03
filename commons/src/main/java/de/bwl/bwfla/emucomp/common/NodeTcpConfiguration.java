@@ -1,7 +1,6 @@
 package de.bwl.bwfla.emucomp.common;
 
 
-import de.bwl.bwfla.emucomp.api.ComponentConfiguration;
 
 import javax.xml.bind.annotation.*;
 

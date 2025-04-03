@@ -27,8 +27,6 @@
 
 package de.bwl.bwfla.emucomp.common;
 
-import de.bwl.bwfla.emucomp.api.Drive;
-import de.bwl.bwfla.emucomp.api.Nic;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

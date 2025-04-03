@@ -1,8 +1,8 @@
 package de.bwl.bwfla.emucomp.common;
 
 
-import de.bwl.bwfla.common.exceptions.BWFLAException;
-import de.bwl.bwfla.common.utils.ProcessRunner;
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.common.utils.ProcessRunner;
 
 import java.io.IOException;
 import java.util.HashMap;

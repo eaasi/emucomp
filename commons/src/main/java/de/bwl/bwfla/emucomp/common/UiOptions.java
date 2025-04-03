@@ -19,9 +19,6 @@
 
 package de.bwl.bwfla.emucomp.common;
 
-import de.bwl.bwfla.emucomp.api.InputOptions;
-import de.bwl.bwfla.emucomp.api.TimeOptions;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;

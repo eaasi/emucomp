@@ -22,9 +22,6 @@ package de.bwl.bwfla.emucomp.common;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import de.bwl.bwfla.emucomp.common.utils.jaxb.JaxbType;
-import de.bwl.bwfla.emucomp.api.AbstractDataResource;
-import de.bwl.bwfla.emucomp.api.ObjectArchiveBinding;
-import de.bwl.bwfla.emucomp.api.OciContainerConfiguration;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.*;

@@ -18,19 +18,21 @@
  */
 package de.bwl.bwfla.emucomp.common;
 
-import de.bwl.bwfla.common.exceptions.BWFLAException;
-import de.bwl.bwfla.common.services.container.helpers.ContainerHelper;
-import de.bwl.bwfla.common.services.container.helpers.ContainerHelperFactory;
-import de.bwl.bwfla.common.services.container.types.Container;
-import de.bwl.bwfla.common.services.container.types.Container.Filesystem;
-import de.bwl.bwfla.common.utils.Pair;
-import de.bwl.bwfla.emucomp.api.Binding.AccessType;
-import de.bwl.bwfla.emucomp.api.Drive.DriveType;
+
+import de.bwl.bwfla.emucomp.common.Binding.AccessType;
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.common.services.container.helpers.ContainerHelper;
+import de.bwl.bwfla.emucomp.common.services.container.helpers.ContainerHelperFactory;
+import de.bwl.bwfla.emucomp.common.services.container.types.Container;
+import de.bwl.bwfla.emucomp.common.services.container.types.Container.Filesystem;
+import de.bwl.bwfla.emucomp.common.utils.Pair;
 
 import javax.xml.bind.JAXBException;
 import java.io.File;
 import java.util.*;
 import java.util.logging.Logger;
+
+import static de.bwl.bwfla.emucomp.common.Drive.*;
 
 
 public class EmulationEnvironmentHelper {
@@ -133,15 +135,15 @@ public class EmulationEnvironmentHelper {
 				continue;
 			}
 
-			if (r instanceof ImageArchiveBinding)
-			{
-
-				if(env.checkpointBindingId == null || env.checkpointBindingId.isEmpty()) {
-					ImageArchiveBinding iab = (ImageArchiveBinding) r;
-					if (iab.getId().equals("emucon-rootfs"))
-						it.remove();
-				}
-			}
+//			if (r instanceof ImageArchiveBinding)
+//			{
+//
+//				if(env.checkpointBindingId == null || env.checkpointBindingId.isEmpty()) {
+//					ImageArchiveBinding iab = (ImageArchiveBinding) r;
+//					if (iab.getId().equals("emucon-rootfs"))
+//						it.remove();
+//				}
+//			}
 
 			// resource was volatile (but not in use by a drive), remove it, too
 			for (AbstractDataResource origRes : original.getAbstractDataResource()) {
