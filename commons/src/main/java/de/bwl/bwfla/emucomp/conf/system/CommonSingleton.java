@@ -17,7 +17,7 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.bwl.bwfla.emucomp.conf;
+package de.bwl.bwfla.emucomp.conf.system;
 
 
 import javax.inject.Inject;

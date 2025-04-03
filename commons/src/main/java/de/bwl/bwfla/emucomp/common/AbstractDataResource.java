@@ -2,11 +2,7 @@ package de.bwl.bwfla.emucomp.common;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import de.bwl.bwfla.emucomp.common.Binding;
-import de.bwl.bwfla.emucomp.common.BlobStoreBinding;
-import de.bwl.bwfla.emucomp.common.ImageArchiveBinding;
 import de.bwl.bwfla.emucomp.common.utils.jaxb.JaxbType;
-
 
 import javax.xml.bind.annotation.*;
 

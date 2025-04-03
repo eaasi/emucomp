@@ -17,27 +17,28 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.bwl.bwfla.emucomp.conf;
+package de.bwl.bwfla.emucomp.common;
+
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
+import javax.xml.bind.annotation.XmlType;
 
 
-import org.eclipse.microprofile.config.inject.ConfigProperty;
+@XmlEnum
+@XmlType(namespace = "http://bwfla.bwl.de/components/datatypes")
+public enum MediumType
+{
+	@XmlEnumValue("hdd")
+	HDD,
 
-import javax.enterprise.context.ApplicationScoped;
+	@XmlEnumValue("cdrom")
+	CDROM,
 
-@ApplicationScoped
-public class HelpersConf {
-    @ConfigProperty(name = "helpers.hddfat16create")
-    public String hddFat16Create;
-    @ConfigProperty(name = "helpers.hddfat16io")
-    public String hddFat16Io;
+	@XmlEnumValue("floppy")
+	FLOPPY;
 
-    @ConfigProperty(name = "helpers.hddhfscreate")
-    public String hddHfsCreate;
-    @ConfigProperty(name = "helpers.hddhfsio")
-    public String hddHfsIo;
-
-    @ConfigProperty(name = "helpers.floppyfat12create")
-    public String floppyFat12Create;
-    @ConfigProperty(name = "helpers.floppyfat12io")
-    public String floppyFat12Io;
+	public static MediumType fromString(String value)
+	{
+		return MediumType.valueOf(value.toUpperCase());
+	}
 }

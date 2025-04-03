@@ -17,33 +17,23 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.bwl.bwfla.emucomp.api;
+package de.bwl.bwfla.emucomp.common;
 
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
+import javax.xml.bind.annotation.XmlType;
 
-
-import de.bwl.bwfla.emucomp.common.ComponentState;
-import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
-import de.bwl.bwfla.emucomp.template.BlobHandle;
-
-import java.net.URI;
-import java.util.Map;
-
-public interface ClusterComponent {
-    public void initialize(ComponentConfiguration config) throws BWFLAException;
-
-    public void destroy();
-
-    public String getComponentType() throws BWFLAException;
-
-    public ComponentState getState() throws BWFLAException;
-
-    public Map<String, URI> getControlUrls();
-
-    public URI getEventSourceUrl();
-
-    public void setKeepaliveTimestamp(long timestamp);
-
-    public long getKeepaliveTimestamp();
-
-    public BlobHandle getResult() throws BWFLAException;
+@XmlEnum
+@XmlType(namespace = "http://bwfla.bwl.de/components/datatypes")
+public enum ComponentState {
+    @XmlEnumValue("initializing")
+    INITIALIZING,
+    @XmlEnumValue("inactive")
+    INACTIVE,
+    @XmlEnumValue("stopped")
+    STOPPED,
+    @XmlEnumValue("failed")
+    FAILED,
+    @XmlEnumValue("running")
+    RUNNING;
 }

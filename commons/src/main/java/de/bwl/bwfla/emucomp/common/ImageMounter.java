@@ -19,13 +19,13 @@
 
 package de.bwl.bwfla.emucomp.common;
 
-
-
-import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
-import de.bwl.bwfla.emucomp.common.services.net.HttpUtils;
-import de.bwl.bwfla.emucomp.common.utils.EaasFileUtils;
-import de.bwl.bwfla.emucomp.common.utils.ProcessRunner;
-import org.eclipse.microprofile.config.ConfigProvider;
+import de.bwl.bwfla.common.exceptions.BWFLAException;
+import de.bwl.bwfla.common.services.net.HttpUtils;
+import de.bwl.bwfla.common.utils.EaasFileUtils;
+import de.bwl.bwfla.common.utils.ProcessRunner;
+import de.bwl.bwfla.emucomp.api.FileSystemType;
+import de.bwl.bwfla.emucomp.api.MountOptions;
+import org.apache.tamaya.ConfigurationProvider;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -397,8 +397,8 @@ public class ImageMounter implements AutoCloseable
 
 	public static Path createWorkingDirectory() throws BWFLAException
 	{
-		final String basedir = ConfigProvider.getConfig()
-				.getValue("imagemounter.basedir", String.class);
+		final String basedir = ConfigurationProvider.getConfiguration()
+				.get("imagemounter.basedir");
 
 		return ImageMounter.createWorkingDirectory(Path.of(basedir));
 	}
@@ -711,7 +711,7 @@ public class ImageMounter implements AutoCloseable
 		process.addArguments("-o", "use_ino");
 
 		process.addArguments("-o",
-				"uid=" + ConfigProvider.getConfig().getValue("components.emulator_containers.uid", String.class));
+				"uid=" + ConfigurationProvider.getConfiguration().get("components.emulator_containers.uid"));
 
 
 		process.addArgument(path.toString());

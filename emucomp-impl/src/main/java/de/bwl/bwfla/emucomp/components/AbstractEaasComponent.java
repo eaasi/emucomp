@@ -20,12 +20,12 @@
 package de.bwl.bwfla.emucomp.components;
 
 
-import de.bwl.bwfla.emucomp.ComponentState;
 import de.bwl.bwfla.emucomp.api.ClusterComponent;
+import de.bwl.bwfla.emucomp.common.ComponentState;
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.common.services.guacplay.events.EventSink;
 import de.bwl.bwfla.emucomp.control.connectors.IConnector;
-import de.bwl.bwfla.emucomp.data.BlobHandle;
-import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
-import de.bwl.bwfla.emucomp.services.sse.EventSink;
+import de.bwl.bwfla.emucomp.template.BlobHandle;
 
 import java.net.URI;
 import java.util.Map;
@@ -35,132 +35,128 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 
-/** Base class for beans representing EaasComponents */
-public abstract class AbstractEaasComponent implements ClusterComponent
-{
-	private String componentID;
-	private String detachedTitle;
-	private String environmentId = null;
-	
-	protected ComponentState state = ComponentState.RUNNING;
-	private BWFLAException asyncError = null;
-	
-	private Map<String, IConnector> controlConnectors = new ConcurrentHashMap<String, IConnector>();
-	
-	private final AtomicLong keepaliveTimestamp = new AtomicLong(0);
+/**
+ * Base class for beans representing EaasComponents
+ */
+public abstract class AbstractEaasComponent implements ClusterComponent {
+    private String componentID;
+    private String detachedTitle;
+    private String environmentId = null;
 
-	/** Result of an async-computation */
-	protected final CompletableFuture<BlobHandle> result = new CompletableFuture<BlobHandle>();
+    protected ComponentState state = ComponentState.RUNNING;
+    private BWFLAException asyncError = null;
 
-	private EventSink esink;
+    private Map<String, IConnector> controlConnectors = new ConcurrentHashMap<String, IConnector>();
+
+    private final AtomicLong keepaliveTimestamp = new AtomicLong(0);
+
+    /**
+     * Result of an async-computation
+     */
+    protected final CompletableFuture<BlobHandle> result = new CompletableFuture<BlobHandle>();
+
+    private EventSink esink;
 
 
-	public String getComponentId()
-	{
-		return componentID;
-	}
-	
-	public void setComponentId(String id)
-	{
-		this.componentID = id;
-	}
-	
-	@Override
-	public ComponentState getState() throws BWFLAException {
-	    if (this.asyncError != null) {
-	        throw this.asyncError;
-	    }
-	    return this.state;
-	}
+    public String getComponentId() {
+        return componentID;
+    }
 
-	protected URI getComponentResource()
-	{
-		return URI.create(String.format("%%7Bcontext%%7D/components/%s/", componentID));
-	}
+    public void setComponentId(String id) {
+        this.componentID = id;
+    }
 
-	@Override
-	public Map<String, URI> getControlUrls() {
-	    URI componentResource = getComponentResource();
+    @Override
+    public ComponentState getState() throws BWFLAException {
+        if (this.asyncError != null) {
+            throw this.asyncError;
+        }
+        return this.state;
+    }
+
+    protected URI getComponentResource() {
+        return URI.create(String.format("%%7Bcontext%%7D/components/%s/", componentID));
+    }
+
+    @Override
+    public Map<String, URI> getControlUrls() {
+        URI componentResource = getComponentResource();
 
         return controlConnectors.entrySet().stream().collect(
                 Collectors.toMap(
                         e -> e.getKey(),
                         e -> e.getValue().getControlPath(componentResource)));
-	}
+    }
 
-	@Override
-	public URI getEventSourceUrl() {
-		return URI.create(String.format("%%7Bcontext%%7D/api/v1/components/%s/events", componentID));
-	}
+    @Override
+    public URI getEventSourceUrl() {
+        return URI.create(String.format("%%7Bcontext%%7D/api/v1/components/%s/events", componentID));
+    }
 
-	@Override
-	public void setKeepaliveTimestamp(long timestamp)
-	{
-		keepaliveTimestamp.set(timestamp);
-	}
+    @Override
+    public void setKeepaliveTimestamp(long timestamp) {
+        keepaliveTimestamp.set(timestamp);
+    }
 
-	@Override
-	public long getKeepaliveTimestamp()
-	{
-		return keepaliveTimestamp.get();
-	}
+    @Override
+    public long getKeepaliveTimestamp() {
+        return keepaliveTimestamp.get();
+    }
 
-	@Override
-	public BlobHandle getResult() throws BWFLAException
-	{
-		try {
-			return (result.isDone()) ? result.get() : null;
-		}
-		catch (Exception error) {
-			throw new BWFLAException("Retrieving the async-result failed!", error);
-		}
-	}
+    @Override
+    public BlobHandle getResult() throws BWFLAException {
+        try {
+            return (result.isDone()) ? result.get() : null;
+        } catch (Exception error) {
+            throw new BWFLAException("Retrieving the async-result failed!", error);
+        }
+    }
 
-	protected void addControlConnector(IConnector connector) {
-	    this.controlConnectors.put(connector.getProtocol(), connector);
-	}
+    protected void addControlConnector(IConnector connector) {
+        this.controlConnectors.put(connector.getProtocol(), connector);
+    }
 
-	public String getDetachedTitle() {
-		return detachedTitle;
-	}
+    public String getDetachedTitle() {
+        return detachedTitle;
+    }
 
-	public void setDetachedTitle(String detachedTitle) {
-		this.detachedTitle = detachedTitle;
-	}
+    public void setDetachedTitle(String detachedTitle) {
+        this.detachedTitle = detachedTitle;
+    }
 
-	public IConnector getControlConnector(String protocol) {
-	    return controlConnectors.get(protocol);
-	}
-	
-	protected void fail(BWFLAException e) {
-	    this.asyncError = e;
-	}
+    public IConnector getControlConnector(String protocol) {
+        return controlConnectors.get(protocol);
+    }
 
-	public String getEnvironmentId() {
-		return environmentId;
-	}
+    protected void fail(BWFLAException e) {
+        this.asyncError = e;
+    }
 
-	public void setEnvironmentId(String environmentId) {
-		this.environmentId = environmentId;
-	}
+    public String getEnvironmentId() {
+        return environmentId;
+    }
 
-	public void setEventSink(EventSink sink) {
-		if (this.hasEventSink())
-			this.esink.close();
+    public void setEnvironmentId(String environmentId) {
+        this.environmentId = environmentId;
+    }
 
-		this.esink = sink;
-	}
+    public void setEventSink(EventSink sink) {
+        if (this.hasEventSink())
+            this.esink.close();
 
-	public EventSink getEventSink() {
-		return esink;
-	}
+        this.esink = sink;
+    }
 
-	public boolean hasEventSink() {
-		return (esink != null);
-	}
+    public EventSink getEventSink() {
+        return esink;
+    }
 
-	@Override
-	public void destroy() {
-		this.setEventSink(null);
-	}
+    public boolean hasEventSink() {
+        return (esink != null);
+    }
+
+    @Override
+    public void destroy() {
+        this.setEventSink(null);
+    }
 }

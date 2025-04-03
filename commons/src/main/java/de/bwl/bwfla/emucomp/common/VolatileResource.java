@@ -17,21 +17,8 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.bwl.bwfla.emucomp.conf;
+package de.bwl.bwfla.emucomp.common;
 
+public class VolatileResource extends Binding {
 
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-
-import javax.enterprise.context.ApplicationScoped;
-
-@ApplicationScoped
-public class RunnerConf {
-    @ConfigProperty(name = "runners.tmpbasedir")
-    public String tmpBaseDir;
-    @ConfigProperty(name = "runners.tmpdirprefix")
-    public String tmpdirPrefix;
-    @ConfigProperty(name = "runners.stdoutfilename")
-    public String stdoutFilename;
-    @ConfigProperty(name = "runners.stderrfilename")
-    public String stderrFilename;
 }

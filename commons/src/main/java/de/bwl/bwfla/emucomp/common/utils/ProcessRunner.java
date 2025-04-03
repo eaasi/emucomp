@@ -20,7 +20,7 @@
 package de.bwl.bwfla.emucomp.common.utils;
 
 
-import de.bwl.bwfla.emucomp.conf.CommonSingleton;
+import de.bwl.bwfla.emucomp.conf.system.CommonSingleton;
 
 import java.io.*;
 import java.nio.file.Files;

@@ -17,33 +17,21 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.bwl.bwfla.emucomp.api;
+package de.bwl.bwfla.emucomp.conf.system;
 
 
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-import de.bwl.bwfla.emucomp.common.ComponentState;
-import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
-import de.bwl.bwfla.emucomp.template.BlobHandle;
+import javax.enterprise.context.ApplicationScoped;
 
-import java.net.URI;
-import java.util.Map;
-
-public interface ClusterComponent {
-    public void initialize(ComponentConfiguration config) throws BWFLAException;
-
-    public void destroy();
-
-    public String getComponentType() throws BWFLAException;
-
-    public ComponentState getState() throws BWFLAException;
-
-    public Map<String, URI> getControlUrls();
-
-    public URI getEventSourceUrl();
-
-    public void setKeepaliveTimestamp(long timestamp);
-
-    public long getKeepaliveTimestamp();
-
-    public BlobHandle getResult() throws BWFLAException;
+@ApplicationScoped
+public class CommonConf {
+    @ConfigProperty(name = "commonconf.keyfile")
+    public String keyfile;
+    @ConfigProperty(name = "commonconf.authindex")
+    public String authIndex;
+    @ConfigProperty(name = "commonconf.authhandle")
+    public String authHandle;
+    @ConfigProperty(name = "commonconf.serverdatadir")
+    public String serverdatadir;
 }

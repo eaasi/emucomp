@@ -11,27 +11,32 @@
  * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
  * PARTICULAR PURPOSE.  See the GNU General Public License for
  * more details.
- *
+ *s
  * You should have received a copy of the GNU General Public License
  * along with the Emulation-as-a-Software framework.
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.bwl.bwfla.emucomp.conf;
+package de.bwl.bwfla.emucomp.common;
+
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
+import javax.xml.bind.annotation.XmlType;
 
 
-import org.eclipse.microprofile.config.inject.ConfigProperty;
+@XmlEnum
+@XmlType(namespace = "http://bwfla.bwl.de/components/datatypes")
+public enum PartitionTableType
+{
+	/** Master Boot Record */
+	@XmlEnumValue("mbr")
+	MBR,
 
-import javax.enterprise.context.ApplicationScoped;
+	/** GUID Partition Table */
+	@XmlEnumValue("gpt")
+	GPT,
 
-@ApplicationScoped
-public class CommonConf {
-    @ConfigProperty(name = "commonconf.keyfile")
-    public String keyfile;
-    @ConfigProperty(name = "commonconf.authindex")
-    public String authIndex;
-    @ConfigProperty(name = "commonconf.authhandle")
-    public String authHandle;
-    @ConfigProperty(name = "commonconf.serverdatadir")
-    public String serverdatadir;
+	/** No Partition Table */
+	@XmlEnumValue("none")
+	NONE
 }

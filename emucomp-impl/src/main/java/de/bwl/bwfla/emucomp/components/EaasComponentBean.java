@@ -20,8 +20,8 @@
 package de.bwl.bwfla.emucomp.components;
 
 
-import de.bwl.bwfla.emucomp.TaskStack;
-import de.bwl.bwfla.emucomp.logging.PrefixLogger;
+import de.bwl.bwfla.emucomp.common.logging.PrefixLogger;
+import de.bwl.bwfla.emucomp.common.utils.TaskStack;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;

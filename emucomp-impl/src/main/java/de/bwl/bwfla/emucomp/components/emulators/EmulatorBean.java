@@ -22,6 +22,7 @@ package de.bwl.bwfla.emucomp.components.emulators;
 
 import de.bwl.bwfla.emucomp.*;
 import de.bwl.bwfla.emucomp.api.EmulatorComponent;
+import de.bwl.bwfla.emucomp.common.MachineConfiguration;
 import de.bwl.bwfla.emucomp.common.datatypes.EmuCompState;
 import de.bwl.bwfla.emucomp.common.services.guacplay.net.TunnelConfig;
 import de.bwl.bwfla.emucomp.common.utils.ProcessRunner;
