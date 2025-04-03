@@ -29,22 +29,21 @@ import de.bwl.bwfla.emucomp.components.emulators.EmulatorBean;
 import de.bwl.bwfla.emucomp.components.network.NetworkSwitchBean;
 import de.bwl.bwfla.emucomp.components.network.NodeTcpBean;
 import de.bwl.bwfla.emucomp.components.network.VdeSlirpBean;
+import lombok.Getter;
 import org.eclipse.microprofile.config.ConfigProvider;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-
-import javax.annotation.Resource;
-import javax.enterprise.concurrent.ManagedScheduledExecutorService;
-import javax.enterprise.concurrent.ManagedThreadFactory;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.xml.bind.JAXBException;
 import java.time.Duration;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 
 @ApplicationScoped
@@ -52,16 +51,21 @@ public class NodeManager {
     @Inject
     protected PrefixLogger log;
 
-    @Resource(lookup = "java:jboss/ee/concurrency/factory/default")
-    private ManagedThreadFactory workerThreadFactory = null;
+    @Getter
+    @Inject
+    protected ThreadFactory workerThreadFactory;
 
-    @Resource(lookup = "java:jboss/ee/concurrency/scheduler/default")
-    protected ManagedScheduledExecutorService scheduler;
+    @Inject
+    protected ScheduledExecutorService scheduler;
 
-    @Resource(lookup = "java:jboss/ee/concurrency/executor/io")
+    @Inject
     protected ExecutorService executor;
-    
-    protected ConcurrentMap<String, AbstractEaasComponent> components = new ConcurrentHashMap<String, AbstractEaasComponent>();
+
+    protected AbstractEaasComponent currentComponent;
+
+    private AtomicReference<String> currentComponentId = new AtomicReference<>();
+
+    private final ThreadLocal<ComponentConfiguration> usedComponentConfiguration = ThreadLocal.withInitial(() -> null);
 
     @Inject
     @ConfigProperty(name = "components.warmup_timeout")
@@ -72,31 +76,25 @@ public class NodeManager {
     protected Duration componentExpirationTimeout;
 
     private final AtomicBoolean isGcTriggered = new AtomicBoolean(false);
-    
-    
-    // TODO: does it make sense to do something for @PreDestroy?
-    
 
-    public ManagedThreadFactory getWorkerThreadFactory()
-    {
-        return workerThreadFactory;
-    }
+
+    // TODO: does it make sense to do something for @PreDestroy?
+
 
     /**
      * Creates and registers a component with the given {@componentId} and
      * configuration.
-     * 
+     * <p>
      * After this method is called, the instance is allocated, under proper
      * resource management and fully initialized.
-     * 
+     *
      * @param componentId
-     * @param config a serialized instance of a {@link ComponentConfiguration}
+     * @param config      a serialized instance of a {@link ComponentConfiguration}
      * @return the given {@code componentId}
      * @throws BWFLAException if {@code config} could not be unmarshalled or a
-     *             runtime error occurred while registering the component to the
-     *             local component map or an exception from
-     *             {@link createComponentInstance}
-     * 
+     *                        runtime error occurred while registering the component to the
+     *                        local component map or an exception from
+     *                        {@link createComponentInstance}
      * @see #createComponentInstance(ComponentConfiguration, String)
      */
     public String allocateComponent(String componentId, String config) throws BWFLAException {
@@ -104,26 +102,23 @@ public class NodeManager {
             final ComponentConfiguration configuration =
                     ComponentConfiguration.fromValue(config, ComponentConfiguration.class);
 
-            // atomically create a new bean iff the given id does not already exist
-            final AbstractEaasComponent component = components.computeIfAbsent(componentId, id -> {
-                try {
-                    return createComponentInstance(configuration, id);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            
-            // don't to this in the atomic insert to reduce
-            // the time the map's bucket is locked
-            component.initialize(configuration);
-            
+            // create a new bean iff the given id does not already exist
+            if (usedComponentConfiguration.get() != null && Objects.deepEquals(usedComponentConfiguration, configuration)) {
+                throw new BWFLAException("Already allocated component: " + componentId);
+            } else {
+                usedComponentConfiguration.set(configuration);
+                currentComponentId.getAndSet(componentId);
+
+                currentComponent = createComponentInstance(configuration, componentId);
+            }
+
+            currentComponent.initialize(configuration);
+
             return componentId;
-        }
-        catch (JAXBException error) {
+        } catch (JAXBException error) {
             throw new BWFLAException("Unmarshalling configuration metadata failed!", error);
-        }
-        catch (RuntimeException | BWFLAException error) {
-            this.releaseComponent(componentId);
+        } catch (RuntimeException | BWFLAException error) {
+            this.releaseComponent();
             if (error instanceof BWFLAException)
                 throw (BWFLAException) error;
             else if (error.getCause() instanceof BWFLAException)
@@ -134,67 +129,66 @@ public class NodeManager {
             }
         }
     }
-    
+
 
     /**
-     * Destroys the component instance with the given {@code componentId}. 
-     * 
-     * @param componentId
+     * Destroys current component instance.
      */
-    public void releaseComponent(String componentId) {
-        AbstractEaasComponent component = components.remove(componentId);
-        if (component != null) {
-            component.destroy();
+    public void releaseComponent() {
+        if (currentComponent != null) {
+            currentComponent.destroy();
             this.triggerGarbageCollection();
         }
     }
 
     /**
-     * Resets the keepalive timeout for the specified {@code component}.
-     * 
-     * @param componentId
+     * Resets the keepalive timeout for current component.
      */
-    public void keepalive(String componentId) throws BWFLAException {
-        AbstractEaasComponent component = this.getComponentById(componentId);
+    public void keepalive() throws BWFLAException {
+        AbstractEaasComponent component = this.currentComponent;
         component.setKeepaliveTimestamp(NodeManager.timestamp());
     }
 
-    
+
     /**
      * Returns the component instance for the given {@code componentId}.
-     * 
+     *
      * @param componentId
      * @return a component instance
      * @throws BWFLAException if there is no registered component instance with
-     *             the given id.
+     *                        the given id.
      */
     public AbstractEaasComponent getComponentById(String componentId) throws BWFLAException {
-        AbstractEaasComponent component = this.components.get(componentId);
-        if (component == null) {
+        AbstractEaasComponent component = this.currentComponent;
+        if (component == null || !component.getComponentId().equals(componentId)) {
             throw new BWFLAException("Could not find a component instance for the given id: " + component);
         }
-            
+
         return component;
     }
-    
+
     public <T> T getComponentById(String componentId, Class<T> klass) throws BWFLAException {
         return klass.cast(this.getComponentById(componentId));
     }
-    
+
+    public <T> T getComponentTransformed(Class<T> klass) throws BWFLAException {
+        return klass.cast(this.currentComponent);
+    }
+
 
     /**
      * Creates a component instance depending on the type of the
      * {@code configuration} argument.
-     * 
+     * <p>
      * The returned components are bare CDI-enabled instances and are not yet
      * configured or initialized.
-     * 
+     *
      * @param configuration the configuration to base the instantiation on
-     * @param componentId a component id to give to the instance
+     * @param componentId   a component id to give to the instance
      * @return A component instance
      * @throws BWFLAException if the required bean type cannot be found by the
-     *             classloader or the configuration does not correspond to any
-     *             known bean class.
+     *                        classloader or the configuration does not correspond to any
+     *                        known bean class.
      */
     protected AbstractEaasComponent createComponentInstance(ComponentConfiguration configuration, String componentId) throws BWFLAException {
         try {
@@ -202,7 +196,7 @@ public class NodeManager {
 
             if (configuration instanceof MachineConfiguration) {
                 component = EmulatorBean.createEmulatorBean((MachineConfiguration) configuration);
-                component.setEnvironmentId(((MachineConfiguration)configuration).getId());
+                component.setEnvironmentId(((MachineConfiguration) configuration).getId());
             } else if (configuration instanceof VdeSlirpConfiguration) {
                 component = VdeSlirpBean.createVdeSlirp((VdeSlirpConfiguration) configuration);
             } else if (configuration instanceof NetworkSwitchConfiguration) {
@@ -229,40 +223,35 @@ public class NodeManager {
             throw new BWFLAException("The requested bean type could not be found.", e);
         }
     }
-    
+
     protected void onComponentTimeout(String componentId) {
-        if (!components.containsKey(componentId))
+        if (!this.currentComponent.getComponentId().equals(componentId))
             return;
 
         log.info("Aww, component " + componentId + " has timed out :-(");
-        this.releaseComponent(componentId);
+        this.releaseComponent();
     }
 
-    private void triggerGarbageCollection()
-    {
+    private void triggerGarbageCollection() {
         if (!isGcTriggered.getAndSet(true))
             executor.execute(new GarbageCollectionRunner());
     }
 
-    private static long timestamp()
-    {
+    private static long timestamp() {
         return System.currentTimeMillis();
     }
 
-    private class CleanupTrigger implements Runnable
-    {
+    private class CleanupTrigger implements Runnable {
         private final AbstractEaasComponent component;
         private final long timeout;
 
-        public CleanupTrigger(AbstractEaasComponent component, Duration timeout)
-        {
+        public CleanupTrigger(AbstractEaasComponent component, Duration timeout) {
             this.component = component;
             this.timeout = timeout.toMillis();
         }
 
         @Override
-        public void run()
-        {
+        public void run() {
             final long curts = NodeManager.timestamp();
             final long prevts = component.getKeepaliveTimestamp();
             final long elapsed = curts - prevts;
@@ -270,8 +259,7 @@ public class NodeManager {
                 // Component should be kept alive! Schedule this task again.
                 final long delay = timeout - elapsed + 10L;
                 scheduler.schedule(this, delay, TimeUnit.MILLISECONDS);
-            }
-            else {
+            } else {
                 // Timeout expired!
 
                 // Since scheduler tasks should complete quickly and this.onComponentTimeout()
@@ -281,11 +269,9 @@ public class NodeManager {
         }
     }
 
-    private class GarbageCollectionRunner implements Runnable
-    {
+    private class GarbageCollectionRunner implements Runnable {
         @Override
-        public void run()
-        {
+        public void run() {
             this.sleep(500L);
 
             log.info("Trigger garbage-collection...");
@@ -301,12 +287,10 @@ public class NodeManager {
             log.info("Finished garbage-collection");
         }
 
-        private void sleep(long timeout)
-        {
+        private void sleep(long timeout) {
             try {
                 Thread.sleep(timeout);
-            }
-            catch (Exception error) {
+            } catch (Exception error) {
                 // Ignore it!
             }
         }

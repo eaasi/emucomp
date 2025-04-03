@@ -104,6 +104,14 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-smallrye-context-propagation</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.microprofile.context-propagation</groupId>
+            <artifactId>microprofile-context-propagation-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-scheduler</artifactId>
+        </dependency>
 
         <!-- Other Dependencies -->
         <dependency>

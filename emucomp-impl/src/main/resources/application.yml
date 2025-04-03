@@ -1,9 +1,4 @@
-#quarkus:
-#  application:
-#    name: emucomp-impl
-#  config:
-#    locations:
-#      - classpath:/default.yml
-#      - classpath:/blob-default.yml
-#      - classpath:/connection.yml
-#      - classpath:/threads.yml
+quarkus:
+  thread-pool:
+    max-threads: 100
+    queue-size: 1000

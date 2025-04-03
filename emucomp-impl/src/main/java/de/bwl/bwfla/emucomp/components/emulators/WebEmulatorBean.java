@@ -44,8 +44,7 @@ public class WebEmulatorBean extends EmulatorBean implements MessageHandlerBoth 
 	@Override
 	public void start() {
 		try {
-			ManagedThreadFactory threadFactory = InitialContext.doLookup("java:jboss/ee/concurrency/factory/default");
-			workerThread = threadFactory.newThread(() -> {
+			workerThread = workerThreadFactory.newThread(() -> {
 				for (;;) {
 					try {
 						final JsonObject request = requests.take();

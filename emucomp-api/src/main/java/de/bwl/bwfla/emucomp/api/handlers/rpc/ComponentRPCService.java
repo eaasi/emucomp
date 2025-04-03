@@ -2,8 +2,8 @@ package de.bwl.bwfla.emucomp.api.handlers.rpc;
 
 import de.bwl.bwfla.emucomp.NodeManager;
 import de.bwl.bwfla.emucomp.api.security.SessionManagerResolver;
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
 import de.bwl.bwfla.emucomp.components.AbstractEaasComponent;
-import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 import de.bwl.bwfla.emucomp.grpc.*;
 import io.grpc.stub.StreamObserver;
 import io.quarkus.grpc.GrpcService;

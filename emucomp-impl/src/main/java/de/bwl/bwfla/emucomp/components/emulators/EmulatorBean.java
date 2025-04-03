@@ -74,6 +74,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
@@ -117,11 +119,11 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
 	@ConfigProperty(name = "emucomp.blobstore_soap")
 	private String blobStoreAddressSoap = null;
 
-    @Resource(lookup = "java:jboss/ee/concurrency/executor/io")
-    protected ExecutorService ioTaskExecutor;
+	@Inject
+	protected ThreadFactory workerThreadFactory;
 
-	@Resource(lookup = "java:jboss/ee/concurrency/factory/default")
-	protected ManagedThreadFactory workerThreadFactory;
+	@Inject
+	protected ExecutorService executor;
 
 	@Inject
 	@ConfigProperty(name = "rest.blobstore")
@@ -906,7 +908,7 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
 						}
 					};
 
-					ioTaskExecutor.execute(waitTask);
+					executor.execute(waitTask);
 
 					// Construct the tunnel
 					final GuacTunnel tunnel = GuacTunnel.construct(tunnelConfig);

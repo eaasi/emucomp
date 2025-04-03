@@ -19,6 +19,7 @@
 
 package de.bwl.bwfla.emucomp.common.services.net;
 
+import com.mongodb.internal.thread.DaemonThreadFactory;
 import de.bwl.bwfla.emucomp.common.utils.ByteRange;
 import de.bwl.bwfla.emucomp.common.utils.FileRangeIterator;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -39,10 +40,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -53,11 +51,8 @@ public abstract class HttpExportServlet extends HttpServlet
 	private static final Map<String, FileCacheEntry> exportedFileCache = new ConcurrentHashMap<String, FileCacheEntry>();
 	protected Logger log = Logger.getLogger(this.getClass().getName());
 
-	@Resource(lookup = "java:jboss/ee/concurrency/scheduler/default")
-	protected ScheduledExecutorService scheduler;
-
-	@Resource(lookup = "java:jboss/ee/concurrency/executor/io")
-	protected ExecutorService executor;
+	private final static ExecutorService executor = Executors.newFixedThreadPool(2);
+	private final static ScheduledExecutorService scheduledExecutor = Executors.newSingleThreadScheduledExecutor(new DaemonThreadFactory("http-export-servlet"));
 
 	@Inject
 	@ConfigProperty(name = "http_export_servlet.file_cache.gc_interval")
@@ -173,7 +168,7 @@ public abstract class HttpExportServlet extends HttpServlet
 	{
 		final long delay = fileCacheGcInterval.toMillis();
 		final Runnable trigger = () -> executor.execute(task);
-		scheduler.schedule(trigger, delay, TimeUnit.MILLISECONDS);
+		scheduledExecutor.schedule(trigger, delay, TimeUnit.MILLISECONDS);
 	}
 
 	@PostConstruct
