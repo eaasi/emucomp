@@ -19,6 +19,8 @@
 
 package de.bwl.bwfla.emucomp.common.logging;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.SessionScoped;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 

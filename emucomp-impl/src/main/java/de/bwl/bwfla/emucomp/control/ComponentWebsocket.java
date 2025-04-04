@@ -67,7 +67,7 @@ public class ComponentWebsocket {
             break;
         case "keepalive":
             try {
-                nodeManager.keepalive(componentId);
+                nodeManager.keepalive();
             } catch (BWFLAException e) {
                 // TODO Auto-generated catch block
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, e.getMessage(), e);

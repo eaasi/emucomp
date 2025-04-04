@@ -2,6 +2,7 @@ package de.bwl.bwfla.emucomp;
 
 import io.smallrye.common.annotation.Identifier;
 import io.smallrye.context.api.ManagedExecutorConfig;
+import org.eclipse.microprofile.context.ManagedExecutor;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;

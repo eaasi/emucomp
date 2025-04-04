@@ -29,10 +29,12 @@ import de.bwl.bwfla.emucomp.components.emulators.EmulatorBean;
 import de.bwl.bwfla.emucomp.components.network.NetworkSwitchBean;
 import de.bwl.bwfla.emucomp.components.network.NodeTcpBean;
 import de.bwl.bwfla.emucomp.components.network.VdeSlirpBean;
+import io.smallrye.context.api.ManagedExecutorConfig;
 import lombok.Getter;
 import org.eclipse.microprofile.config.ConfigProvider;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
+import javax.enterprise.concurrent.ManagedThreadFactory;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.xml.bind.JAXBException;
@@ -48,8 +50,8 @@ import java.util.logging.Level;
 
 @ApplicationScoped
 public class NodeManager {
-    @Inject
-    protected PrefixLogger log;
+
+    protected PrefixLogger log = new PrefixLogger(this.getClass().getName());
 
     @Getter
     @Inject

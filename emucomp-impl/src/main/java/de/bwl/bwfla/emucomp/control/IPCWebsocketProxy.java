@@ -10,6 +10,7 @@ import javax.websocket.*;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.file.Path;
+import java.util.concurrent.ThreadFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -115,7 +116,7 @@ public abstract class IPCWebsocketProxy {
         private final Session session;
         private boolean running;
 
-        public OutputStreamer(Session session, ManagedThreadFactory wfactory)
+        public OutputStreamer(Session session, ThreadFactory wfactory)
         {
             this.worker = wfactory.newThread(this);
             this.session = session;

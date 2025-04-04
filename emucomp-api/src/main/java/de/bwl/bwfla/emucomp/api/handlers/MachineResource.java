@@ -20,7 +20,6 @@
 package de.bwl.bwfla.emucomp.api.handlers;
 
 
-
 import de.bwl.bwfla.emucomp.NodeManager;
 import de.bwl.bwfla.emucomp.api.EmulatorComponent;
 import de.bwl.bwfla.emucomp.api.security.SessionManagerResolver;
@@ -30,6 +29,7 @@ import de.bwl.bwfla.emucomp.common.datatypes.ProcessMonitorVID;
 import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
 
 import javax.activation.DataHandler;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.ws.rs.*;
@@ -39,6 +39,7 @@ import javax.ws.rs.core.UriInfo;
 import java.util.List;
 import java.util.Set;
 
+@ApplicationScoped
 @Path("/ComponentService/Machine")
 public class MachineResource {
     @Inject

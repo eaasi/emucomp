@@ -25,6 +25,7 @@ import de.bwl.bwfla.emucomp.api.security.SessionManagerResolver;
 import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
 import de.bwl.bwfla.emucomp.components.AbstractEaasComponent;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.ws.rs.*;
@@ -36,6 +37,7 @@ import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@ApplicationScoped
 @Path("/ComponentService/Component")
 public class ComponentResource {
     @Inject

@@ -27,9 +27,6 @@ components:
 
     runc: runc
     vdeplug: /usr/bin/vde_plug
-    vdesocks: lklsocks
-  socks.ports: 1080-1090
-  socks.listenaddress: 0.0.0.0
   xpra:
     ports: 7000-7100
     enable_gpu: false
@@ -56,7 +53,6 @@ components:
 
 emucomp:
   blobstore_soap: http://eaas:8080
-  blobstore_rest: http://eaas:8080/blobstore/api/v1/blobs
   inactivitytimeout:  0
   enable_pulseaudio: false
   enable_screenshooter: false
@@ -65,6 +61,6 @@ emucomp:
   curl_proxy: /usr/local/lib/LD_PRELOAD_libcurl.so
   rompath: /eaas/roms
   alsa_card: PCH
-  image_proxy: nginx:81
 
-ws.imagearchive: http://eaas:8080
+rest:
+  imagearchive: "http://eaas:8080/image-archive"
