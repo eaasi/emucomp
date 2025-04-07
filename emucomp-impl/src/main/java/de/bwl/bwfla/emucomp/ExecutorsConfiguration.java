@@ -6,6 +6,7 @@ import io.smallrye.context.api.ManagedExecutorConfig;
 import org.eclipse.microprofile.context.ManagedExecutor;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
 import javax.inject.Named;
 import java.util.concurrent.ExecutorService;
@@ -30,6 +31,7 @@ public class ExecutorsConfiguration {
 
     @Produces
     @Named("managed-executor")
+    @Default
     ExecutorService produceExecutor() {
         return Executors.newFixedThreadPool(10);
     }

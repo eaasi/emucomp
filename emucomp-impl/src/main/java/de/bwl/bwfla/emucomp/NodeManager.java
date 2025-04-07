@@ -40,20 +40,16 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
-import java.util.Arrays;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 
 @Startup
@@ -112,22 +108,22 @@ public class NodeManager {
                     configurationLoadedOnInit.getAndSet(true);
 
                     currentComponent = createComponentInstance();
-                } catch (RuntimeException | BWFLAException error) {
-                    this.releaseComponent();
-                    if (error instanceof BWFLAException)
-                        throw (BWFLAException) error;
-                    else if (error.getCause() instanceof BWFLAException)
-                        throw (BWFLAException) error.getCause();
-                    else {
-                        log.log(Level.WARNING, "Allocating component failed!", error);
-                        throw new BWFLAException("Allocating component failed!", error);
-                    }
-                }catch (JsonProcessingException e) {
-                    log.severe("Error parsing configuration: " + componentDefaultConfigInitUri);
                 }
                 log.info("Initializing NodeManager with ");
             }
 
+        } catch (RuntimeException | BWFLAException error) {
+            this.releaseComponent();
+            if (error instanceof BWFLAException)
+                throw (BWFLAException) error;
+            else if (error.getCause() instanceof BWFLAException)
+                throw (BWFLAException) error.getCause();
+            else {
+                log.log(Level.WARNING, "Allocating component failed!", error);
+                throw new BWFLAException("Allocating component failed!", error);
+            }
+        } catch (JsonProcessingException e) {
+            log.severe("Error parsing configuration: " + componentDefaultConfigInitUri);
         } catch (Exception e) {
             log.log(Level.SEVERE, "Error while initializing component", e);
             throw new BWFLAException("Cannot initialize component based on default configuration");

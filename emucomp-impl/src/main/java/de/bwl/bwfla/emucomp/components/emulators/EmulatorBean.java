@@ -64,6 +64,7 @@ import javax.annotation.Resource;
 import javax.enterprise.concurrent.ManagedThreadFactory;
 import javax.enterprise.inject.spi.CDI;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.xml.bind.JAXBException;
 import java.io.File;
 import java.io.IOException;
@@ -123,6 +124,7 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
 	protected ThreadFactory workerThreadFactory;
 
 	@Inject
+	@Named("managed-executor")
 	protected ExecutorService executor;
 
 	@Inject
