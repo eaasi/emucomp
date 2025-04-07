@@ -42,7 +42,7 @@ public class XpraWebsocketProxy extends IPCWebsocketProxy
 	private XpraConnector connector;
 
 	@Inject
-	private NodeManager nodeManager = null;
+	protected NodeManager nodeManager;
 
 	@OnOpen
 	public void open(Session session, EndpointConfig config, @PathParam("componentId") String componentId)

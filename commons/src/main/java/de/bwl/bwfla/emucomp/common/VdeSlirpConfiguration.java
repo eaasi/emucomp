@@ -1,11 +1,12 @@
 package de.bwl.bwfla.emucomp.common;
 
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import de.bwl.bwfla.emucomp.common.utils.NetworkUtils;
 
 import javax.xml.bind.annotation.*;
 
-
+@JsonTypeName("vdeSlirp")
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(namespace = "http://bwfla.bwl.de/common/datatypes")
 @XmlRootElement(name="vdeslirp", namespace = "http://bwfla.bwl.de/common/datatypes")

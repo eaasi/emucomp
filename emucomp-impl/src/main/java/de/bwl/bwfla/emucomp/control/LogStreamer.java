@@ -18,7 +18,7 @@ import javax.ws.rs.core.StreamingOutput;
 public class LogStreamer {
 
     @Inject
-	private NodeManager nodemgr = null;
+	protected NodeManager nodemgr;
 
     @GET
 	@Path("/{componentId}/stdout")

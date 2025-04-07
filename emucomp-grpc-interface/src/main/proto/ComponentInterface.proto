@@ -10,7 +10,6 @@ package emucomp;
 
 
 service ComponentService {
-  rpc InitializeComponent (ComponentRequest) returns (GenericResponse) {}
   rpc DestroyComponent (EmptyRequest) returns (GenericResponse) {}
   rpc KeepAliveComponent (EmptyRequest) returns (GenericResponse) {}
   rpc State (EmptyRequest) returns (GenericResponse) {}

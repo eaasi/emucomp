@@ -2,8 +2,11 @@ package de.bwl.bwfla.emucomp.common;
 
 
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
 import javax.xml.bind.annotation.*;
 
+@JsonTypeName("nodetcp")
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(namespace = "http://bwfla.bwl.de/common/datatypes")
 @XmlRootElement(name = "nodetcp", namespace = "http://bwfla.bwl.de/common/datatypes")

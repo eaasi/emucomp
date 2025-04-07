@@ -2,3 +2,7 @@ quarkus:
   thread-pool:
     max-threads: 100
     queue-size: 1000
+
+configuration:
+  component:
+    uri: /config/test-machine.json

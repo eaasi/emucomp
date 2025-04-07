@@ -1,0 +1,103 @@
+{
+  "type": "emulationEnvironment",
+  "arch" : "x86_64",
+  "emulator" : {
+    "bean" : "Qemu",
+    "containerName" : "qemu-system"
+  },
+  "ui_options" : {
+    "html5" : {
+      "pointer_lock" : false
+    },
+    "input" : {
+      "clientKbdLayout" : "us",
+      "required" : false
+    },
+    "audio_system" : "webRTC",
+    "disableGhostCursor" : false
+  },
+  "operatingSystemId" : "os:linux:ubuntu",
+  "drive" : [ {
+    "unit" : "0",
+    "type" : "floppy",
+    "filesystem" : "fat12",
+    "boot" : false,
+    "plugged" : false
+  }, {
+    "unit" : "1",
+    "type" : "floppy",
+    "filesystem" : "fat12",
+    "boot" : false,
+    "plugged" : false
+  }, {
+    "data" : "binding://<DISK-IMAGE-ID>",
+    "iface" : "ide",
+    "bus" : "0",
+    "unit" : "0",
+    "type" : "disk",
+    "boot" : true,
+    "plugged" : false
+  }, {
+    "data" : "binding://<OBJECT-ID>/<OBJECT-FILE-ID>",
+    "iface" : "ide",
+    "bus" : "0",
+    "unit" : "1",
+    "type" : "cdrom",
+    "filesystem" : "ISO",
+    "boot" : false,
+    "plugged" : false
+  }, {
+    "iface" : "ide",
+    "bus" : "1",
+    "unit" : "0",
+    "type" : "disk",
+    "boot" : false,
+    "plugged" : false
+  }, {
+    "iface" : "ide",
+    "bus" : "1",
+    "unit" : "1",
+    "type" : "cdrom",
+    "filesystem" : "ISO",
+    "boot" : false,
+    "plugged" : false
+  } ],
+  "nic" : [ {
+    "hwaddress" : "c6:7c:66:b0:21:d5"
+  } ],
+  "abstractDataResource" : [ {
+    "imageArchiveBinding" : {
+      "imageId" : "<EMULATOR-IMAGE-ID>",
+      "type" : "user",
+      "backendName" : "default",
+      "filesize" : -1,
+      "id" : "emucon-rootfs"
+    }
+  }, {
+    "imageArchiveBinding" : {
+      "imageId" : "<DISK-IMAGE-ID>",
+      "type" : "user",
+      "backendName" : "default",
+      "filesize" : -1,
+      "id" : "<DISK-IMAGE-ID>"
+    }
+  },{
+    "objectArchiveBinding" : {
+      "objectId" : "<OBJECT-ID>",
+      "archive" : "default",
+      "id" : "<OBJECT-ID>"
+    }
+  } ],
+  "nativeConfig" : {
+    "value" : "-vga cirrus -smp 1 -net nic,model=rtl8139 -soundhw ac97 -m 1024 -usb -usbdevice tablet"
+  },
+  "isLinuxRuntime" : false,
+  "description" : {
+    "title" : "test environment"
+  },
+  "configurationType" : "MachineConfigurationTemplate",
+  "metaDataVersion" : "1",
+  "deleted" : false,
+  "id" : "test-machine",
+  "timestamp" : "2023-09-05T17:46:29.483217Z"
+}

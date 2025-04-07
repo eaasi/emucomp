@@ -23,20 +23,6 @@ public class ComponentRPCService extends ComponentServiceGrpc.ComponentServiceIm
     SessionManagerResolver sessionManagerResolver;
 
     @Override
-    public void initializeComponent(ComponentRequest request, StreamObserver<GenericResponse> responseObserver) {
-        sessionManagerResolver.getSessionManager();
-        try {
-            String s = nodeManager.allocateComponent(request.getComponentId(), request.getComponentConfiguration());
-            responseObserver.onNext(GenericResponse.newBuilder()
-                    .setMessage(s)
-                    .build());
-            responseObserver.onCompleted();
-        } catch (BWFLAException e) {
-            responseObserver.onError(e);
-        }
-    }
-
-    @Override
     public void destroyComponent(EmptyRequest request, StreamObserver<GenericResponse> responseObserver) {
         nodeManager.releaseComponent();
         responseObserver.onNext(GenericResponse.newBuilder().setMessage("Component destroyed").build());

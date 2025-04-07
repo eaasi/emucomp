@@ -39,7 +39,7 @@ public class EventManager {
     private final Logger log = Logger.getLogger(EventManager.class.getName());
 
     @Inject
-    private NodeManager nodemgr;
+    protected NodeManager nodemgr;
 
     @GET
     @Path("/{componentId}/events")

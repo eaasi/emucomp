@@ -19,6 +19,7 @@
 
 package de.bwl.bwfla.emucomp.common;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import de.bwl.bwfla.emucomp.common.utils.jaxb.JaxbType;
 
 import javax.xml.bind.JAXBException;
@@ -29,6 +30,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
+@JsonTypeName("emulationEnvironment")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "emulationEnvironment", namespace = "http://bwfla.bwl.de/common/datatypes", propOrder = {
         "arch",
@@ -45,10 +47,9 @@ import java.util.logging.Logger;
         "outputBindingId",
         "isLinuxRuntime"
 })
-@XmlRootElement(name="emulationEnvironment", namespace = "http://bwfla.bwl.de/common/datatypes")
+@XmlRootElement(name = "emulationEnvironment", namespace = "http://bwfla.bwl.de/common/datatypes")
 public class MachineConfiguration
-    extends Environment
-{
+        extends Environment {
 
     @XmlElement(namespace = "http://bwfla.bwl.de/common/datatypes", required = false)
     protected String arch;
@@ -68,8 +69,8 @@ public class MachineConfiguration
     protected boolean isLinuxRuntime;
 
     @XmlElementRefs({
-  	   @XmlElementRef(name="binding", type= Binding.class, namespace = "http://bwfla.bwl.de/common/datatypes"),
-  	 @XmlElementRef(name="objectArchiveBinding", type=ObjectArchiveBinding.class, namespace = "http://bwfla.bwl.de/common/datatypes")})
+            @XmlElementRef(name = "binding", type = Binding.class, namespace = "http://bwfla.bwl.de/common/datatypes"),
+            @XmlElementRef(name = "objectArchiveBinding", type = ObjectArchiveBinding.class, namespace = "http://bwfla.bwl.de/common/datatypes")})
     protected List<AbstractDataResource> abstractDataResource;
 
     @XmlElement(namespace = "http://bwfla.bwl.de/common/datatypes")
@@ -81,13 +82,14 @@ public class MachineConfiguration
     @XmlElement(namespace = "http://bwfla.bwl.de/common/datatypes", required = false)
     protected String operatingSystemId;
 
-    /** ID of the checkpoint binding */
+    /**
+     * ID of the checkpoint binding
+     */
     @XmlElement(namespace = "http://bwfla.bwl.de/common/datatypes", required = false)
     protected String checkpointBindingId;
 
     // must only be used for serialization
-    protected MachineConfiguration(MachineConfigurationTemplate template)
-    {
+    protected MachineConfiguration(MachineConfigurationTemplate template) {
         arch = template.arch;
         emulator = template.emulator;
         model = template.model;
@@ -103,17 +105,18 @@ public class MachineConfiguration
         metaDataVersion = template.metaDataVersion;
     }
 
-    public MachineConfiguration() {}
+    public MachineConfiguration() {
+    }
 
     public String getOperatingSystemId() {
-		return operatingSystemId;
-	}
+        return operatingSystemId;
+    }
 
-	public void setOperatingSystemId(String operatingSystemId) {
-		this.operatingSystemId = operatingSystemId;
-	}
+    public void setOperatingSystemId(String operatingSystemId) {
+        this.operatingSystemId = operatingSystemId;
+    }
 
-	@XmlElement(namespace = "http://bwfla.bwl.de/common/datatypes", name = "installedSoftwareId")
+    @XmlElement(namespace = "http://bwfla.bwl.de/common/datatypes", name = "installedSoftwareId")
     protected List<String> installedSoftwareIds = new ArrayList<String>();
 
     public String getArch() {
@@ -131,7 +134,7 @@ public class MachineConfiguration
     public void setModel(String value) {
         this.model = value;
     }
-    
+
     public EmulatorSpec getEmulator() {
         return emulator;
     }
@@ -154,9 +157,9 @@ public class MachineConfiguration
         }
         return this.drive;
     }
-    
+
     public void setDrive(List<Drive> drives) {
-    	this.drive = drives;
+        this.drive = drives;
     }
 
     public List<Nic> getNic() {
@@ -165,19 +168,17 @@ public class MachineConfiguration
         }
         return this.nic;
     }
-    
-    public void setAbstractDataResource(List<AbstractDataResource> abstractDataResource)
-    {
-    	this.abstractDataResource = abstractDataResource;
+
+    public void setAbstractDataResource(List<AbstractDataResource> abstractDataResource) {
+        this.abstractDataResource = abstractDataResource;
     }
 
     public List<AbstractDataResource> getAbstractDataResource() {
         if (abstractDataResource == null) {
-        	abstractDataResource = new ArrayList<AbstractDataResource>();
+            abstractDataResource = new ArrayList<AbstractDataResource>();
         }
         return this.abstractDataResource;
     }
-
 
 
     public NativeConfig getNativeConfig() {
@@ -189,12 +190,12 @@ public class MachineConfiguration
     }
 
     public List<String> getInstalledSoftwareIds() {
-		return installedSoftwareIds;
-	}
-    
-	public void setInstalledSoftwareIds(List<String> ids) {
-		this.installedSoftwareIds = ids;
-	}
+        return installedSoftwareIds;
+    }
+
+    public void setInstalledSoftwareIds(List<String> ids) {
+        this.installedSoftwareIds = ids;
+    }
 
     public boolean hasCheckpointBindingId() {
         return (checkpointBindingId != null && !checkpointBindingId.isEmpty());
@@ -234,7 +235,7 @@ public class MachineConfiguration
 
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "value"
+            "value"
     })
     public static class NativeConfig {
 
@@ -261,17 +262,16 @@ public class MachineConfiguration
 
     }
 
-    public static MachineConfiguration fromValue(String data) throws JAXBException
-    {
+    public static MachineConfiguration fromValue(String data) throws JAXBException {
         return JaxbType.fromValue(data, MachineConfiguration.class);
     }
 
-	public MachineConfiguration copy() {
-		try {
-			return MachineConfiguration.fromValue(this.value());
-		} catch (JAXBException e) {
+    public MachineConfiguration copy() {
+        try {
+            return MachineConfiguration.fromValue(this.value());
+        } catch (JAXBException e) {
             Logger.getLogger(MachineConfiguration.class.getName()).log(Level.WARNING, e.getMessage(), e);
-			return null;
-		}
-	}
+            return null;
+        }
+    }
 }

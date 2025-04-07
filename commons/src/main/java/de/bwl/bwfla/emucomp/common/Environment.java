@@ -19,6 +19,7 @@
 
 package de.bwl.bwfla.emucomp.common;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import de.bwl.bwfla.emucomp.common.datatypes.EnvironmentDescription;
 import de.bwl.bwfla.emucomp.common.utils.jaxb.JaxbType;
 
@@ -28,7 +29,7 @@ import java.time.Instant;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
+@JsonTypeName("environment")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "environment", namespace = "http://bwfla.bwl.de/common/datatypes", propOrder = {
 	Environment.Fields.IDENTIFIER,
@@ -42,8 +43,6 @@ import java.util.logging.Logger;
 @XmlSeeAlso({
     MachineConfiguration.class,
 	MachineConfigurationTemplate.class,
-    DockerContainerConfiguration.class,
-    OciContainerConfiguration.class,
 //    NetworkEnvironment.class
 })
 public class Environment extends ComponentConfiguration {

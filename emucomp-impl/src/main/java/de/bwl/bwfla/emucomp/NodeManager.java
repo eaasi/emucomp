@@ -20,6 +20,8 @@
 package de.bwl.bwfla.emucomp;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bwl.bwfla.emucomp.common.*;
 import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
 import de.bwl.bwfla.emucomp.common.logging.PrefixLogger;
@@ -29,17 +31,23 @@ import de.bwl.bwfla.emucomp.components.emulators.EmulatorBean;
 import de.bwl.bwfla.emucomp.components.network.NetworkSwitchBean;
 import de.bwl.bwfla.emucomp.components.network.NodeTcpBean;
 import de.bwl.bwfla.emucomp.components.network.VdeSlirpBean;
-import io.smallrye.context.api.ManagedExecutorConfig;
+import io.quarkus.runtime.Startup;
 import lombok.Getter;
 import org.eclipse.microprofile.config.ConfigProvider;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-import javax.enterprise.concurrent.ManagedThreadFactory;
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.xml.bind.JAXBException;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
@@ -48,6 +56,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 
+@Startup
 @ApplicationScoped
 public class NodeManager {
 
@@ -58,17 +67,17 @@ public class NodeManager {
     protected ThreadFactory workerThreadFactory;
 
     @Inject
+    @Named("scheduled-executor")
     protected ScheduledExecutorService scheduler;
 
     @Inject
+    @Named("managed-executor")
     protected ExecutorService executor;
 
     @Getter
     protected AbstractEaasComponent currentComponent;
 
-    private final AtomicReference<String> currentComponentId = new AtomicReference<>();
-
-    private final ThreadLocal<ComponentConfiguration> usedComponentConfiguration = ThreadLocal.withInitial(() -> null);
+    private final ThreadLocal<ComponentConfiguration> loadedComponentConfiguration = ThreadLocal.withInitial(() -> null);
 
     @Inject
     @ConfigProperty(name = "components.warmup_timeout")
@@ -80,58 +89,52 @@ public class NodeManager {
 
     private final AtomicBoolean isGcTriggered = new AtomicBoolean(false);
 
+    private final AtomicBoolean configurationLoadedOnInit = new AtomicBoolean(false);
 
-    // TODO: does it make sense to do something for @PreDestroy?
+    @Inject
+    @ConfigProperty(name = "configuration.component.uri")
+    protected String componentDefaultConfigInitUri;
 
+    @Inject
+    ObjectMapper objectMapper;
 
-    /**
-     * Creates and registers a component with the given {@componentId} and
-     * configuration.
-     * <p>
-     * After this method is called, the instance is allocated, under proper
-     * resource management and fully initialized.
-     *
-     * @param componentId
-     * @param config      a serialized instance of a {@link ComponentConfiguration}
-     * @return the given {@code componentId}
-     * @throws BWFLAException if {@code config} could not be unmarshalled or a
-     *                        runtime error occurred while registering the component to the
-     *                        local component map or an exception from
-     *                        {@link createComponentInstance}
-     * @see #createComponentInstance(ComponentConfiguration, String)
-     */
-    public String allocateComponent(String componentId, String config) throws BWFLAException {
+    @PostConstruct
+    public void init() throws BWFLAException {
         try {
-            final ComponentConfiguration configuration =
-                    ComponentConfiguration.fromValue(config, ComponentConfiguration.class);
+            if (componentDefaultConfigInitUri != null && !componentDefaultConfigInitUri.isEmpty()) {
+                try (InputStream is = getClass().getClassLoader().getResourceAsStream(componentDefaultConfigInitUri)) {
+                    if (is == null) {
+                        throw new FileNotFoundException("Resource not found: " + componentDefaultConfigInitUri);
+                    }
+                    String data = new String(is.readAllBytes(), StandardCharsets.UTF_8);
 
-            // create a new bean iff the given id does not already exist
-            if (usedComponentConfiguration.get() != null && Objects.deepEquals(usedComponentConfiguration, configuration)) {
-                throw new BWFLAException("Already allocated component: " + componentId);
-            } else {
-                usedComponentConfiguration.set(configuration);
-                currentComponentId.getAndSet(componentId);
+                    loadedComponentConfiguration.set(objectMapper.readValue(data, ComponentConfiguration.class));
+                    configurationLoadedOnInit.getAndSet(true);
 
-                currentComponent = createComponentInstance(configuration, componentId);
+                    currentComponent = createComponentInstance();
+                } catch (RuntimeException | BWFLAException error) {
+                    this.releaseComponent();
+                    if (error instanceof BWFLAException)
+                        throw (BWFLAException) error;
+                    else if (error.getCause() instanceof BWFLAException)
+                        throw (BWFLAException) error.getCause();
+                    else {
+                        log.log(Level.WARNING, "Allocating component failed!", error);
+                        throw new BWFLAException("Allocating component failed!", error);
+                    }
+                }catch (JsonProcessingException e) {
+                    log.severe("Error parsing configuration: " + componentDefaultConfigInitUri);
+                }
+                log.info("Initializing NodeManager with ");
             }
 
-            currentComponent.initialize(configuration);
-
-            return componentId;
-        } catch (JAXBException error) {
-            throw new BWFLAException("Unmarshalling configuration metadata failed!", error);
-        } catch (RuntimeException | BWFLAException error) {
-            this.releaseComponent();
-            if (error instanceof BWFLAException)
-                throw (BWFLAException) error;
-            else if (error.getCause() instanceof BWFLAException)
-                throw (BWFLAException) error.getCause();
-            else {
-                log.log(Level.WARNING, "Allocating component failed!", error);
-                throw new BWFLAException("Allocating component failed!", error);
-            }
+        } catch (Exception e) {
+            log.log(Level.SEVERE, "Error while initializing component", e);
+            throw new BWFLAException("Cannot initialize component based on default configuration");
         }
     }
+
+    // TODO: does it make sense to do something for @PreDestroy?
 
 
     /**
@@ -193,9 +196,11 @@ public class NodeManager {
      *                        classloader or the configuration does not correspond to any
      *                        known bean class.
      */
-    protected AbstractEaasComponent createComponentInstance(ComponentConfiguration configuration, String componentId) throws BWFLAException {
+    protected AbstractEaasComponent createComponentInstance() throws BWFLAException {
         try {
             AbstractEaasComponent component;
+            String componentId = UUID.randomUUID().toString();
+            ComponentConfiguration configuration = loadedComponentConfiguration.get();
 
             if (configuration instanceof MachineConfiguration) {
                 component = EmulatorBean.createEmulatorBean((MachineConfiguration) configuration);
