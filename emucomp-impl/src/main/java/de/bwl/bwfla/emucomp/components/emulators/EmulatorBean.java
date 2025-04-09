@@ -21,8 +21,7 @@ package de.bwl.bwfla.emucomp.components.emulators;
 
 
 import com.openslx.eaas.common.util.RuncStateInformation;
-import de.bwl.bwfla.emucomp.*;
-import de.bwl.bwfla.emucomp.api.EmulatorComponent;
+import de.bwl.bwfla.emucomp.components.api.EmulatorComponent;
 import de.bwl.bwfla.emucomp.common.*;
 import de.bwl.bwfla.emucomp.common.EmulatorUtils.XmountOutputFormat;
 import de.bwl.bwfla.emucomp.common.datatypes.EmuCompState;
@@ -60,8 +59,6 @@ import org.glyptodon.guacamole.protocol.GuacamoleConfiguration;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
-import javax.annotation.Resource;
-import javax.enterprise.concurrent.ManagedThreadFactory;
 import javax.enterprise.inject.spi.CDI;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -75,7 +72,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -117,10 +113,6 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
 	private boolean isPulseAudioEnabled = false;
 
 	@Inject
-	@ConfigProperty(name = "emucomp.blobstore_soap")
-	private String blobStoreAddressSoap = null;
-
-	@Inject
 	protected ThreadFactory workerThreadFactory;
 
 	@Inject
@@ -129,7 +121,7 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
 
 	@Inject
 	@ConfigProperty(name = "rest.blobstore")
-	private String blobStoreRestAddress;
+	protected String blobStoreRestAddress;
 
 	private final String containerOutput = "container-output";
 
@@ -201,15 +193,15 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
 
 	@Inject
 	@ConfigProperty(name = "components.emulator_containers.enabled")
-	private boolean emuContainerModeEnabled = false;
+	protected boolean emuContainerModeEnabled = false;
 
 	@Inject
 	@ConfigProperty(name = "components.emulator_containers.uid")
-	private String emuContainerUserId = null;
+	protected String emuContainerUserId = null;
 
 	@Inject
 	@ConfigProperty(name = "components.emulator_containers.gid")
-	private String emuContainerGroupId = null;
+	protected String emuContainerGroupId = null;
 
 	/** Files to include into a container-checkpoint */
 	protected List<String> emuContainerFilesToCheckpoint = new ArrayList<>();

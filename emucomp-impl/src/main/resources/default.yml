@@ -63,4 +63,55 @@ emucomp:
   alsa_card: PCH
 
 rest:
-  imagearchive: "http://eaas:8080/image-archive"
+  blobstore: http://eaas:8080/blobstore/api/v1/blobs
+  imagearchive: http://eaas:8080/image-archive
+
+emil:
+  cachedclassificationpath: /home/bwfla/classification-cache/
+  exportpath: /home/bwfla/export/
+  emilenvironmentspath: /home/bwfla/emil-environments/
+  inputpathtodelete: /tmp/toDelete/
+  dockerTmpBuildFiles: /tmp/docker-tmp-build-files/
+  classificationservice: http://eaas:8080/
+  imageproposerservice: http://eaas:8080
+  emilobjectenvironmentspaths: /home/bwfla/emil-object-environments/
+  usersessionretention: 10080
+  containerdata:
+    imagebuilder:
+      timeout: 30 mins
+      delay: 3 secs
+  imagesDatabase: images
+  emilDatabase: emil
+  classificationDatabase: classification
+  max_session_duration: 0 sec
+  autorun_scripts_dir: /home/bwfla/server-data/autorun-scripts
+  default_environments_path: /home/bwfla/server-data/default-environments.properties
+
+ws:
+  blobstore: http://eaas:8080/
+  imagebuilder: http://eaas:8080/
+  imagearchive: http://eaas:8080/
+  eaasgw:  http://eaas:8080/
+  embedgw: http://eaas:8080/
+  objectarchive: http://eaas:8080/
+  softwarearchive: http://eaas:8080/
+
+metadata_repositories:
+  - name: public-images
+    type: images
+    mode: R
+  - name: public-environments
+    type: environments
+    mode: R
+  - name: public-software
+    type: software
+    mode: R
+  - name: remote-images
+    type: images
+    mode: W
+  - name: remote-environments
+    type: environments
+    mode: W
+  - name: remote-software
+    type: software
+    mode: W

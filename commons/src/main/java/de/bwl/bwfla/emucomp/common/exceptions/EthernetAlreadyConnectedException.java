@@ -1,4 +1,4 @@
-package de.bwl.bwfla.emucomp.api;
+package de.bwl.bwfla.emucomp.common.exceptions;
 
 public class EthernetAlreadyConnectedException extends Exception{
 }

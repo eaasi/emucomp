@@ -1,7 +1,7 @@
 package de.bwl.bwfla.emucomp.api.handlers;
 
 import de.bwl.bwfla.emucomp.NodeManager;
-import de.bwl.bwfla.emucomp.api.NetworkSwitchComponent;
+import de.bwl.bwfla.emucomp.components.api.NetworkSwitchComponent;
 import de.bwl.bwfla.emucomp.api.security.SessionManagerResolver;
 import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
 

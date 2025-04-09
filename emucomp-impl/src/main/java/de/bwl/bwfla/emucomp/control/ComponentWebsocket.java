@@ -1,7 +1,7 @@
 package de.bwl.bwfla.emucomp.control;
 
 import de.bwl.bwfla.emucomp.NodeManager;
-import de.bwl.bwfla.emucomp.api.EmulatorComponent;
+import de.bwl.bwfla.emucomp.components.api.EmulatorComponent;
 import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
 
 import javax.inject.Inject;

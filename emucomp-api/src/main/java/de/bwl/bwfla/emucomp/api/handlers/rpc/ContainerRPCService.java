@@ -1,7 +1,7 @@
 package de.bwl.bwfla.emucomp.api.handlers.rpc;
 
 import de.bwl.bwfla.emucomp.NodeManager;
-import de.bwl.bwfla.emucomp.api.ContainerComponent;
+import de.bwl.bwfla.emucomp.components.api.ContainerComponent;
 import de.bwl.bwfla.emucomp.api.security.SessionManagerResolver;
 import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
 import de.bwl.bwfla.emucomp.grpc.ContainerServiceGrpc;

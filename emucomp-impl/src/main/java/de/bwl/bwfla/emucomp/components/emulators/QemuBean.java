@@ -7,11 +7,13 @@ import de.bwl.bwfla.emucomp.common.MachineConfiguration;
 import de.bwl.bwfla.emucomp.common.Nic;
 import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
 import de.bwl.bwfla.emucomp.common.utils.ProcessRunner;
+import io.quarkus.arc.Unremovable;
 import org.eclipse.microprofile.config.ConfigProvider;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -27,6 +29,7 @@ import java.util.Set;
  * @author iv1004
  */
 @ApplicationScoped
+@Unremovable
 public class QemuBean extends EmulatorBean {
 
     final boolean isGpuEnabled = ConfigProvider.getConfig().getValue("components.xpra.enable_gpu", Boolean.class);

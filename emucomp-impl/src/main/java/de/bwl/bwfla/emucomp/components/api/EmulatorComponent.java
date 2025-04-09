@@ -17,7 +17,7 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.bwl.bwfla.emucomp.api;
+package de.bwl.bwfla.emucomp.components.api;
 
 
 import de.bwl.bwfla.emucomp.common.BindingDataHandler;

@@ -19,7 +19,7 @@
 
 package de.bwl.bwfla.emucomp.control.connectors;
 
-import de.bwl.bwfla.emucomp.api.EthernetAlreadyConnectedException;
+import de.bwl.bwfla.emucomp.common.exceptions.EthernetAlreadyConnectedException;
 import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
 import de.bwl.bwfla.emucomp.common.utils.ProcessRunner;
 import de.bwl.bwfla.emucomp.components.emulators.EmulatorBean;

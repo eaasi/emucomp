@@ -3,7 +3,7 @@ package de.bwl.bwfla.emucomp.api.handlers.rpc;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bwl.bwfla.emucomp.NodeManager;
-import de.bwl.bwfla.emucomp.api.EmulatorComponent;
+import de.bwl.bwfla.emucomp.components.api.EmulatorComponent;
 import de.bwl.bwfla.emucomp.api.security.SessionManagerResolver;
 import de.bwl.bwfla.emucomp.common.datatypes.ProcessMonitorVID;
 import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
