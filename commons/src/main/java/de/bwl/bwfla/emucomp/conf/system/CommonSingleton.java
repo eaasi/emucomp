@@ -36,7 +36,6 @@ public class CommonSingleton {
 
     private static CommonSingleton instance;
 
-
     static RunnerConf runnerConf;
     static HelpersConf helpersConf;
     static CommonConf commonConf;

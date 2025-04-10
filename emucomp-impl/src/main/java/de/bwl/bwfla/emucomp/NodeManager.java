@@ -214,6 +214,8 @@ public class NodeManager {
             // Explicitly run Quarkus configuration injection
             ConfigHelpers.configure(component, ConfigProvider.getConfig());
 
+            component.initialize(configuration);
+
             component.setComponentId(componentId);
             component.setKeepaliveTimestamp(NodeManager.timestamp());
 
