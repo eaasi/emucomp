@@ -11,7 +11,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - EMIL_IMAGE_PATH=/data/emil
+      - EMIL_IMAGE_PATH=/data
       - EMIL_EMULATOR_REPO_PATH=${EMIL_IMAGE_PATH}/emulator-repository/images
       - EMIL_ENV_REPO_PATH=${EMIL_IMAGE_PATH}/environment-repository/images
       - EMIL_ROM_REPO_PATH=${EMIL_IMAGE_PATH}/environment-repository/roms
@@ -19,7 +19,7 @@ services:
       - EMIL_OBJECT_REPO_PATH=${EMIL_IMAGE_PATH}/object-repository/archives
       - EMIL_COMPONENT_REPO_PATH=${EMIL_IMAGE_PATH}/components
     volumes:
-      - ./data:/data
+      - /home/emu:/data
       - ./nginx-template.conf:/etc/nginx/nginx.conf
     networks:
       - emucomp
