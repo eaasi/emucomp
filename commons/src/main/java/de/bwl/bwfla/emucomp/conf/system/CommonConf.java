@@ -20,18 +20,18 @@
 package de.bwl.bwfla.emucomp.conf.system;
 
 
-import org.eclipse.microprofile.config.inject.ConfigProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.enterprise.context.ApplicationScoped;
-
-@ApplicationScoped
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CommonConf {
-    @ConfigProperty(name = "commonconf.keyfile")
     public String keyfile;
-    @ConfigProperty(name = "commonconf.authindex")
     public String authIndex;
-    @ConfigProperty(name = "commonconf.authhandle")
     public String authHandle;
-    @ConfigProperty(name = "commonconf.serverdatadir")
     public String serverdatadir;
 }

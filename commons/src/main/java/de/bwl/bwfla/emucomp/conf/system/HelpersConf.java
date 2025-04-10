@@ -20,24 +20,25 @@
 package de.bwl.bwfla.emucomp.conf.system;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.enterprise.context.ApplicationScoped;
 
-@ApplicationScoped
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class HelpersConf {
-    @ConfigProperty(name = "helpers.hddfat16create")
     public String hddFat16Create;
-    @ConfigProperty(name = "helpers.hddfat16io")
     public String hddFat16Io;
 
-    @ConfigProperty(name = "helpers.hddhfscreate")
     public String hddHfsCreate;
-    @ConfigProperty(name = "helpers.hddhfsio")
     public String hddHfsIo;
 
-    @ConfigProperty(name = "helpers.floppyfat12create")
     public String floppyFat12Create;
-    @ConfigProperty(name = "helpers.floppyfat12io")
     public String floppyFat12Io;
 }

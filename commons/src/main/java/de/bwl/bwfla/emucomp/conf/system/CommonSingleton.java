@@ -20,7 +20,9 @@
 package de.bwl.bwfla.emucomp.conf.system;
 
 
-import javax.inject.Inject;
+import org.eclipse.microprofile.config.Config;
+import org.eclipse.microprofile.config.ConfigProvider;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -34,14 +36,10 @@ public class CommonSingleton {
 
     private static CommonSingleton instance;
 
-    @Inject
-    RunnerConf runnerConf;
 
-    @Inject
-    HelpersConf helpersConf;
-
-    @Inject
-    CommonConf commonConf;
+    static RunnerConf runnerConf;
+    static HelpersConf helpersConf;
+    static CommonConf commonConf;
 
     static {
         File tempBaseDir = new File(System.getProperty("java.io.tmpdir"));
@@ -51,6 +49,34 @@ public class CommonSingleton {
         } else if (tempBaseDir.canWrite()) {
             System.setProperty("java.io.tmpdir", "/tmp");
         }
+
+        loadConf();
+    }
+
+    private static void loadConf() {
+        Config config = ConfigProvider.getConfig();
+        runnerConf = RunnerConf.builder()
+                .tmpBaseDir(config.getOptionalValue("runners.tmpbasedir", String.class).orElse(""))
+                .tmpdirPrefix(config.getOptionalValue("runners.tmpdirprefix", String.class).orElse(""))
+                .stderrFilename(config.getOptionalValue("runners.stderrfilename", String.class).orElse(""))
+                .stdoutFilename(config.getOptionalValue("runners.stdoutfilename", String.class).orElse(""))
+                .build();
+
+        helpersConf = HelpersConf.builder()
+                .floppyFat12Create(config.getOptionalValue("helpers.floppyfat12create", String.class).orElse(""))
+                .hddFat16Create(config.getOptionalValue("helpers.hddfat16create", String.class).orElse(""))
+                .hddFat16Io(config.getOptionalValue("helpers.hddfat16io", String.class).orElse(""))
+                .hddHfsCreate(config.getOptionalValue("helpers.hddfat16io", String.class).orElse(""))
+                .hddHfsIo(config.getOptionalValue("helpers.hddfat16io", String.class).orElse(""))
+                .floppyFat12Io(config.getOptionalValue("helpers.floppyfat12io", String.class).orElse(""))
+                .build();
+
+        commonConf = CommonConf.builder()
+                .authHandle(config.getOptionalValue("common.authhandle", String.class).orElse(""))
+                .authIndex(config.getOptionalValue("common.authindex", String.class).orElse(""))
+                .keyfile(config.getOptionalValue("common.keyfile", String.class).orElse(""))
+                .serverdatadir(config.getOptionalValue("common.serverdatadir", String.class).orElse(""))
+                .build();
     }
 
     public static CommonSingleton getInstance() {

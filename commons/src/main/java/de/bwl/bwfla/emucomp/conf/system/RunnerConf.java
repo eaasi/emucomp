@@ -20,18 +20,21 @@
 package de.bwl.bwfla.emucomp.conf.system;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.enterprise.context.ApplicationScoped;
 
-@ApplicationScoped
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class RunnerConf {
-    @ConfigProperty(name = "runners.tmpbasedir")
     public String tmpBaseDir;
-    @ConfigProperty(name = "runners.tmpdirprefix")
     public String tmpdirPrefix;
-    @ConfigProperty(name = "runners.stdoutfilename")
     public String stdoutFilename;
-    @ConfigProperty(name = "runners.stderrfilename")
     public String stderrFilename;
 }
