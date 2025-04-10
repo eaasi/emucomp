@@ -12,24 +12,19 @@ RUN mvn clean package -DskipTests
 
 FROM eclipse-temurin:11-jdk-jammy
 
-
-RUN apt-get update && apt-get install -y \
+RUN echo "locales locales/default_environment_locale string en_US.UTF-8" | debconf-set-selections \
+    && echo "keyboard-configuration keyboard-configuration/layoutcode string us" | debconf-set-selections \
+    && DEBIAN_FRONTEND=noninteractive && apt-get update && apt-get install -y  \
     xpra \
     socat \
     vde2 \
     qemu \
-    qemu-system-x86 \
-    qemu-utils \
-    primus \
+    qemu-system \
     ntfs-3g \
     dosbox \
     fs-uae \
-    mono-complete \
     sudo \
-    gawk \
-    coreutils \
     util-linux \
-    dosfstools \
     && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /linapple-pie /minivmac /usr/local/bin
