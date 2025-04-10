@@ -2,6 +2,7 @@ package de.bwl.bwfla.emucomp.api.handlers;
 
 import de.bwl.bwfla.emucomp.api.security.SessionManagerResolver;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.POST;
@@ -9,6 +10,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
+@ApplicationScoped
 @Path("/session")
 public class SessionResource {
 

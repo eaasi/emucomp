@@ -1,9 +1,28 @@
-#quarkus:
-#  application:
-#    name: emucomp-impl
-#  config:
-#    locations:
-#      - classpath:/default.yml
-#      - classpath:/blob-default.yml
-#      - classpath:/connection.yml
-#      - classpath:/threads.yml
+quarkus:
+  thread-pool:
+    max-threads: 100
+    queue-size: 1000
+
+configuration:
+  component:
+    uri: /config/test-machine.json
+
+emulators:
+  qemu: /usr/bin/qemu-system-
+  basilisk: /usr/bin/BasiliskII.real
+  sheepshaver: /usr/bin/SheepShaver
+  dosbox: /usr/bin/dosbox
+  vbox:
+    headless-exec: /usr/bin/VBoxSDL
+    manage-exec: /usr/bin/VBoxManage
+  hatari: /usr/bin/hatari
+  vde-switch: /usr/bin/vde_switch
+  vice:
+    c64: /usr/bin/x64
+    c128: /usr/bin/x128
+  pce:
+    atarist: /usr/bin/pce-atarist
+    ibmpc: /usr/bin/pce-ibmpc
+    macplus: /usr/bin/pce-macplus
+  kegs: /usr/bin/kegs
+  beebem: /usr/bin/beebem

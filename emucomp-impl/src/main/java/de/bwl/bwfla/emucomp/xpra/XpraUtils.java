@@ -1,7 +1,7 @@
 package de.bwl.bwfla.emucomp.xpra;
 
 
-import de.bwl.bwfla.emucomp.DeprecatedProcessRunner;
+import de.bwl.bwfla.emucomp.common.utils.ProcessRunner;
 import org.eclipse.microprofile.config.Config;
 import org.eclipse.microprofile.config.ConfigProvider;
 
@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 
 
 public class XpraUtils {
-    public static boolean startXpraSession(DeprecatedProcessRunner runner, String command, int port, Logger log)
+    public static boolean startXpraSession(ProcessRunner runner, String command, int port, Logger log)
             throws IOException {
         final Config config = ConfigProvider.getConfig();
         final boolean isGpuEnabled = config.getValue("components.xpra.enable_gpu", Boolean.class);
@@ -30,7 +30,7 @@ public class XpraUtils {
         return runner.start();
     }
 
-    public static boolean startXpraSession(DeprecatedProcessRunner runner, int port, Logger log) {
+    public static boolean startXpraSession(ProcessRunner runner, int port, Logger log) {
         runner.setCommand("xpra");
         runner.addArgument("start");
         runner.addArgument(":" + port);

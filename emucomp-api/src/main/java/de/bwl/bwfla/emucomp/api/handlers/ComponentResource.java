@@ -22,9 +22,11 @@ package de.bwl.bwfla.emucomp.api.handlers;
 import de.bwl.bwfla.emucomp.NodeManager;
 import de.bwl.bwfla.emucomp.api.dto.ComponentRequest;
 import de.bwl.bwfla.emucomp.api.security.SessionManagerResolver;
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
 import de.bwl.bwfla.emucomp.components.AbstractEaasComponent;
-import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
+import org.jboss.logging.annotations.Pos;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.ws.rs.*;
@@ -36,6 +38,7 @@ import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@ApplicationScoped
 @Path("/ComponentService/Component")
 public class ComponentResource {
     @Inject
@@ -49,15 +52,6 @@ public class ComponentResource {
 
     @Inject
     SessionManagerResolver sessionManagerResolver;
-
-    @POST
-    @Path("/initialize")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public String initialize(ComponentRequest componentRequest) throws BWFLAException {
-        sessionManagerResolver.getSessionManager();
-        return nodeManager.allocateComponent(componentRequest.getComponentId(), componentRequest.getConfig());
-    }
 
     @POST
     @Path("/destroy")

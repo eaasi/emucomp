@@ -1,7 +1,8 @@
 package de.bwl.bwfla.emucomp.control;
 
-import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
-import de.bwl.bwfla.emucomp.DeprecatedProcessRunner;
+
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.common.utils.ProcessRunner;
 import de.bwl.bwfla.emucomp.components.emulators.IpcSocket;
 
 import javax.enterprise.concurrent.ManagedThreadFactory;
@@ -20,7 +21,13 @@ public abstract class IPCWebsocketProxy {
     protected OutputStreamer streamer;
     protected String componentId;
 
+
     public static void wait(Path path) throws BWFLAException
+    {
+        wait(path, Path.of("/proc"));
+    }
+
+    public static void wait(Path path, Path procfsPath) throws BWFLAException
     {
         log.info("Waiting for socket to become ready...");
 
@@ -28,19 +35,16 @@ public abstract class IPCWebsocketProxy {
         final int waittime = 1000;  // in ms
         for (int numretries = timeout / waittime; numretries > 0; --numretries) {
 
-            DeprecatedProcessRunner runner = new DeprecatedProcessRunner();
+            ProcessRunner runner = new ProcessRunner();
             runner.setCommand("awk");
             runner.addArgument("BEGIN {e=1} $8==sock && $4==\"00010000\" {e=0; exit} END {exit e}");
             runner.addArgument("sock=" + path.toString());
-            runner.addArgument("/proc/net/unix");
-            runner.execute(false, false);
-            int code = runner.getReturnCode();
-            if (code == 0) {
+            runner.addArgument(procfsPath.resolve("net/unix").toString());
+            if (runner.execute(false)) {
                 log.info("socket seems to be ready now");
-                runner.cleanup();
                 return;
             }
-            runner.cleanup();
+
             try {
                 Thread.sleep(waittime);
             }
@@ -141,9 +145,25 @@ public abstract class IPCWebsocketProxy {
         {
             try {
                 final ByteBuffer buffer = ByteBuffer.allocate(4 * 1024);
-                while (running && iosock.receive(buffer, true)) {
+                final ByteBuffer ping = ByteBuffer.allocate(1);
+
+                long nextPingTimestamp = 0L;
+
+                while (running) {
                     if (!session.isOpen())
                         break;
+
+                    final var curtime = System.currentTimeMillis();
+                    if (curtime > nextPingTimestamp) {
+                        // not sure what the payload should be
+                        session.getBasicRemote()
+                                .sendPing(ping);
+
+                        nextPingTimestamp = curtime + (60L * 1000L);
+                    }
+
+                    if (!iosock.receive(buffer, 1000))
+                        continue;
 
                     session.getBasicRemote()
                             .sendBinary(buffer);
@@ -154,6 +174,9 @@ public abstract class IPCWebsocketProxy {
             }
             catch (Exception error) {
                 log.log(Level.WARNING, "Forwarding from io-socket to client failed!", error);
+                try {
+                    session.close(new CloseReason(CloseReason.CloseCodes.UNEXPECTED_CONDITION, error.getMessage()));
+                } catch (IOException ignore) { }
             }
         }
     }

@@ -1,10 +1,14 @@
 package de.bwl.bwfla.emucomp;
 
+import io.quarkus.arc.Unremovable;
 import io.smallrye.common.annotation.Identifier;
 import io.smallrye.context.api.ManagedExecutorConfig;
+import org.eclipse.microprofile.context.ManagedExecutor;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
+import javax.inject.Named;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -14,7 +18,9 @@ import java.util.concurrent.ThreadFactory;
 public class ExecutorsConfiguration {
 
     @Produces
-    ScheduledExecutorService executor() {
+    @Unremovable
+    @Named("scheduled-executor")
+    ScheduledExecutorService scheduledExecutor() {
         return Executors.newScheduledThreadPool(10);
     }
 
@@ -24,9 +30,9 @@ public class ExecutorsConfiguration {
     }
 
     @Produces
-    @Identifier("managed-executor")
-    @ManagedExecutorConfig(maxAsync = 5, maxQueued = 100)
+    @Named("managed-executor")
+    @Default
     ExecutorService produceExecutor() {
-        return java.util.concurrent.Executors.newFixedThreadPool(10);
+        return Executors.newFixedThreadPool(10);
     }
 }

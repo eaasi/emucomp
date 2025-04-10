@@ -1,19 +1,16 @@
 package de.bwl.bwfla.emucomp.api.handlers.rpc;
 
 import de.bwl.bwfla.emucomp.NodeManager;
-import de.bwl.bwfla.emucomp.api.ContainerComponent;
+import de.bwl.bwfla.emucomp.components.api.ContainerComponent;
 import de.bwl.bwfla.emucomp.api.security.SessionManagerResolver;
-import de.bwl.bwfla.emucomp.components.AbstractEaasComponent;
-import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
-import de.bwl.bwfla.emucomp.grpc.*;
-import io.grpc.ServerServiceDefinition;
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.grpc.ContainerServiceGrpc;
+import de.bwl.bwfla.emucomp.grpc.EmptyRequest;
+import de.bwl.bwfla.emucomp.grpc.EmptyResponse;
 import io.grpc.stub.StreamObserver;
 import io.quarkus.grpc.GrpcService;
 
 import javax.inject.Inject;
-import java.net.URI;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @GrpcService
 public class ContainerRPCService extends ContainerServiceGrpc.ContainerServiceImplBase {

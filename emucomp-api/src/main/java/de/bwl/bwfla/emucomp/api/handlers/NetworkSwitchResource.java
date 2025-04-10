@@ -1,10 +1,11 @@
 package de.bwl.bwfla.emucomp.api.handlers;
 
 import de.bwl.bwfla.emucomp.NodeManager;
-import de.bwl.bwfla.emucomp.api.NetworkSwitchComponent;
+import de.bwl.bwfla.emucomp.components.api.NetworkSwitchComponent;
 import de.bwl.bwfla.emucomp.api.security.SessionManagerResolver;
-import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.ws.rs.*;
@@ -15,6 +16,7 @@ import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+@ApplicationScoped
 @Path("/ComponentService/NetworkSwitch")
 public class NetworkSwitchResource {
 

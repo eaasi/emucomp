@@ -1,9 +1,9 @@
 package de.bwl.bwfla.emucomp.components.emulators;
 
-import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
-import de.bwl.bwfla.emucomp.Drive;
-import de.bwl.bwfla.emucomp.MachineConfiguration;
-import de.bwl.bwfla.emucomp.Nic;
+import de.bwl.bwfla.emucomp.common.Drive;
+import de.bwl.bwfla.emucomp.common.MachineConfiguration;
+import de.bwl.bwfla.emucomp.common.Nic;
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.inject.Inject;
@@ -23,7 +23,7 @@ import java.util.HashMap;
 public class SheepShaverBean extends EmulatorBean
 {
     @Inject
-	@ConfigProperty(name = "components.binary.sheepshaver")
+    @ConfigProperty(name = "components.binary.sheepshaver")
     private String sheepShaverBean;
 
 	@Override
@@ -112,17 +112,13 @@ public class SheepShaverBean extends EmulatorBean
 	}
 
     @Override
-    public int changeMedium(int containerId, String objReference)
-            throws BWFLAException {
-        throw new BWFLAException("Hotplug is not supported by this emulator");
+    public int changeMedium(int containerId, String objReference) throws BWFLAException {
+		throw this.newNotSupportedException();
     }
 
     @Override
-    public boolean connectDrive(Drive drive, boolean attach) {
-        // This method should never be called.
-        LOG.severe("Hotplug is not supported by this emulator");
-        LOG.info("The previous message cannot appear. Please verify that changeMedium is correctly overridden in BasiliskIIBean.");
-        return false;
+    public boolean connectDrive(Drive drive, boolean attach) throws BWFLAException {
+		throw this.newNotSupportedException();
 
         // This code WOULD implement hotswapping media IF BasiliskII would allow
         // it
@@ -184,39 +180,46 @@ public class SheepShaverBean extends EmulatorBean
 
 	@Override
 	protected boolean addNic(Nic nic) {
-		LOG.warning("Network connection is currently not implemented.");
-		return false;
+		emuRunner.addArguments("--switch", this.getNetworksDir().resolve("nic_" + nic.getHwaddress()).toString());
+		return true;
 	}
 
-	private HashMap prepareConfig(String config)
+	private HashMap<String, String> prepareConfig(String config)
 	{
 		HashMap<String,String> confValues = loadDefaults();
+		this.parseConfig(config, confValues);
 
-		if(config == null)
-			return confValues;
+		if (this.getEmuBeanMode() == EmulatorBeanMode.XPRA) {
+			String screenConf = confValues.get("screen");
+			if (screenConf != null)
+				screenConf = screenConf.replace("dga", "win");
+			confValues.put("screen", screenConf);
+		}
+
+		return confValues;
+	}
+
+	private void parseConfig(String config, HashMap<String, String> confValues)
+	{
+		if (config == null || config.isBlank())
+			return;
 
 		String[] tokens = config.trim().split("\n");
 		for (String token : tokens) {
 			String[] args = token.trim().split("\\s+");
-			if (args.length < 1 || args.length > 2) {
-				LOG.warning("check your native config file, some 'param-value' pairs are malformed");
+			if (args.length != 2) {
+				LOG.warning("Native config is malformed! Skipping '" + token + "'!");
 				continue;
 			}
 
+			if(args[0].equals("ether") && args[1].equals("slirp"))
+				args[1] = "vde";
+
 			confValues.put(args[0], args[1]);
-			EmulatorBeanMode mode = this.getEmuBeanMode();
-			if(mode == EmulatorBeanMode.XPRA)
-			{
-				String screenConf = confValues.get("screen");
-				if(screenConf != null)
-					screenConf = screenConf.replace("dga", "win");
-				confValues.put("screen", screenConf);
-			}
 		}
-		return confValues;
 	}
 
-	private HashMap loadDefaults()
+	private HashMap<String, String> loadDefaults()
 	{
 		HashMap<String, String> defValues = new HashMap<String,String>();
 		final String defaultsName = "sheepshaver.defaults";

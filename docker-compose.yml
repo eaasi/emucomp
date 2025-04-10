@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  emucomp:
+    container_name: emucomp
+    image: emucomp:latest
+    networks:
+      - emucomp
+  nginx:
+    container_name: emucomp-nginx
+    image: nginx
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./nginx-template.conf:/etc/nginx/nginx.conf
+    networks:
+      - emucomp
+networks:
+  emucomp:

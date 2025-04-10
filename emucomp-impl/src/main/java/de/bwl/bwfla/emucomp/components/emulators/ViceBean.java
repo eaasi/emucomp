@@ -19,9 +19,11 @@
 
 package de.bwl.bwfla.emucomp.components.emulators;
 
-import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
 
-import de.bwl.bwfla.emucomp.*;
+
+import de.bwl.bwfla.emucomp.common.*;
+import de.bwl.bwfla.emucomp.common.Drive.DriveType;
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.inject.Inject;
@@ -31,6 +33,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 import java.util.logging.Level;
+
+import static de.bwl.bwfla.emucomp.common.EmulatorUtils.*;
 
 
 public abstract class ViceBean extends EmulatorBean
@@ -67,7 +71,7 @@ public abstract class ViceBean extends EmulatorBean
 				final Binding binding = entry.getValue();
 				LOG.info("Creating alias-link for binding: " + name);
 				try {
-					Path imgpath = Paths.get(this.lookupResource("binding://" + name, EmulatorUtils.XmountOutputFormat.RAW));
+					Path imgpath = Paths.get(this.lookupResource("binding://" + name, XmountOutputFormat.RAW));
 					String imgname = binding.getLocalAlias();
 					if (imgname == null || imgname.isEmpty()) {
 						LOG.info("No alias set, skipping: " + name);
@@ -160,7 +164,7 @@ public abstract class ViceBean extends EmulatorBean
 	        //     => Floppy images in D64 and X64 formats, using devices 8-11
 	   	    //     => Tape images in T64 format, using device 1
 
-	        if (drive.getType() == Drive.DriveType.FLOPPY) {
+	        if (drive.getType() == DriveType.FLOPPY) {
 	        	if (numAttachedDrives >= FLOPPY_DRIVES_NUM)
 	        		return false;  // All devices occupied!
 	        	
@@ -193,17 +197,15 @@ public abstract class ViceBean extends EmulatorBean
 	}
 
 	@Override
-	public boolean connectDrive(Drive drive, boolean connect)
+	public boolean connectDrive(Drive drive, boolean connect) throws BWFLAException
 	{
-		LOG.severe("operation unsupported yet: " + this.getClass().getEnclosingMethod().getName());
-		return false;
+		throw this.newNotSupportedException();
 	}
 
 
-	protected boolean addNic(Nic nic)
+	protected boolean addNic(Nic nic) throws BWFLAException
 	{
-		LOG.severe("operation unsupported yet: " + this.getClass().getEnclosingMethod().getName());
-		return false;
+		throw this.newNotSupportedException();
 	}
 	
 	

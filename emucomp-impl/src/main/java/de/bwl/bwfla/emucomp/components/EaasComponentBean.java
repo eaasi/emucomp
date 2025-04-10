@@ -20,12 +20,14 @@
 package de.bwl.bwfla.emucomp.components;
 
 
-import de.bwl.bwfla.emucomp.logging.PrefixLogger;
+import de.bwl.bwfla.emucomp.common.logging.PrefixLogger;
+import de.bwl.bwfla.emucomp.common.utils.TaskStack;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.util.Comparator;
@@ -39,11 +41,16 @@ import java.util.stream.Stream;
 public abstract class EaasComponentBean extends AbstractEaasComponent 
 {
 	protected final PrefixLogger LOG;
+	protected final TaskStack cleanups;
 	private final Path workdir;
-	
+	private final Path bindingDir;
+
+	private final static String tmpBindingsDir = "/tmp-storage";
+
 	protected EaasComponentBean()
 	{
 		LOG = new PrefixLogger(this.getClass().getSimpleName());
+		this.cleanups = new TaskStack(LOG);
 
 		// Create component's working directory
 		try {
@@ -55,7 +62,10 @@ public abstract class EaasComponentBean extends AbstractEaasComponent
 			permissions.add(PosixFilePermission.GROUP_WRITE);
 			permissions.add(PosixFilePermission.GROUP_EXECUTE);
 
+			Path tmpBindingsPath = Paths.get(tmpBindingsDir);
 			this.workdir = Files.createTempDirectory("eaas-", PosixFilePermissions.asFileAttribute(permissions));
+			this.bindingDir = Files.createTempDirectory(tmpBindingsPath,
+					"bindings-", PosixFilePermissions.asFileAttribute(permissions));
 		}
 		catch (IOException error) {
 			throw new UncheckedIOException("Creating working directory failed!", error);
@@ -75,11 +85,15 @@ public abstract class EaasComponentBean extends AbstractEaasComponent
 		return workdir;
 	}
 
-	@Override
-	public void destroy()
+	public Path getBindingsDir()
 	{
-		// Delete component's working directory
-		try (final Stream<Path> stream = Files.walk(workdir)) {
+		return bindingDir;
+	}
+
+
+	private void deleteTmpDirs(Path tmpDir)
+	{
+		try (final Stream<Path> stream = Files.walk(tmpDir)) {
 			final Consumer<Path> deleter = (path) -> {
 				try {
 					Files.delete(path);
@@ -95,12 +109,27 @@ public abstract class EaasComponentBean extends AbstractEaasComponent
 			stream.sorted(Comparator.reverseOrder())
 					.forEach(deleter);
 
-			LOG.info("Working directory removed: " + workdir.toString());
-
+			LOG.info("Working directory removed: " + tmpDir.toString());
 		}
 		catch (Exception error) {
 			String message = "Deleting working directory failed!\n";
 			LOG.log(Level.WARNING, message, error);
 		}
+	}
+
+	@Override
+	public void destroy()
+	{
+		// Run all tasks in reverse order
+		LOG.info("Running cleanup tasks...");
+		if (!cleanups.execute())
+			LOG.warning("Running cleanup tasks failed!");
+
+		// Delete temp dirs
+		deleteTmpDirs(bindingDir);
+		deleteTmpDirs(workdir);
+
+		// Destroy base class!
+		super.destroy();
 	}
 }

@@ -19,7 +19,7 @@
 
 package de.bwl.bwfla.emucomp.components.emulators;
 
-import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.inject.Inject;

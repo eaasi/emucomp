@@ -18,11 +18,12 @@
  */
 
 package de.bwl.bwfla.emucomp.components.emulators;
-import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
-import de.bwl.bwfla.emucomp.Drive;
-import de.bwl.bwfla.emucomp.MachineConfiguration;
-import de.bwl.bwfla.emucomp.Nic;
+import de.bwl.bwfla.emucomp.common.Drive;
+import de.bwl.bwfla.emucomp.common.MachineConfiguration;
+import de.bwl.bwfla.emucomp.common.Nic;
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+
 
 import javax.inject.Inject;
 import java.nio.file.Path;
@@ -140,9 +141,8 @@ public class DosBoxBean extends EmulatorBean {
 	}
 
 	@Override
-	public boolean connectDrive(Drive drive, boolean attach) {
-		LOG.warning("Hotplug is not supported by this emulator.");
-		return false;
+	public boolean connectDrive(Drive drive, boolean attach) throws BWFLAException {
+		throw this.newNotSupportedException();
 	}
 
 	@Override
@@ -180,9 +180,8 @@ public class DosBoxBean extends EmulatorBean {
 	}
 
 	@Override
-	protected boolean addNic(Nic nic) {
-		LOG.warning("Network connection is currently not implemented.");
-		return false;
+	protected boolean addNic(Nic nic) throws BWFLAException {
+		throw this.newNotImplementedException();
 	}
 
 	private String addQuotes(String s){

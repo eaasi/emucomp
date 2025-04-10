@@ -1,14 +1,13 @@
 quarkus:
   application:
     name: emucomp-api
-  arc:
-    include-dependencies: true
   config:
     locations:
       - default.yml
       - blob-default.yml
       - connection.yml
       - threads.yml
+      - commons.yml
   grpc:
     server:
       health:

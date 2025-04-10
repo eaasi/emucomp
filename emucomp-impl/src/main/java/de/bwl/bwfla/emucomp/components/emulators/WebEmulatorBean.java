@@ -1,9 +1,10 @@
 package de.bwl.bwfla.emucomp.components.emulators;
 
-import de.bwl.bwfla.emucomp.EmuCompState;
-import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
-import de.bwl.bwfla.emucomp.Drive;
-import de.bwl.bwfla.emucomp.Nic;
+
+import de.bwl.bwfla.emucomp.common.Drive;
+import de.bwl.bwfla.emucomp.common.Nic;
+import de.bwl.bwfla.emucomp.common.datatypes.EmuCompState;
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
 import de.bwl.bwfla.emucomp.control.ResumableSocket;
 import de.bwl.bwfla.emucomp.control.ResumableSocket.MessageHandlerBoth;
 import de.bwl.bwfla.emucomp.control.connectors.WebEmulatorConnector;
@@ -24,7 +25,7 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 
-import static de.bwl.bwfla.emucomp.Drive.DriveType.*;
+import static de.bwl.bwfla.emucomp.common.Drive.*;
 
 /**
  * @author rafael@gieschke.de
@@ -43,8 +44,7 @@ public class WebEmulatorBean extends EmulatorBean implements MessageHandlerBoth 
 	@Override
 	public void start() {
 		try {
-			ManagedThreadFactory threadFactory = InitialContext.doLookup("java:jboss/ee/concurrency/factory/default");
-			workerThread = threadFactory.newThread(() -> {
+			workerThread = workerThreadFactory.newThread(() -> {
 				for (;;) {
 					try {
 						final JsonObject request = requests.take();
@@ -96,9 +96,9 @@ public class WebEmulatorBean extends EmulatorBean implements MessageHandlerBoth 
 	@Override
 	public Set<String> getHotplugableDrives() {
 		HashSet<String> set = new HashSet<String>();
-		set.add(CDROM.name());
-		set.add(DISK.name());
-		set.add(FLOPPY.name());
+		set.add(DriveType.CDROM.name());
+		set.add(DriveType.DISK.name());
+		set.add(DriveType.FLOPPY.name());
 		return set;
 	}
 

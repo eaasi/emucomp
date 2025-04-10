@@ -3,10 +3,10 @@ package de.bwl.bwfla.emucomp.api.handlers.rpc;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bwl.bwfla.emucomp.NodeManager;
-import de.bwl.bwfla.emucomp.ProcessMonitorVID;
-import de.bwl.bwfla.emucomp.api.EmulatorComponent;
+import de.bwl.bwfla.emucomp.components.api.EmulatorComponent;
 import de.bwl.bwfla.emucomp.api.security.SessionManagerResolver;
-import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.common.datatypes.ProcessMonitorVID;
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
 import de.bwl.bwfla.emucomp.grpc.*;
 import io.grpc.stub.StreamObserver;
 import io.quarkus.grpc.GrpcService;
@@ -170,7 +170,7 @@ public class MachineRPCService extends MachineServiceGrpc.MachineServiceImplBase
         try {
             emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
             responseObserver.onNext(GenericResponse.newBuilder()
-                    .setMessage(emul.getEmulatorState())
+                    .setMessage(emul.getEmulatorState().value())
                     .build());
             responseObserver.onCompleted();
         } catch (BWFLAException e) {

@@ -20,26 +20,28 @@
 package de.bwl.bwfla.emucomp.components.emulators;
 
 
+import org.eclipse.microprofile.config.spi.Converter;
 
-public class EmulatorBeanModePropertyConverter
-//		implements PropertyConverter<EmulatorBeanMode>
-{
-//	@Override
-//	public EmulatorBeanMode convert(String value, ConversionContext context)
-//	{
-//		switch (value)
-//		{
-//			case "sdlonp":
-//				return EmulatorBeanMode.SDLONP;
-//
-//			case "xpra":
-//				return EmulatorBeanMode.XPRA;
-//
-//			case "y11":
-//				return EmulatorBeanMode.Y11;
-//
-//			default:
-//				throw new ConfigException("Invalid emulator mode:  " + value);
-//		}
-//	}
+
+public class EmulatorBeanModePropertyConverter implements Converter<EmulatorBeanMode> {
+    @Override
+    public EmulatorBeanMode convert(String value) {
+        if (value == null || value.trim().isEmpty()) {
+            throw new IllegalArgumentException("Emulator mode value cannot be null or empty");
+        }
+
+        switch (value.toLowerCase()) {
+            case "sdlonp":
+                return EmulatorBeanMode.SDLONP;
+
+            case "xpra":
+                return EmulatorBeanMode.XPRA;
+
+            case "y11":
+                return EmulatorBeanMode.Y11;
+
+            default:
+                throw new IllegalArgumentException("Invalid emulator mode: " + value);
+        }
+    }
 }

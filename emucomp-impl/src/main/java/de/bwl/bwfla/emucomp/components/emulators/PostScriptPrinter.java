@@ -20,12 +20,13 @@
 package de.bwl.bwfla.emucomp.components.emulators;
 
 
-
-
-import de.bwl.bwfla.emucomp.DeprecatedProcessRunner;
-import de.bwl.bwfla.emucomp.PrintJob;
+import com.sun.jna.LastErrorException;
+import com.sun.jna.Native;
+import com.sun.jna.Platform;
+import de.bwl.bwfla.emucomp.common.PrintJob;
+import de.bwl.bwfla.emucomp.common.services.sse.EventSink;
+import de.bwl.bwfla.emucomp.common.utils.ProcessRunner;
 import de.bwl.bwfla.emucomp.components.AbstractEaasComponent;
-import de.bwl.bwfla.emucomp.services.sse.EventSink;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
@@ -54,6 +55,8 @@ public class PostScriptPrinter implements Runnable
 	private static final String TOKEN_START_DOCUMENT  = "%!PS";
 	private static final String TOKEN_END_DOCUMENT    = "%%EOF";
 
+	private static final long READ_INTERVAL = 100L;
+
 	private final Logger log;
 	private final Path datapipe;
 	private final Charset charset;
@@ -64,6 +67,8 @@ public class PostScriptPrinter implements Runnable
 	private Thread worker;
 	private boolean running;
 	private int docNumber;
+	private long lastReadTimestamp;
+
 
 	private enum PrinterState
 	{
@@ -87,6 +92,7 @@ public class PostScriptPrinter implements Runnable
 		this.converter = null;
 		this.docNumber = 0;
 		this.running = true;
+		this.lastReadTimestamp = PostScriptPrinter.time();
 	}
 
 	@Override
@@ -147,8 +153,18 @@ public class PostScriptPrinter implements Runnable
 		return jobs;
 	}
 
+	public static void createUnixPipe(String path) throws LastErrorException
+	{
+		PostScriptPrinter.mkfifo(path, S_IRUSR | S_IRGRP);
+	}
+
 
 	/* ========== Internal Helpers ==================== */
+
+	private static long time()
+	{
+		return System.currentTimeMillis();
+	}
 
 	private void setPrinterState(PrinterState newstate)
 	{
@@ -167,6 +183,13 @@ public class PostScriptPrinter implements Runnable
 	{
 		// Data consumed completely?
 		if (!buffer.hasRemaining()) {
+			// Wait before trying to read more data, preventing busy-loop
+			final long delay = lastReadTimestamp + READ_INTERVAL - PostScriptPrinter.time();
+			if (delay > 0)
+				Thread.sleep(delay);
+
+			lastReadTimestamp = PostScriptPrinter.time();
+
 			// Yes, update buffer state
 			final int offset = buffer.position();
 			final int limit = buffer.limit();
@@ -179,9 +202,6 @@ public class PostScriptPrinter implements Runnable
 
 			final int length = reader.read(buffer);
 			if (length <= 0) {
-				// Wait before trying to read more data, preventing busy-loop
-				Thread.sleep((state == PrinterState.PRINTING) ? 250L : 3000L);
-
 				// Revert buffer state
 				buffer.position(offset);
 				buffer.limit(limit);
@@ -354,7 +374,7 @@ public class PostScriptPrinter implements Runnable
 	{
 		private final Logger log;
 		private final Path output;
-		private final DeprecatedProcessRunner ps2pdf;
+		private final ProcessRunner ps2pdf;
 		private final Writer writer;
 		private long numBytesProcessed;
 
@@ -364,7 +384,7 @@ public class PostScriptPrinter implements Runnable
 			this.output = output;
 			this.numBytesProcessed = 0L;
 
-			this.ps2pdf = new DeprecatedProcessRunner("ps2pdf");
+			this.ps2pdf = new ProcessRunner("ps2pdf");
 			ps2pdf.addArguments("-", output.toString());
 			ps2pdf.setLogger(log);
 			if (!ps2pdf.start())
@@ -462,5 +482,20 @@ public class PostScriptPrinter implements Runnable
 		{
 			return "print-job";
 		}
+	}
+
+
+	/* ========== Native API ==================== */
+
+	private static final int S_IRUSR = 0x100;
+	private static final int S_IRGRP = 0x20;
+
+	private static native int mkfifo(String path, int mode) throws LastErrorException;
+
+	static {
+		if (!Platform.isLinux())
+			throw new UnsupportedOperationException("The current platform is not supported!");
+
+		Native.register(Platform.C_LIBRARY_NAME);
 	}
 }

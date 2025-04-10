@@ -1,11 +1,10 @@
 package de.bwl.bwfla.emucomp.control;
 
+import org.apache.commons.collections.buffer.CircularFifoBuffer;
 
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
-import org.apache.commons.collections.buffer.CircularFifoBuffer;
-
 import javax.websocket.CloseReason;
 import javax.websocket.MessageHandler;
 import javax.websocket.OnOpen;

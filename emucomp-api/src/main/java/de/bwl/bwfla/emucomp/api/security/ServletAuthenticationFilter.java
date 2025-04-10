@@ -5,7 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
 import io.quarkus.arc.Priority;
 
 import javax.enterprise.context.ApplicationScoped;

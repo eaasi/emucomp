@@ -20,10 +20,11 @@
 package de.bwl.bwfla.emucomp.api.handlers;
 
 import de.bwl.bwfla.emucomp.NodeManager;
-import de.bwl.bwfla.emucomp.api.ContainerComponent;
+import de.bwl.bwfla.emucomp.components.api.ContainerComponent;
 import de.bwl.bwfla.emucomp.api.security.SessionManagerResolver;
-import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
@@ -34,7 +35,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
-
+@ApplicationScoped
 @Path("/ComponentService/Container")
 public class ContainerResource {
     @Inject

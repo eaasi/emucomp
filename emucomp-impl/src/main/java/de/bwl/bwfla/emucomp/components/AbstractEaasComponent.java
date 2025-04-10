@@ -20,13 +20,12 @@
 package de.bwl.bwfla.emucomp.components;
 
 
-
-import de.bwl.bwfla.emucomp.data.BlobHandle;
-import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
-import de.bwl.bwfla.emucomp.ComponentState;
-import de.bwl.bwfla.emucomp.api.ClusterComponent;
+import de.bwl.bwfla.emucomp.components.api.ClusterComponent;
+import de.bwl.bwfla.emucomp.common.ComponentState;
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.common.services.sse.EventSink;
 import de.bwl.bwfla.emucomp.control.connectors.IConnector;
-import de.bwl.bwfla.emucomp.services.sse.EventSink;
+import de.bwl.bwfla.emucomp.template.BlobHandle;
 
 import java.net.URI;
 import java.util.Map;
@@ -44,7 +43,7 @@ public abstract class AbstractEaasComponent implements ClusterComponent {
     private String detachedTitle;
     private String environmentId = null;
 
-    protected ComponentState state = ComponentState.OK;
+    protected ComponentState state = ComponentState.RUNNING;
     private BWFLAException asyncError = null;
 
     private Map<String, IConnector> controlConnectors = new ConcurrentHashMap<String, IConnector>();
@@ -142,6 +141,9 @@ public abstract class AbstractEaasComponent implements ClusterComponent {
     }
 
     public void setEventSink(EventSink sink) {
+        if (this.hasEventSink())
+            this.esink.close();
+
         this.esink = sink;
     }
 
@@ -151,5 +153,10 @@ public abstract class AbstractEaasComponent implements ClusterComponent {
 
     public boolean hasEventSink() {
         return (esink != null);
+    }
+
+    @Override
+    public void destroy() {
+        this.setEventSink(null);
     }
 }

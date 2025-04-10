@@ -19,22 +19,20 @@
 
 package de.bwl.bwfla.emucomp.components.emulators;
 
-import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.inject.Inject;
 
 
-public class ViceC64Bean extends ViceBean
-{
+public class ViceC64Bean extends ViceBean {
     @Inject
     @ConfigProperty(name = "components.binary.vice.c64")
     protected String c64;
 
-	@Override
-	public void prepareEmulatorRunner() throws BWFLAException
-	{
-		emuRunner.setCommand(c64);
-		super.prepareEmulatorRunner();
-	}
+    @Override
+    public void prepareEmulatorRunner() throws BWFLAException {
+        emuRunner.setCommand(c64);
+        super.prepareEmulatorRunner();
+    }
 }

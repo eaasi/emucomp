@@ -19,10 +19,10 @@
 
 package de.bwl.bwfla.emucomp.components;
 
-
-import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
-
-import de.bwl.bwfla.emucomp.*;
+import de.bwl.bwfla.emucomp.common.*;
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.common.resolvers.DataResolvers;
+import de.bwl.bwfla.emucomp.common.utils.ImageInformation;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,363 +30,362 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.function.Function;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 
-public class BindingsManager {
-    private final Logger log;
+public class BindingsManager
+{
+	private final Logger log;
 
-    private final Map<String, Binding> bindings;
-    private final Map<String, String> paths;
+	private final Map<String, Binding> bindings;
+	private final Map<String, String> paths;
+	private final ImageMounter imageMounter;
 
-    public enum EntryType {
-        IMAGE("image"),
-        ALIAS("alias"),
-        FS_MOUNT("fsmnt"),
-        RAW_MOUNT("rawmnt");
-
-        private final String value;
-
-        EntryType(String value) {
-            this.value = value;
-        }
-    }
-
-    private static final String ID_SEPARATOR = "/_____";
-
-    public BindingsManager() {
-        this(Logger.getLogger(BindingsManager.class.getName()));
-    }
-
-    public BindingsManager(Logger log) {
-        this.bindings = new HashMap<String, Binding>();
-        this.paths = new LinkedHashMap<String, String>();
-        this.log = log;
-    }
-
-    /**
-     * Returns all registered bindings: binding's ID -> binding object
-     */
-    public Map<String, Binding> entries() {
-        return Collections.unmodifiableMap(bindings);
-    }
-
-    /**
-     * Returns all mountpoints: binding's ID -> mountpoint
-     */
-    public Map<String, String> mountpoints() {
-        return Collections.unmodifiableMap(paths);
-    }
-
-    /**
-     * Returns all mountpoints: binding's ID -> binding's access path
-     */
-    public Stream<Map.Entry<String, String>> paths() {
-        return paths.entrySet().stream()
-                .filter((entry) -> !entry.getKey().contains(ID_SEPARATOR));
-    }
-
-    /**
-     * Returns a binding by its ID.
-     */
-    public Binding get(String id) {
-        return bindings.get(id);
-    }
-
-    /**
-     * Registers a new binding.
-     */
-    public void register(AbstractDataResource resource) throws BWFLAException {
-        final String id = resource.getId();
-        if (id == null || id.isEmpty())
-            throw new IllegalArgumentException("Invalid resource's ID!");
-
-        if (resource instanceof Binding) {
-            this.put(id, (Binding) resource);
-        } else if (resource instanceof ObjectArchiveBinding) {
-            // If the resource is an ArchiveBinding, query the archive
-            // and add all entries from the file collection
-            final ObjectArchiveBinding object = (ObjectArchiveBinding) resource;
-//            ObjectArchiveClient client = new ObjectArchiveClient(object.getArchiveHost());
-//            final FileCollection fc;
-//            try {
-//                fc = client.fetchObjectReference(object);
-//            } catch (Exception e) {
-//                throw new BWFLAException("Cannot retrieve FileCollection from archive: " + e.getMessage(), e);
-//            }
-//            if (fc == null || fc.id == null || fc.id.isEmpty())
-//                throw new BWFLAException("Retrieving object meta data failed!");
+	//TODO REMOVE MOCKED
+	private static final Object objectArchiveHelper = null;
+//	static {
+//		final var objectArchiveAddress = ConfigurationProvider.getConfiguration()
+//				.get("ws.objectarchive");
 //
-//            for (FileCollectionEntry link : fc.files) {
-//                if (link.getId() == null || link.getUrl() == null)
-//                    continue;
-//
-//                this.put(id + "/" + link.getId(), link);
-//            }
-        } else {
-            final String clazz = resource.getClass().getName();
-            throw new IllegalArgumentException("Unsupported resource type: " + clazz);
-        }
-    }
+//		objectArchiveHelper = new ObjectArchiveHelper(objectArchiveAddress);
+//	}
 
-    /**
-     * Returns path to the binding's image, or null if not mounted or avalilable.
-     */
-    public String lookup(String binding) {
-        final String prefix = "binding://";
-        if (binding.startsWith(prefix))
-            binding = binding.substring(prefix.length());
+	public enum EntryType
+	{
+		IMAGE("image"),
+		ALIAS("alias"),
+		FS_MOUNT("fsmnt"),
+		RAW_MOUNT("rawmnt");
 
-        return paths.get(binding);
-    }
+		private final String value;
 
-    /**
-     * Returns a collection of all binding-ids starting with prefix.
-     */
-    public Stream<String> find(String prefix) {
-        return bindings.keySet().stream()
-                .filter((id) -> id.startsWith(prefix));
-    }
+		EntryType(String value)
+		{
+			this.value = value;
+		}
+	}
 
-    /**
-     * Resolves and mounts a binding location of either the form
-     * binding://<binding_id>> or <binding_id>.
-     * <p>
-     * The <binding_id> is replaced with the actual filesystem location of the binding's mountpoint.
-     *
-     * @param binding A binding location
-     * @return The resolved path or null, if the binding cannot be found
-     */
-    public String mount(String binding, Path outdir, EmulatorUtils.XmountOutputFormat outformat)
-            throws BWFLAException, IOException, IllegalArgumentException {
-        if (binding == null || binding.isEmpty())
-            throw new IllegalArgumentException("Binding is null or empty!");
+	private static final String ID_SEPARATOR = "/_____";
 
-        if (outformat == null)
-            throw new IllegalArgumentException("Output format is null!");
+	public BindingsManager()
+	{
+		this(Logger.getLogger(BindingsManager.class.getName()));
+	}
 
-        if (binding.startsWith("rom://"))
-            binding = "rom-" + binding.substring("rom://".length());
+	public BindingsManager(Logger log)
+	{
+		this.bindings = new HashMap<String, Binding>();
+		this.paths = new LinkedHashMap<String, String>();
+		this.log = log;
+		this.imageMounter = new ImageMounter(log);
+	}
 
-        if (binding.startsWith("binding://"))
-            binding = binding.substring("binding://".length());
+	/** Returns all registered bindings: binding's ID -> binding object */
+	public Map<String, Binding> entries()
+	{
+		return Collections.unmodifiableMap(bindings);
+	}
 
-        // if (binding.contains("/"))
-        // 	throw new BWFLAException("Subresource bindings are currently not supported!");
+	/** Returns all mountpoints: binding's ID -> mountpoint */
+	public Map<String, String> mountpoints()
+	{
+		return Collections.unmodifiableMap(paths);
+	}
 
-        // Let's see if we already have the resource mounted
-        String resourcePath = this.lookup(binding);
-        if (resourcePath != null)
-            return resourcePath;
+	/** Returns all mountpoints: binding's ID -> binding's access path */
+	public Stream<Map.Entry<String, String>> paths()
+	{
+		return paths.entrySet().stream()
+				.filter((entry) -> !entry.getKey().contains(ID_SEPARATOR));
+	}
 
-        log.info("Resolving resource '" + binding + "'...");
+	/** Returns a binding by its ID. */
+	public Binding get(String id)
+	{
+		return bindings.get(id);
+	}
 
-        final String realBindingId = binding;
-        final Binding resource = bindings.get(realBindingId);
-        if (resource == null)
-            throw new BWFLAException("Could not find binding for resource " + binding);
+	/** Registers a new binding. */
+	public void register(AbstractDataResource resource) throws BWFLAException
+	{
+		final String id = resource.getId();
+		if (id == null || id.isEmpty())
+			throw new IllegalArgumentException("Invalid resource's ID!");
 
-        log.info("Mounting binding '" + binding + "'...");
+		if (resource instanceof Binding) {
+			this.put(id, (Binding) resource);
+		}
+		else if (resource instanceof ObjectArchiveBinding) {
+			// If the resource is an ArchiveBinding, query the archive
+			// and add all entries from the file collection
+			final ObjectArchiveBinding object = (ObjectArchiveBinding) resource;
+			final FileCollection fc = null;
+//					objectArchiveHelper.getObjectReference(object.getArchive(), object.getId());
+			if (fc == null || fc.id == null || fc.id.isEmpty())
+				throw new BWFLAException("Retrieving object meta data failed!");
 
-        final XmountOptions xmountOpts = new XmountOptions(outformat);
-        if (resource instanceof VolatileResource) {
-            VolatileResource vResource = (VolatileResource) resource;
-            // The resource should be written to in-place, ignoring the
-            // value of getAccess(), as it is a temporary copy of user-data
+			for (FileCollectionEntry link : fc.files) {
+				if (link.getId() == null || link.getUrl() == null)
+					continue;
 
-            // (TODO) Currently only file: transport is allowed here
-            if (!vResource.getUrl().startsWith("file:"))
-                throw new IllegalArgumentException("Only 'file:' transport is allowed for injected objects/VolatileDrives.");
+				this.put(id + "/" + link.getId(), link);
+			}
+		}
+		else {
+			final String clazz = resource.getClass().getName();
+			throw new IllegalArgumentException("Unsupported resource type: " + clazz);
+		}
+	}
 
-            resourcePath = EmulatorUtils.connectBinding(vResource, outdir, xmountOpts);
-            vResource.setResourcePath(resourcePath);
-            if (resourcePath == null || !(new File(resourcePath).canRead())) {
-                final String message = "Binding target at location "
-                                       + vResource.getUrl() + " cannot be accessed!";
+	/** Returns path to the binding's image, or null if not mounted or avalilable. */
+	public String lookup(String binding)
+	{
+		final String prefix = "binding://";
+		if (binding.startsWith(prefix))
+			binding = binding.substring(prefix.length());
 
-                throw new BWFLAException(message);
-            }
-        } else {
-            if (resource.getFileSize() > 0)
-                xmountOpts.setSize(resource.getFileSize());
+		return paths.get(binding);
+	}
 
-            resourcePath = EmulatorUtils.connectBinding(resource, outdir, xmountOpts);
+	/** Returns a collection of all binding-ids starting with prefix. */
+	public Stream<String> find(String prefix)
+	{
+		return bindings.keySet().stream()
+				.filter((id) -> id.startsWith(prefix));
+	}
 
-            // resourcePath is now the base path for the binding we want to find
-            if (resourcePath == null || !(new File(resourcePath).canRead())) {
-                final String message = "Binding target at location "
-                                       + resource.getUrl() + " cannot be accessed!";
+	private static void prepareResourceBinding(String componentId, Binding resource) throws IllegalArgumentException
+	{
+		/*
+			ImageArchive Bindings contain no valid URLs, just image IDs
+			We delegate the resolving image IDs to the proxy.
+			Other resources may contain valid URLs.
+		 */
+		if (resource instanceof ImageArchiveBinding)
+		{
+			final var binding = (ImageArchiveBinding) resource;
+			final var location = DataResolvers.resolve(componentId, binding);
+			resource.setUrl(location);
+		}
 
-                throw new BWFLAException(message);
-            }
-        }
+		// Resolve object-archive's binding URLs!
+		if (resource instanceof FileCollectionEntry)
+		{
+			final var location = DataResolvers.objects()
+					.resolve(componentId, (FileCollectionEntry) resource);
 
-        {
-            // HACK: recreate the path to the image, as defined in
-            //       EmulatorUtils.connectBinding()!
-            String imgpath = outdir.resolve(realBindingId).toString();
-            switch (resource.getAccess()) {
-                case COW:
-                    this.put(realBindingId, EntryType.RAW_MOUNT, resourcePath);
-                    imgpath += ".cow";
-                    break;
-                case COPY:
-                    imgpath += ".copy";
-                    break;
-            }
+			resource.setUrl(location);
+		}
 
-            this.put(realBindingId, EntryType.IMAGE, imgpath);
-        }
+		if (resource.getId() == null
+				|| resource.getId().isEmpty()
+				|| resource.getUrl() == null
+				|| resource.getUrl().isEmpty())
+			throw new IllegalArgumentException(
+					"Given resource is null, has invalid id or empty url.");
 
-        // Is the raw file a block device with a filesystem?
-        final String fsType = this.getImageFileSystem(resource);
-        if (fsType != null && !fsType.isEmpty()) {
-            final Path mountpoint = outdir.resolve(realBindingId + "." + fsType.replace(',', '.') + ".fuse");
-            EmulatorUtils.lklMount(Paths.get(resourcePath), mountpoint, fsType, log, false);
-            resourcePath = mountpoint.toString();
-            this.put(realBindingId, EntryType.FS_MOUNT, resourcePath);
-        }
+		if (resource.getAccess() == null)
+			resource.setAccess(Binding.AccessType.COW);
+	}
 
-        // Is local alias specified?
-        final String alias = resource.getLocalAlias();
-        if (alias != null) {
-            final Path link = outdir.resolve(alias);
-            Files.deleteIfExists(link);
-            Files.createSymbolicLink(link, Paths.get(resourcePath));
-            resourcePath = link.toString();
+	/**
+	 * Resolves and mounts a binding location of either the form
+	 * binding://<binding_id>> or <binding_id>.
+	 *
+	 * The <binding_id> is replaced with the actual filesystem location of the binding's mountpoint.
+	 *
+	 * @param binding  A binding location
+	 * @return The resolved path or null, if the binding cannot be found
+	 */
+	public String mount(String componentId, String binding, Path outdir)
+			throws BWFLAException, IOException, IllegalArgumentException
+	{
+		if (binding == null || binding.isEmpty())
+			throw new IllegalArgumentException("Binding is null or empty!");
 
-            this.put(realBindingId, EntryType.ALIAS, resourcePath);
-        }
+		if (binding.startsWith("rom://"))
+			binding = "rom-" + binding.substring("rom://".length());
 
-        this.add(realBindingId, resourcePath);
+		if (binding.startsWith("binding://"))
+			binding = binding.substring("binding://".length());
 
-        return resourcePath;
-    }
+		// if (binding.contains("/"))
+		// 	throw new BWFLAException("Subresource bindings are currently not supported!");
 
-    /**
-     * Unmounts all registered bindings
-     */
-    public void cleanup() {
-        final String fuseSuffix = ".fuse";
+		// Let's see if we already have the resource mounted
+		String resourcePath = this.lookup(binding);
+		if (resourcePath != null)
+			return resourcePath;
 
-        log.info("Unmounting bindings...");
-        {
-            // Finds the real FUSE-mountpoint in paths of the form:
-            //     /some/path/binding-name.fuse/subresource...
-            //     --> /some/path/binding-name.fuse
-            final Function<String, String> toFuseMountpoint = (path) -> {
-                final int index = path.indexOf(fuseSuffix);
-                if (index < 0)
-                    return null;
+		log.info("Resolving resource '" + binding + "'...");
 
-                return path.substring(0, index + fuseSuffix.length());
-            };
+		final String realBindingId = binding;
+		final Binding resource = bindings.get(realBindingId);
+		if (resource == null)
+			throw new BWFLAException("Could not find binding for resource " + binding);
 
-            final Set<String> idsToRemove = new HashSet<String>();
-            final List<Pair<String, String>> entriesToUnmount = new ArrayList<Pair<String, String>>();
+		log.info("Mounting binding '" + binding + "'...");
 
-            final String[] fuseIdSuffixes = new String[]{
-                    ID_SEPARATOR + EntryType.RAW_MOUNT.value,
-                    ID_SEPARATOR + EntryType.FS_MOUNT.value,
-            };
+		prepareResourceBinding(componentId, resource);
 
-            paths.forEach((id, path) -> {
-                for (String suffix : fuseIdSuffixes) {
-                    if (!id.endsWith(suffix))
-                        continue;  // Not a FUSE-mount!
+		// TODO: we need to resolve the full path here or earlier to
+		// ensure that all access options use the same path:
+		if(binding.startsWith("rom-")) // old rom bindings do not have COPY access by default
+		{
+			log.info("guessing resource is a ROM. force COPY access if not QCOW");
 
-                    final String mountpoint = toFuseMountpoint.apply(path);
-                    if (mountpoint != null) {
-                        entriesToUnmount.add(new Pair<String, String>(id, mountpoint));
-                    } else {
-                        // Should never happen!
-                        log.warning("Expected a suffix '" + fuseSuffix + "' in path: " + path);
-                    }
+			// check the file type first.
+			ImageInformation inf = new ImageInformation(resource.getUrl(), log);
+			ImageInformation.QemuImageFormat fmt = inf.getFileFormat();
+			if(fmt != ImageInformation.QemuImageFormat.QCOW2)
+				resource.setAccess(Binding.AccessType.COPY);
+		}
 
-                    final int end = id.length() - suffix.length();
-                    idsToRemove.add(id.substring(0, end));
+		final MountOptions mountOpts = new MountOptions();
+		if (resource.getFileSize() > 0)
+			mountOpts.setSize(resource.getFileSize());
 
-                }
-            });
+		Path imgPath = null;
+		ImageMounter.Mount mount = null;
+		switch (resource.getAccess()) {
+			case COW:
+				imgPath = outdir.resolve(realBindingId + ".cow");
 
-            // Unmount in reverse order
-            final DeprecatedProcessRunner process = new DeprecatedProcessRunner();
-            process.setLogger(log);
-            for (int i = entriesToUnmount.size() - 1; i >= 0; --i) {
-                final Pair<String, String> entry = entriesToUnmount.get(i);
-                final String id = entry.getA();
-                final String mountpoint = entry.getB();
+				QcowOptions qcowOptions = new QcowOptions();
+				qcowOptions.setBackingFile(resource.getUrl());
 
-                // Sync cached buffers first!
-                process.setCommand("sync");
-                process.execute();
+				EmulatorUtils.createCowFile(imgPath, qcowOptions);
 
-                // Now it should be safe to unmount
-                try {
-                    EmulatorUtils.unmountFuse(Paths.get(mountpoint), log);
-                } catch (Exception error) {
-                    log.log(Level.WARNING, "Unmounting binding failed: " + mountpoint, error);
-                }
-            }
+				Path rawImagePath = outdir.resolve(realBindingId + ".dd");
+				mount = imageMounter.mount(imgPath, rawImagePath, mountOpts);
 
-            entriesToUnmount.clear();
+				this.put(realBindingId, EntryType.RAW_MOUNT, resourcePath);
+				resourcePath = mount.getMountPoint().toAbsolutePath().toString();
+				break;
+			case COPY:
+				imgPath = outdir.resolve(realBindingId + ".copy");
+				EmulatorUtils.copyRemoteUrl(resource, imgPath, log);
+				resourcePath =imgPath.toString();
+				break;
+		}
+		this.put(realBindingId, EntryType.IMAGE, imgPath.toAbsolutePath().toString());
 
-            idsToRemove.forEach((id) -> this.remove(id));
-            idsToRemove.clear();
-        }
-    }
+		// resourcePath is now the base path for the binding we want to find
+		if (resourcePath == null || !(new File(resourcePath).canRead())) {
+			final String message = "Binding target at location "
+					+ resource.getUrl() + " cannot be accessed!";
 
-    public static String toBindingId(String base, EntryType type) {
-        return (base + ID_SEPARATOR + type.value);
-    }
+			throw new BWFLAException(message);
+		}
+
+		// Is the raw file a block device with a filesystem?
+		final String fsType = this.getImageFileSystem(resource);
+		if (mount != null && fsType != null && !fsType.isEmpty()) {
+			final Path mountpoint = outdir.resolve(realBindingId + "." + fsType.replace(',', '.') + ".fuse");
+			imageMounter.mount(mount, mountpoint, FileSystemType.fromString(fsType));
+			resourcePath = mountpoint.toString();
+			this.put(realBindingId, EntryType.FS_MOUNT, resourcePath);
+		}
+
+		// Is local alias specified?
+		final String alias = resource.getLocalAlias();
+		if (alias != null) {
+			final Path link = outdir.resolve(alias);
+			Files.deleteIfExists(link);
+			Files.createSymbolicLink(link, Paths.get(resourcePath));
+			resourcePath = link.toString();
+
+			this.put(realBindingId, EntryType.ALIAS, resourcePath);
+		}
+
+		this.add(realBindingId, resourcePath);
+		return resourcePath;
+	}
+
+	/** Unmounts all registered bindings */
+	public void cleanup()
+	{
+		log.info("Unmounting bindings...");
+		{
+			final Set<String> idsToRemove = new HashSet<String>();
+
+			final String[] fuseIdSuffixes = new String[] {
+					ID_SEPARATOR + EntryType.RAW_MOUNT.value,
+					ID_SEPARATOR + EntryType.FS_MOUNT.value,
+			};
+
+			paths.forEach((id, path) -> {
+				for (String suffix : fuseIdSuffixes) {
+					if (!id.endsWith(suffix))
+						continue;  // Not a FUSE-mount!
+
+					final int end = id.length() - suffix.length();
+					idsToRemove.add(id.substring(0, end));
+				}
+			});
+
+			imageMounter.unmount();
+			idsToRemove.forEach((id) -> this.remove(id));
+			idsToRemove.clear();
+		}
+	}
+
+	public static String toBindingId(String base, EntryType type)
+	{
+		return (base + ID_SEPARATOR + type.value);
+	}
 
 
-    /* =============== Internal Helpers =============== */
+	/* =============== Internal Helpers =============== */
 
-    private void put(String id, Binding binding) {
-        bindings.put(id, binding);
+	private void put(String id, Binding binding)
+	{
+		bindings.put(id, binding);
 
-        log.info("Added binding: " + id);
-    }
+		log.info("Added binding: " + id);
+	}
 
-    private void put(String base, EntryType type, String path) {
-        final String id = BindingsManager.toBindingId(base, type);
-        paths.put(id, path);
+	private void put(String base, EntryType type, String path)
+	{
+		final String id = BindingsManager.toBindingId(base, type);
+		paths.put(id, path);
 
-        log.info("Added binding's path entry: " + id + " -> " + path);
-    }
+		log.info("Added binding's path entry: " + id + " -> " + path);
+	}
 
-    private void add(String id, String path) {
-        paths.put(id, path);
+	private void add(String id, String path)
+	{
+		paths.put(id, path);
 
-        log.info("Added binding's access path: " + id + " -> " + path);
-    }
+		log.info("Added binding's access path: " + id + " -> " + path);
+	}
 
-    private void remove(String id) {
-        bindings.remove(id);
-        paths.remove(id);
-        for (EntryType type : EntryType.values())
-            paths.remove(BindingsManager.toBindingId(id, type));
-    }
+	private void remove(String id)
+	{
+		bindings.remove(id);
+		paths.remove(id);
+		for (EntryType type : EntryType.values())
+			paths.remove(BindingsManager.toBindingId(id, type));
+	}
 
-    private String getImageFileSystem(Binding resource) {
-        String fstype = null;
+	private String getImageFileSystem(Binding resource)
+	{
+		String fstype = null;
 
-        if (resource instanceof ImageArchiveBinding) {
-            final ImageArchiveBinding image = (ImageArchiveBinding) resource;
-            fstype = image.getFileSystemType();
-        } else if (resource instanceof BlobStoreBinding) {
-            final BlobStoreBinding image = (BlobStoreBinding) resource;
-            if (image.getFileSystemType() != null && image.getMountFS())
-                fstype = image.getFileSystemType().toString();
-        }
+		if (resource instanceof ImageArchiveBinding) {
+			final ImageArchiveBinding image = (ImageArchiveBinding) resource;
+			fstype = image.getFileSystemType();
+		}
+		else if (resource instanceof BlobStoreBinding) {
+			final BlobStoreBinding image = (BlobStoreBinding) resource;
+			if (image.getFileSystemType() != null && image.getMountFS())
+				fstype = image.getFileSystemType().toString();
+		}
 
-        if (fstype != null)
-            fstype = fstype.toLowerCase();
+		if (fstype != null)
+			fstype = fstype.toLowerCase();
 
-        return fstype;
-    }
+		return fstype;
+	}
 }

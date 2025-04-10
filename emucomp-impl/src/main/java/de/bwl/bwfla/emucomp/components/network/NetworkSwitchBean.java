@@ -19,9 +19,9 @@
 
 package de.bwl.bwfla.emucomp.components.network;
 
-import de.bwl.bwfla.emucomp.NetworkSwitchConfiguration;
-import de.bwl.bwfla.emucomp.api.ClusterComponent;
-import de.bwl.bwfla.emucomp.api.NetworkSwitchComponent;
+import de.bwl.bwfla.emucomp.components.api.ClusterComponent;
+import de.bwl.bwfla.emucomp.components.api.NetworkSwitchComponent;
+import de.bwl.bwfla.emucomp.common.NetworkSwitchConfiguration;
 import de.bwl.bwfla.emucomp.components.EaasComponentBean;
 
 import javax.enterprise.inject.spi.CDI;

@@ -19,11 +19,13 @@
 
 package de.bwl.bwfla.emucomp.components.emulators;
 
-import de.bwl.bwfla.emucomp.Drive;
-import de.bwl.bwfla.emucomp.MachineConfiguration;
-import de.bwl.bwfla.emucomp.Nic;
-import de.bwl.bwfla.emucomp.exceptions.BWFLAException;
-import de.bwl.bwfla.emucomp.services.Zip32Utils;
+
+
+import de.bwl.bwfla.emucomp.common.Drive;
+import de.bwl.bwfla.emucomp.common.MachineConfiguration;
+import de.bwl.bwfla.emucomp.common.Nic;
+import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
+import de.bwl.bwfla.emucomp.common.utils.Zip32Utils;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.inject.Inject;
@@ -123,10 +125,9 @@ public class HatariBean extends EmulatorBean
 	}
 
 	@Override
-	public boolean connectDrive(Drive drive, boolean connect)
+	public boolean connectDrive(Drive drive, boolean connect) throws BWFLAException
 	{
-		LOG.severe("operation unsupported yet: " + this.getClass().getEnclosingMethod().getName());
-		return false;
+		throw this.newNotSupportedException();
 	}
 
 //	@Override
@@ -152,9 +153,8 @@ public class HatariBean extends EmulatorBean
 //        return null;
 //	}
 
-	protected boolean addNic(Nic nic)
+	protected boolean addNic(Nic nic) throws BWFLAException
 	{
-		LOG.severe("operation unsupported yet: " + this.getClass().getEnclosingMethod().getName());
-		return false;
+		throw this.newNotSupportedException();
 	}
 }

@@ -25,7 +25,9 @@ import de.bwl.bwfla.emucomp.components.emulators.IpcSocket;
 import de.bwl.bwfla.emucomp.control.connectors.XpraConnector;
 
 import javax.inject.Inject;
-import javax.websocket.*;
+import javax.websocket.EndpointConfig;
+import javax.websocket.OnOpen;
+import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.util.logging.Level;

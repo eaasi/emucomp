@@ -19,58 +19,63 @@
 
 package de.bwl.bwfla.emucomp.components.emulators;
 
-import de.bwl.bwfla.emucomp.MachineConfiguration;
+
+
+import de.bwl.bwfla.emucomp.common.MachineConfiguration;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.inject.Inject;
 
-public class PceAtariStBean extends PceBean {
+public class PceAtariStBean extends PceBean
+{
     @Inject
     @ConfigProperty(name = "components.binary.pce.atarist")
     protected String emuExecPath;
 
-    /**
-     * Max. number of supported drives per type.
-     */
-    private static final int[] DRIVES_NUMBER = {2, 4};
+	/** Max. number of supported drives per type. */
+	private static final int[] DRIVES_NUMBER = { 2, 4 };
 
-    /**
-     * ID of the first usable slot.
-     */
-    private static final int[] DRIVES_BASE_IDS = {0, 128};
+	/** ID of the first usable slot. */
+	private static final int[] DRIVES_BASE_IDS = { 0, 128 };
+	
+	
+	public PceAtariStBean()
+	{
+		super();
+	}
 
+	@Override
+	protected String getEmuContainerName(MachineConfiguration env)
+	{
+		return "pce";
+	}
 
-    public PceAtariStBean() {
-        super();
-    }
+	@Override
+	protected int[] getDrivesNumber()
+	{
+		return DRIVES_NUMBER;
+	}
 
-    @Override
-    protected String getEmuContainerName(MachineConfiguration env) {
-        return "pce";
-    }
+	@Override
+	protected int[] getDrivesBaseIds()
+	{
+		return DRIVES_BASE_IDS;
+	}
+	
+	@Override
+	protected String getConfigTemplatePath()
+	{
+		String arch = emuEnvironment.getArch();
+		if (arch == null || arch.isEmpty()) {
+			arch = "68010";
+			LOG.warning("Emulator's architectrue was not set! Using default '" + arch + "'.");
+		}
+		
+		return "pce/atarist/atarist-" + arch + ".cfg";
+	}
 
-    @Override
-    protected int[] getDrivesNumber() {
-        return DRIVES_NUMBER;
-    }
-
-    @Override
-    protected int[] getDrivesBaseIds() {
-        return DRIVES_BASE_IDS;
-    }
-
-    @Override
-    protected String getConfigTemplatePath() {
-        String arch = emuEnvironment.getArch();
-        if (arch == null || arch.isEmpty()) {
-            arch = "68010";
-            LOG.warning("Emulator's architectrue was not set! Using default '" + arch + "'.");
-        }
-
-        return "pce/atarist/atarist-" + arch + ".cfg";
-    }
-
-    protected String getExecPath() {
-        return emuExecPath;
-    }
+	protected String getExecPath()
+	{
+		return emuExecPath;
+	}
 }
