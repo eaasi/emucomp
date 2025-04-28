@@ -12,12 +12,9 @@ services:
       - "8080:8080"
     environment:
       - EMIL_IMAGE_PATH=/data
-      - EMIL_EMULATOR_REPO_PATH=${EMIL_IMAGE_PATH}/emulator-repository/images
-      - EMIL_ENV_REPO_PATH=${EMIL_IMAGE_PATH}/environment-repository/images
-      - EMIL_ROM_REPO_PATH=${EMIL_IMAGE_PATH}/environment-repository/roms
-      - EMIL_CHECKPOINT_REPO_PATH=${EMIL_IMAGE_PATH}/environment-repository/checkpoints
-      - EMIL_OBJECT_REPO_PATH=${EMIL_IMAGE_PATH}/object-repository/archives
-      - EMIL_COMPONENT_REPO_PATH=${EMIL_IMAGE_PATH}/components
+      - EMIL_EMULATOR_REPO_PATH=${EMIL_IMAGE_PATH}/emulators/qemu-system-v31.qcow2
+      - EMIL_IMAGE=${EMIL_IMAGE_PATH}/image/windows-for-workgroups-311-base-v2.qcow2
+      - EMIL_OBJ=${EMIL_IMAGE_PATH}/objects/
     volumes:
       - /home/emu:/data
       - ./nginx-template.conf:/etc/nginx/nginx.conf

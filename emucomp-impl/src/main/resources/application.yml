@@ -26,3 +26,6 @@ emulators:
     macplus: /usr/bin/pce-macplus
   kegs: /usr/bin/kegs
   beebem: /usr/bin/beebem
+
+emucomp:
+  resolver: http://resolver:8080

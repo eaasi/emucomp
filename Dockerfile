@@ -18,13 +18,14 @@ RUN echo "locales locales/default_environment_locale string en_US.UTF-8" | debco
     xpra \
     socat \
     vde2 \
+    runc \
     qemu \
     qemu-system \
     ntfs-3g \
-    dosbox \
-    fs-uae \
+    parted \
     sudo \
     util-linux \
+    vde-switch \
     && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /linapple-pie /minivmac /usr/local/bin
