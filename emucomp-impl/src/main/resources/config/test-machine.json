@@ -30,15 +30,7 @@
     "boot" : false,
     "plugged" : false
   }, {
-    "data" : "binding://<DISK-IMAGE-ID>",
-    "iface" : "ide",
-    "bus" : "0",
-    "unit" : "0",
-    "type" : "disk",
-    "boot" : true,
-    "plugged" : false
-  }, {
-    "data" : "binding://<OBJECT-ID>/<OBJECT-FILE-ID>",
+    "data" : "emucon-rootfs",
     "iface" : "ide",
     "bus" : "0",
     "unit" : "1",
@@ -67,25 +59,17 @@
   } ],
   "abstractDataResource" : [ {
     "imageArchiveBinding" : {
-      "imageId" : "<EMULATOR-IMAGE-ID>",
+      "imageId" : "test",
       "type" : "user",
       "backendName" : "default",
       "filesize" : -1,
       "id" : "emucon-rootfs"
     }
-  }, {
-    "imageArchiveBinding" : {
-      "imageId" : "<DISK-IMAGE-ID>",
-      "type" : "user",
-      "backendName" : "default",
-      "filesize" : -1,
-      "id" : "<DISK-IMAGE-ID>"
-    }
   },{
     "objectArchiveBinding" : {
-      "objectId" : "<OBJECT-ID>",
+      "objectId" : "software-object",
       "archive" : "default",
-      "id" : "<OBJECT-ID>"
+      "id" : "software-object"
     }
   } ],
   "nativeConfig" : {
