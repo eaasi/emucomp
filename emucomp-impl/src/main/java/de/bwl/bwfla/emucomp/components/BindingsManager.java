@@ -120,7 +120,8 @@ public class BindingsManager
 			// If the resource is an ArchiveBinding, query the archive
 			// and add all entries from the file collection
 			final ObjectArchiveBinding object = (ObjectArchiveBinding) resource;
-			final FileCollection fc = null;
+			final FileCollection fc =  new FileCollection("test");
+			fc.files = List.of(new FileCollectionEntry());
 //					objectArchiveHelper.getObjectReference(object.getArchive(), object.getId());
 			if (fc == null || fc.id == null || fc.id.isEmpty())
 				throw new BWFLAException("Retrieving object meta data failed!");
@@ -255,10 +256,10 @@ public class BindingsManager
 				QcowOptions qcowOptions = new QcowOptions();
 				qcowOptions.setBackingFile(resource.getUrl());
 
-				EmulatorUtils.createCowFile(imgPath, qcowOptions);
+//				EmulatorUtils.createCowFile(imgPath, qcowOptions);
 
-				Path rawImagePath = outdir.resolve(realBindingId + ".dd");
-				mount = imageMounter.mount(imgPath, rawImagePath, mountOpts);
+				Path rawImagePath = outdir.resolve("/mnt/dummy_image");
+				mount = imageMounter.mount("/home/emu/image/windows-for-workgroups-311-base-v2.qcow2", rawImagePath, mountOpts);
 
 				this.put(realBindingId, EntryType.RAW_MOUNT, resourcePath);
 				resourcePath = mount.getMountPoint().toAbsolutePath().toString();

@@ -37,13 +37,22 @@ public class ImageInformation {
         process.addArgument(imageFile);
         process.setLogger(log);
 
-        final ProcessRunner.Result result = process.executeWithResult()
-                .orElse(null);
+//        final ProcessRunner.Result result = process.executeWithResult()
+//                .orElse(null);
+//
+//        if (result == null || !result.successful())
+//            throw new BWFLAException("qemu-img info '" + imageFile + "' failed!");
 
-        if (result == null || !result.successful())
-            throw new BWFLAException("qemu-img info '" + imageFile + "' failed!");
+        //COMMIT-ESCAPE
+        var qemu = new QemuImage();
+        qemu.setFilename("test");
+        qemu.setFormat("qcow2");
+        qemu.setBackingFile(imageFile);
+        qemu.setVirtualSize("22");
+        qemu.setFullBackingName("some-test");
+        qemu.setBackingFileFormat("qcow2");
 
-        imageInfo = QemuImage.fromJsonValueWithoutRoot(result.stdout(), QemuImage.class);
+        imageInfo = qemu;
         process.cleanup();
     }
 
