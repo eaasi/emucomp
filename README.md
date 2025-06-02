@@ -9,3 +9,7 @@ project, which has been heavily modified to make it natively runnable in Kuberne
 This project is licensed under the GPL-3.0 license. See the [LICENSE](./LICENSE) file and
 the original [Emulation-as-a-Service](https://gitlab.com/emulation-as-a-service/eaas-server)
 repository for more details.
+
+Scaling
+kubectl scale statefulset emucomp --replicas=<N>
+emucomp-<N>.emucomp-headless.default.svc.cluster.local

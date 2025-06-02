@@ -1,100 +1,95 @@
 components:
-  client_timeout: 45s
-  warmup_timeout: 180s
-  timeout: 60s
+  client_timeout: ${COMPONENTS_CLIENT_TIMEOUT:45s}
+  warmup_timeout: ${COMPONENTS_WARMUP_TIMEOUT:180s}
+  timeout: ${COMPONENTS_TIMEOUT:60s}
   binary:
-    qemu: /usr/bin/qemu-system-
-    basilisk: /usr/bin/BasiliskII
-    sheepshaver:  /usr/bin/SheepShaver
-    dosbox: /usr/bin/dosbox
-    hatari: /usr/bin/hatari
-    kegs: /usr/bin/kegs
-    beebem: /usr/bin/beebem
+    qemu: ${COMPONENTS_BINARY_QEMU:/usr/bin/qemu-system-}
+    basilisk: ${COMPONENTS_BINARY_BASILISK:/usr/bin/BasiliskII}
+    sheepshaver: ${COMPONENTS_BINARY_SHEEPSHAVER:/usr/bin/SheepShaver}
+    dosbox: ${COMPONENTS_BINARY_DOSBOX:/usr/bin/dosbox}
+    hatari: ${COMPONENTS_BINARY_HATARI:/usr/bin/hatari}
+    kegs: ${COMPONENTS_BINARY_KEGS:/usr/bin/kegs}
+    beebem: ${COMPONENTS_BINARY_BEEBEM:/usr/bin/beebem}
     vbox:
-      headlessexec: /usr/bin/VBoxSDL
-      manageexec:  /usr/bin/VBoxManage
+      headlessexec: ${COMPONENTS_BINARY_VBOX_HEADLESSEXEC:/usr/bin/VBoxSDL}
+      manageexec: ${COMPONENTS_BINARY_VBOX_MANAGEEXEC:/usr/bin/VBoxManage}
     vice:
-      c64:  /usr/bin/x64
-      c128: /usr/bin/x128
+      c64: ${COMPONENTS_BINARY_VICE_C64:/usr/bin/x64}
+      c128: ${COMPONENTS_BINARY_VICE_C128:/usr/bin/x128}
     pce:
-      atarist:  /usr/bin/pce-atarist
-      ibmpc:  /usr/bin/pce-ibmpc
-      macplus:  /usr/bin/pce-macplus
-    vdeswitch:  /usr/bin/vde_switch
-    vdeslirp: /usr/bin/slirpvde
-    nodetcprunner: /libexec/vdenode
-    nodetcpscript: /libexec/picotcp/webemulator/webemulator/vdenode.js
-
-    runc: runc
-    vdeplug: /usr/bin/vde_plug
+      atarist: ${COMPONENTS_BINARY_PCE_ATARIST:/usr/bin/pce-atarist}
+      ibmpc: ${COMPONENTS_BINARY_PCE_IBMPC:/usr/bin/pce-ibmpc}
+      macplus: ${COMPONENTS_BINARY_PCE_MACPLUS:/usr/bin/pce-macplus}
+    vdeswitch: ${COMPONENTS_BINARY_VDESWITCH:/usr/bin/vde_switch}
+    vdeslirp: ${COMPONENTS_BINARY_VDESLIRP:/usr/bin/slirpvde}
+    nodetcprunner: ${COMPONENTS_BINARY_NODETCPRUNNER:/libexec/vdenode}
+    nodetcpscript: ${COMPONENTS_BINARY_NODETCPSCRIPT:/libexec/picotcp/webemulator/webemulator/vdenode.js}
+    runc: ${COMPONENTS_BINARY_RUNC:runc}
+    vdeplug: ${COMPONENTS_BINARY_VDEPLUG:/usr/bin/vde_plug}
   xpra:
-    ports: 7000-7100
-    enable_gpu: false
-
-  vice_defaults_dir: /home/bwfla/server-data/vice-defaults
-
+    ports: ${COMPONENTS_XPRA_PORTS:7000-7100}
+    enable_gpu: ${COMPONENTS_XPRA_ENABLE_GPU:false}
+  vice_defaults_dir: ${COMPONENTS_VICE_DEFAULTS_DIR:/home/bwfla/server-data/vice-defaults}
   emulator_containers:
-    enabled: false
-    snapshot: false
-    uid: 1000
-    gid: 1000
-
+    enabled: ${COMPONENTS_EMULATOR_CONTAINERS_ENABLED:false}
+    snapshot: ${COMPONENTS_EMULATOR_CONTAINERS_SNAPSHOT:false}
+    uid: ${COMPONENTS_EMULATOR_CONTAINERS_UID:1000}
+    gid: ${COMPONENTS_EMULATOR_CONTAINERS_GID:1000}
   containers:
-    blobstore: http://eaas:8080
+    blobstore: ${COMPONENTS_CONTAINERS_BLOBSTORE:http://eaas:8080}
     usernamespace:
-      enabled: false
-      user: bwfla
-      group: bwfla
-
+      enabled: ${COMPONENTS_CONTAINERS_USERNAMESPACE_ENABLED:false}
+      user: ${COMPONENTS_CONTAINERS_USERNAMESPACE_USER:bwfla}
+      group: ${COMPONENTS_CONTAINERS_USERNAMESPACE_GROUP:bwfla}
   session_statistics:
-    flush_delay: 30s
+    flush_delay: ${COMPONENTS_SESSION_STATISTICS_FLUSH_DELAY:30s}
   tcpNode:
-    ports: 10000-10010
+    ports: ${COMPONENTS_TCPNODE_PORTS:10000-10010}
 
 emucomp:
-  blobstore_soap: http://eaas:8080
-  inactivitytimeout:  0
-  enable_pulseaudio: false
-  enable_screenshooter: false
-  debug_bean_enabled: false
-  libfaketime: /usr/lib/x86_64-linux-gnu/faketime/libfaketime.so.1
-  curl_proxy: /usr/local/lib/LD_PRELOAD_libcurl.so
-  rompath: /eaas/roms
-  alsa_card: PCH
+  blobstore_soap: ${EMUCOMP_BLOBSTORE_SOAP:http://eaas:8080}
+  inactivitytimeout: ${EMUCOMP_INACTIVITY_TIMEOUT:0}
+  enable_pulseaudio: ${EMUCOMP_ENABLE_PULSEAUDIO:false}
+  enable_screenshooter: ${EMUCOMP_ENABLE_SCREENSHOOTER:false}
+  debug_bean_enabled: ${EMUCOMP_DEBUG_BEAN_ENABLED:false}
+  libfaketime: ${EMUCOMP_LIBFAKETIME:/usr/lib/x86_64-linux-gnu/faketime/libfaketime.so.1}
+  curl_proxy: ${EMUCOMP_CURL_PROXY:/usr/local/lib/LD_PRELOAD_libcurl.so}
+  rompath: ${EMUCOMP_ROMPATH:/eaas/roms}
+  alsa_card: ${EMUCOMP_ALSA_CARD:PCH}
 
 rest:
-  blobstore: http://eaas:8080/blobstore/api/v1/blobs
-  imagearchive: http://eaas:8080/image-archive
+  blobstore: ${REST_BLOBSTORE:http://eaas:8080/blobstore/api/v1/blobs}
+  imagearchive: ${REST_IMAGEARCHIVE:http://eaas:8080/image-archive}
 
 emil:
-  cachedclassificationpath: /home/bwfla/classification-cache/
-  exportpath: /home/bwfla/export/
-  emilenvironmentspath: /home/bwfla/emil-environments/
-  inputpathtodelete: /tmp/toDelete/
-  dockerTmpBuildFiles: /tmp/docker-tmp-build-files/
-  classificationservice: http://eaas:8080/
-  imageproposerservice: http://eaas:8080
-  emilobjectenvironmentspaths: /home/bwfla/emil-object-environments/
-  usersessionretention: 10080
+  cachedclassificationpath: ${EMIL_CACHEDCLASSIFICATIONPATH:/home/bwfla/classification-cache/}
+  exportpath: ${EMIL_EXPORTPATH:/home/bwfla/export/}
+  emilenvironmentspath: ${EMIL_EMILENVIRONMENTSPATH:/home/bwfla/emil-environments/}
+  inputpathtodelete: ${EMIL_INPUTPATHTODELETE:/tmp/toDelete/}
+  dockerTmpBuildFiles: ${EMIL_DOCKER_TMP_BUILD_FILES:/tmp/docker-tmp-build-files/}
+  classificationservice: ${EMIL_CLASSIFICATIONSERVICE:http://eaas:8080/}
+  imageproposerservice: ${EMIL_IMAGEPROPOSERSERVICE:http://eaas:8080}
+  emilobjectenvironmentspaths: ${EMIL_OBJECTENVIRONMENTSPATHS:/home/bwfla/emil-object-environments/}
+  usersessionretention: ${EMIL_USERSESSIONRETENTION:10080}
   containerdata:
     imagebuilder:
-      timeout: 30 mins
-      delay: 3 secs
-  imagesDatabase: images
-  emilDatabase: emil
-  classificationDatabase: classification
-  max_session_duration: 0 sec
-  autorun_scripts_dir: /home/bwfla/server-data/autorun-scripts
-  default_environments_path: /home/bwfla/server-data/default-environments.properties
+      timeout: ${EMIL_CONTAINERDATA_IMAGEBUILDER_TIMEOUT:30 mins}
+      delay: ${EMIL_CONTAINERDATA_IMAGEBUILDER_DELAY:3 secs}
+  imagesDatabase: ${EMIL_IMAGESDATABASE:images}
+  emilDatabase: ${EMIL_EMILDATABASE:emil}
+  classificationDatabase: ${EMIL_CLASSIFICATIONDATABASE:classification}
+  max_session_duration: ${EMIL_MAX_SESSION_DURATION:0 sec}
+  autorun_scripts_dir: ${EMIL_AUTORUN_SCRIPTS_DIR:/home/bwfla/server-data/autorun-scripts}
+  default_environments_path: ${EMIL_DEFAULT_ENVIRONMENTS_PATH:/home/bwfla/server-data/default-environments.properties}
 
 ws:
-  blobstore: http://eaas:8080/
-  imagebuilder: http://eaas:8080/
-  imagearchive: http://eaas:8080/
-  eaasgw:  http://eaas:8080/
-  embedgw: http://eaas:8080/
-  objectarchive: http://eaas:8080/
-  softwarearchive: http://eaas:8080/
+  blobstore: ${WS_BLOBSTORE:http://eaas:8080/}
+  imagebuilder: ${WS_IMAGEBUILDER:http://eaas:8080/}
+  imagearchive: ${WS_IMAGEARCHIVE:http://eaas:8080/}
+  eaasgw: ${WS_EAASGW:http://eaas:8080/}
+  embedgw: ${WS_EMBEDGW:http://eaas:8080/}
+  objectarchive: ${WS_OBJECTARCHIVE:http://eaas:8080/}
+  softwarearchive: ${WS_SOFTWAREARCHIVE:http://eaas:8080/}
 
 metadata_repositories:
   - name: public-images

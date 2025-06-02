@@ -1,28 +1,28 @@
 quarkus:
   thread-pool:
-    max-threads: 100
-    queue-size: 1000
+    max-threads: ${MAX_THREADS:100}
+    queue-size: ${QUEUE_SIZE:1000}
 
 configuration:
   component:
-    uri: /config/test-machine.json
+    uri: ${CONFIG_PATH:/config/test-machine.json}
 
 emulators:
-  qemu: /usr/bin/qemu-system-
-  basilisk: /usr/bin/BasiliskII.real
-  sheepshaver: /usr/bin/SheepShaver
-  dosbox: /usr/bin/dosbox
+  qemu: ${EMULATOR_QEMU:/usr/bin/qemu-system-}
+  basilisk: ${EMULATOR_BASILISK:/usr/bin/BasiliskII.real}
+  sheepshaver: ${EMULATOR_SHEEPSHAVER:/usr/bin/SheepShaver}
+  dosbox: ${EMULATOR_DOSBOX:/usr/bin/dosbox}
   vbox:
-    headless-exec: /usr/bin/VBoxSDL
-    manage-exec: /usr/bin/VBoxManage
-  hatari: /usr/bin/hatari
-  vde-switch: /usr/bin/vde_switch
+    headless-exec: ${EMULATOR_VBOX_HEADLESS_EXEC:/usr/bin/VBoxSDL}
+    manage-exec: ${EMULATOR_VBOX_MANAGE_EXEC:/usr/bin/VBoxManage}
+  hatari: ${EMULATOR_HATARI:/usr/bin/hatari}
+  vde-switch: ${EMULATOR_VDE_SWITCH:/usr/bin/vde_switch}
   vice:
-    c64: /usr/bin/x64
-    c128: /usr/bin/x128
+    c64: ${EMULATOR_VICE_C64:/usr/bin/x64}
+    c128: ${EMULATOR_VICE_C128:/usr/bin/x128}
   pce:
-    atarist: /usr/bin/pce-atarist
-    ibmpc: /usr/bin/pce-ibmpc
-    macplus: /usr/bin/pce-macplus
-  kegs: /usr/bin/kegs
-  beebem: /usr/bin/beebem
+    atarist: ${EMULATOR_PCE_ATARIST:/usr/bin/pce-atarist}
+    ibmpc: ${EMULATOR_PCE_IBMPC:/usr/bin/pce-ibmpc}
+    macplus: ${EMULATOR_PCE_MACPLUS:/usr/bin/pce-macplus}
+  kegs: ${EMULATOR_KEGS:/usr/bin/kegs}
+  beebem: ${EMULATOR_BEEBEM:/usr/bin/beebem}

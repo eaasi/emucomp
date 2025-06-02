@@ -1,6 +1,6 @@
 blobstore:
-  gc_interval: 30 min
-  max_entry_age: 1 hour
+  gc_interval: ${BLOBSTORE_GC_INTERVAL:30 min}
+  max_entry_age: ${BLOBSTORE_MAX_ENTRY_AGE:1 hour}
   backend:
-    type: fs
-    base_dir: /tmp/blobstore
+    type: ${BLOBSTORE_BACKEND_TYPE:fs}
+    base_dir: ${BLOBSTORE_BACKEND_BASE_DIR:/tmp/blobstore}

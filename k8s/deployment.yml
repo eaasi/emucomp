@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: emucomp
+spec:
+  serviceName: emucomp-headless
+  replicas: 0
+  selector:
+    matchLabels:
+      app: emucomp
+  template:
+    metadata:
+      labels:
+        app: emucomp
+    spec:
+      containers:
+        - name: emucomp
+          image: emucomp:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080  # HTTP / Guacamole
+            - containerPort: 9000  # GRPC
+            - containerPort: 7000  # WebRTC start
+            - containerPort: 7015  # WebRTC end
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: emucomp-client
+spec:
+  template:
+    metadata:
+      labels:
+        app: emucomp
+    spec:
+      containers:
+        - name: emucomp
+          image: emucomp:latest
+          ports:
+            - containerPort: 8080
+            - containerPort: 9000
+            - containerPort: 7000
+            - containerPort: 7015
+      restartPolicy: Never

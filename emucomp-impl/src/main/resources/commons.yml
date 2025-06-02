@@ -1,43 +1,44 @@
 helpers:
-  hddfat16create: /usr/bin/hdd_create.sh
-  hddfat16io: /usr/bin/hdd_io.sh
-  hddhfscreate: /usr/bin/hdd_create_hfs.sh
-  hddhfsio: /usr/bin/hdd_io_hfs.sh
-  floppyfat12create:  /usr/bin/floppy_create.sh
+  hddfat16create: ${HELPER_HDDFAT16CREATE:/usr/bin/hdd_create.sh}
+  hddfat16io: ${HELPER_HDDFAT16IO:/usr/bin/hdd_io.sh}
+  hddhfscreate: ${HELPER_HDDHFSCREATE:/usr/bin/hdd_create_hfs.sh}
+  hddhfsio: ${HELPER_HDDHFSIO:/usr/bin/hdd_io_hfs.sh}
+  floppyfat12create: ${HELPER_FLOPPYFAT12CREATE:/usr/bin/floppy_create.sh}
+
 runners:
-  tmpbasedir: /tmp/process-runners
-  tmpdirprefix: eaas-pr-
-  stdoutfilename: stdout.log
-  stderrfilename: stderr.log
+  tmpbasedir: ${RUNNERS_TMPBASEDIR:/tmp/process-runners}
+  tmpdirprefix: ${RUNNERS_TMPDIRPREFIX:eaas-pr-}
+  stdoutfilename: ${RUNNERS_STDOUTFILENAME:stdout.log}
+  stderrfilename: ${RUNNERS_STDERRFILENAME:stderr.log}
+
 commonconf:
-  serverdatadir: /home/bwfla/server-data
+  serverdatadir: ${COMMONCONF_SERVERDATADIR:/home/bwfla/server-data}
   mongodb:
-    # default unix domain socket, url-encoded
-    address: 'mongodb://%2Ftmp%2Fmongodb-27017.sock'
-    dbname: eaas
+    address: ${COMMONCONF_MONGODB_ADDRESS:mongodb://%2Ftmp%2Fmongodb-27017.sock}
+    dbname: ${COMMONCONF_MONGODB_DBNAME:eaas}
 
 http_export_servlet:
   file_cache:
-    gc_interval: 10m
-    entry_eviction_timeout: 30m
+    gc_interval: ${HTTP_EXPORT_SERVLET_GC_INTERVAL:10m}
+    entry_eviction_timeout: ${HTTP_EXPORT_SERVLET_ENTRY_EVICTION_TIMEOUT:30m}
 
 rest:
-  internalApiSecret: "please set an internal API Secret"
-  apiSecret: "please set an web API Secret"
+  internalApiSecret: ${REST_INTERNAL_API_SECRET:please set an internal API Secret}
+  apiSecret: ${REST_API_SECRET:please set an web API Secret}
 
 handle:
-  prefix: 11270
+  prefix: ${HANDLE_PREFIX:11270}
   authentication:
-    private_key_file: /home/bwfla/server-data/hdl-keys/admpriv.bin
-    handle: 0.NA/11270
-    index: 300
+    private_key_file: ${HANDLE_AUTH_PRIVATE_KEY_FILE:/home/bwfla/server-data/hdl-keys/admpriv.bin}
+    handle: ${HANDLE_AUTH_HANDLE:0.NA/11270}
+    index: ${HANDLE_AUTH_INDEX:300}
 
 imagemounter:
-  basedir: /tmp-storage/image-mounts
+  basedir: ${IMAGEMOUNTER_BASEDIR:/tmp-storage/image-mounts}
 
 authentication:
-  userRoleLabel: ''
-  adminRoleLabel: 'eaas-admin'
-  authJwksUri: ''
-  authEnabled: false
-  authAudience: ''
+  userRoleLabel: ${AUTH_USER_ROLE_LABEL:''}
+  adminRoleLabel: ${AUTH_ADMIN_ROLE_LABEL:eaas-admin}
+  authJwksUri: ${AUTH_JWKS_URI:''}
+  authEnabled: ${AUTH_ENABLED:false}
+  authAudience: ${AUTH_AUDIENCE:''}
