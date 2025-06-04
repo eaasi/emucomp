@@ -101,12 +101,6 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
 	@ConfigProperty(name = "emucomp.libfaketime")
 	public String libfaketime;
 
-	// this configurable should be removed.
-	// currently it is only used to enable the fake clock
-	@Inject
-	@ConfigProperty(name = "components.emulator_containers.snapshot")
-	public boolean isSnapshotEnabled = false;
-
 	// allow beans to disable the fake clock preload
 	protected boolean disableFakeClock = false;
 
@@ -193,7 +187,7 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
 
 	@Inject
 	@ConfigProperty(name = "components.emulator_containers.enabled")
-	protected boolean emuContainerModeEnabled = false;
+	protected boolean emuContainerModeEnabled = true;
 
 	@Inject
 	@ConfigProperty(name = "components.emulator_containers.uid")
@@ -592,7 +586,7 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
 		if (this.isLocalModeEnabled())
 			LOG.info("Local-mode enabled. Emulator will be started locally!");
 
-		if(isSnapshotEnabled && !disableFakeClock) {
+		if(!disableFakeClock) {
 			LOG.info("initializing fake clock");
 			emuRunner.addEnvVariable("LD_PRELOAD", "/usr/local/lib/LD_PRELOAD_clock_gettime.so");
 		}

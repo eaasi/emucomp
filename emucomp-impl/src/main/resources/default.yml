@@ -31,7 +31,7 @@ components:
     enable_gpu: ${COMPONENTS_XPRA_ENABLE_GPU:false}
   vice_defaults_dir: ${COMPONENTS_VICE_DEFAULTS_DIR:/home/bwfla/server-data/vice-defaults}
   emulator_containers:
-    enabled: ${COMPONENTS_EMULATOR_CONTAINERS_ENABLED:false}
+    enabled: ${COMPONENTS_EMULATOR_CONTAINERS_ENABLED:true}
     snapshot: ${COMPONENTS_EMULATOR_CONTAINERS_SNAPSHOT:false}
     uid: ${COMPONENTS_EMULATOR_CONTAINERS_UID:1000}
     gid: ${COMPONENTS_EMULATOR_CONTAINERS_GID:1000}
