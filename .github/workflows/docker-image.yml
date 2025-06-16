@@ -28,11 +28,11 @@ jobs:
       - name: Create /tmp/oci-tools directory on runner
         run: mkdir /tmp/oci-tools
 
-      - name: Run pre-start bootstrap PATH modification
-        run: cd emucon-tools/ && . ./bootstrap.sh
-
-      - name: Build OCI tools on runner
-        run: ./installer/install-oci-tools.sh --destination /tmp/oci-tools
+      - name: Prepare and Build OCI tools on runner
+        run: |
+            cd emucon-tools/
+            . ./bootstrap.sh
+            ./installer/install-oci-tools.sh --destination /tmp/oci-tools
 
       - name: Extract metadata (tags, labels)
         id: meta
