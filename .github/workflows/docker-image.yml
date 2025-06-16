@@ -25,6 +25,12 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: Create /tmp/oci-tools directory on runner
+        run: mkdir /tmp/oci-tools
+
+      - name: Build OCI tools on runner
+        run: ./emucon-tools/installer/install-oci-tools.sh --destination /tmp/oci-tools
+
       - name: Extract metadata (tags, labels)
         id: meta
         uses: docker/metadata-action@v5
