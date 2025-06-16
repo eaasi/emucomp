@@ -28,6 +28,9 @@ jobs:
       - name: Create /tmp/oci-tools directory on runner
         run: mkdir /tmp/oci-tools
 
+      - name: Run pre-start bootstrap PATH modification
+        run: ./emucon-tools/bootstrap.sh
+
       - name: Build OCI tools on runner
         run: ./emucon-tools/installer/install-oci-tools.sh --destination /tmp/oci-tools
 
