@@ -1,0 +1,140 @@
+#!/bin/sh
+
+#
+# Script for starting following processes:
+# - VDE-Switches (optional)
+# - XPRA-Server (optional)
+# - Emulator
+#
+
+readonly display=':7000'
+export HOME='/home/bwfla'
+
+
+# ========== Helper Functions ==========
+
+__abort() {
+	echo 'Aborting...'
+	exit 1
+}
+
+__list_nics() {
+	ls "$1" | grep 'nic'
+}
+
+__wait_until_ready() {
+	local curiter='-1'
+	local delay='1s'
+	local service="$1"
+	local path="$2"
+	local maxiter="$3"
+	while [ ! -e "${path}" ] ; do
+		curiter=$((curiter + 1))
+		if [ "${curiter}" -gt "${maxiter}" ] ; then
+			echo "==> FAILED:  ${service}"
+			__abort
+		fi
+		sleep "${delay}"
+	done
+	echo "==> READY: ${service}"
+}
+
+__on_exit() {
+	echo 'Waiting for main process to terminate...'
+	wait "${mpid}"
+
+	echo 'Terminating background processes...'
+	kill -TERM -1
+
+	echo 'Waiting for background processes to terminate...'
+	while ! wait ; do
+		: ;
+	done
+
+	if [ -n "${xprasock}" ] ; then
+		echo '===== XPRA LOG ========================='
+		cat "/run/user/$(id --user)/xpra/${display}.log"
+	fi
+}
+
+
+# ========== Script's Begin ==========
+
+# Parse command line arguments
+cmdargs=$(getopt -o 'n:s:' -l 'networks-dir:,xpra-socket:' -n 'emucon-init' -- "$@")
+if [ $? -ne 0 ] ; then
+	echo 'Parsing command arguments failed!'
+	__abort
+fi
+
+# Lookup parsed parameters and their arguments
+eval set -- ${cmdargs}
+while [ $# -gt 0 ] ; do
+	case "$1" in
+		-n|--networks-dir)
+			nicsdir="$2"
+			shift 1 ;;
+		-s|--xpra-socket)
+			xprasock="$2"
+			shift 1 ;;
+		--)
+			shift 1
+			break ;;
+		*)
+			echo "Invalid command line arguments found: ${cmdargs}"
+			__abort ;;
+	esac
+	shift 1
+done
+
+if [ -z "${nicsdir}" ] || [ ! -d "${nicsdir}" ] ; then
+	echo "Required argument -n/--networks-dir is missing!"
+	__abort
+fi
+
+trap __on_exit EXIT
+
+if [ -n "${xprasock}" ] ; then
+	echo 'Starting XPRA-daemon...'
+	xpra start ${display:?} \
+	    --start="sh -c 'xhost +si:localuser:bwfla; touch /tmp/xpra-started'" \
+	    --bind="${xprasock:?}" \
+	    --daemon=yes \
+	    --html=off
+
+	echo '==> DONE: XPRA-daemon started'
+	cmdargs="--xpra-socket ${xprasock}"
+fi
+
+# NOTE: We need to start a vde-hub for every NIC.
+echo 'Starting VDE-hub processes...'
+for nic in $(__list_nics "${nicsdir}") ; do
+	nicpath="${nicsdir}/${nic}"
+	vde_switch -hub -s "${nicpath}" -d
+	echo "==> DONE: ${nicpath}"
+done
+
+echo 'Waiting for all VDE-hubs to be ready...'
+for nic in $(__list_nics "${nicsdir}") ; do
+	__wait_until_ready "/etc/service/${nic}" "${nicsdir}/${nic}/ctl" '5'
+done
+
+if [ -n "${xprasock}" ] ; then
+	export DISPLAY="${display:?}"
+	echo 'Waiting for XPRA-daemon to be ready...'
+	__wait_until_ready 'XPRA-daemon' '/tmp/xpra-started' '30'
+fi
+
+__on_terminate() {
+	echo 'Terminating main process...'
+	kill -TERM "${mpid}"
+}
+
+trap __on_terminate TERM
+
+echo 'Running main command...'
+"$@" &
+
+readonly mpid="$!"
+wait "${mpid}"
+

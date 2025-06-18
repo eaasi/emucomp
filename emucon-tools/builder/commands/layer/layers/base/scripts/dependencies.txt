@@ -1,0 +1,13 @@
+# Common dependencies for supported emulators
+# (for Debian-based distributions)
+#
+# NOTE: empty lines and lines starting
+#        with # will be skipped!
+
+libguac-client-sdlonp0
+libsdl1.2debian
+qemu-utils
+vde2
+xpra
+python-pip
+

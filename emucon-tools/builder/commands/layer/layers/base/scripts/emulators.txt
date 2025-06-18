@@ -1,0 +1,21 @@
+# Package names for supported emulators
+# (for Debian-based distributions)
+#
+# NOTE: empty lines and lines starting
+#        with # will be skipped!
+
+fs-uae
+hatari
+sheepshaver
+beebem
+kegs-sdl
+vice-sdl
+basilisk2
+pce-atari-st
+pce-dos
+pce-ibmpc
+pce-macplus
+dosbox
+qemu-system-x86
+qemu-system-ppc
+
