@@ -21,6 +21,9 @@ package de.bwl.bwfla.emucomp.common;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import de.bwl.bwfla.emucomp.common.utils.jaxb.JaxbType;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.*;
@@ -30,6 +33,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
+@Getter
+@Setter
 @JsonTypeName("emulationEnvironment")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "emulationEnvironment", namespace = "http://bwfla.bwl.de/common/datatypes", propOrder = {
@@ -57,6 +62,7 @@ public class MachineConfiguration
     protected EmulatorSpec emulator;
     @XmlElement(namespace = "http://bwfla.bwl.de/common/datatypes", required = false)
     protected String model;
+    @lombok.Setter
     @XmlElement(name = "ui_options", namespace = "http://bwfla.bwl.de/common/datatypes")
     protected UiOptions uiOptions;
     @XmlElement(namespace = "http://bwfla.bwl.de/common/datatypes")
@@ -72,6 +78,8 @@ public class MachineConfiguration
             @XmlElementRef(name = "binding", type = Binding.class, namespace = "http://bwfla.bwl.de/common/datatypes"),
             @XmlElementRef(name = "objectArchiveBinding", type = ObjectArchiveBinding.class, namespace = "http://bwfla.bwl.de/common/datatypes")})
     protected List<AbstractDataResource> abstractDataResource;
+
+    protected List<FileCollection> attachedFiles;
 
     @XmlElement(namespace = "http://bwfla.bwl.de/common/datatypes")
     protected NativeConfig nativeConfig;
@@ -108,58 +116,15 @@ public class MachineConfiguration
     public MachineConfiguration() {
     }
 
-    public String getOperatingSystemId() {
-        return operatingSystemId;
-    }
-
-    public void setOperatingSystemId(String operatingSystemId) {
-        this.operatingSystemId = operatingSystemId;
-    }
-
     @XmlElement(namespace = "http://bwfla.bwl.de/common/datatypes", name = "installedSoftwareId")
     protected List<String> installedSoftwareIds = new ArrayList<String>();
 
-    public String getArch() {
-        return arch;
-    }
-
-    public void setArch(String value) {
-        this.arch = value;
-    }
-
-    public String getModel() {
-        return model;
-    }
-
-    public void setModel(String value) {
-        this.model = value;
-    }
-
-    public EmulatorSpec getEmulator() {
-        return emulator;
-    }
-
-    public void setEmulator(EmulatorSpec value) {
-        this.emulator = value;
-    }
-
-    public UiOptions getUiOptions() {
-        return uiOptions;
-    }
-
-    public void setUiOptions(UiOptions value) {
-        this.uiOptions = value;
-    }
 
     public List<Drive> getDrive() {
         if (drive == null) {
             drive = new ArrayList<Drive>();
         }
         return this.drive;
-    }
-
-    public void setDrive(List<Drive> drives) {
-        this.drive = drives;
     }
 
     public List<Nic> getNic() {
@@ -169,32 +134,11 @@ public class MachineConfiguration
         return this.nic;
     }
 
-    public void setAbstractDataResource(List<AbstractDataResource> abstractDataResource) {
-        this.abstractDataResource = abstractDataResource;
-    }
-
     public List<AbstractDataResource> getAbstractDataResource() {
         if (abstractDataResource == null) {
             abstractDataResource = new ArrayList<AbstractDataResource>();
         }
         return this.abstractDataResource;
-    }
-
-
-    public NativeConfig getNativeConfig() {
-        return nativeConfig;
-    }
-
-    public void setNativeConfig(NativeConfig value) {
-        this.nativeConfig = value;
-    }
-
-    public List<String> getInstalledSoftwareIds() {
-        return installedSoftwareIds;
-    }
-
-    public void setInstalledSoftwareIds(List<String> ids) {
-        this.installedSoftwareIds = ids;
     }
 
     public boolean hasCheckpointBindingId() {
@@ -211,26 +155,6 @@ public class MachineConfiguration
             return checkpointBindingId.substring(prefix.length());
 
         return checkpointBindingId;
-    }
-
-    public void setCheckpointBindingId(String checkpointId) {
-        this.checkpointBindingId = checkpointId;
-    }
-
-    public String getOutputBindingId() {
-        return outputBindingId;
-    }
-
-    public boolean isLinuxRuntime() {
-        return isLinuxRuntime;
-    }
-
-    public void setLinuxRuntime(boolean linuxRuntime) {
-        isLinuxRuntime = linuxRuntime;
-    }
-
-    public void setOutputBindingId(String bindingId) {
-        this.outputBindingId = bindingId;
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)

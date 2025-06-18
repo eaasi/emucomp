@@ -27,6 +27,7 @@ import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
 import de.bwl.bwfla.emucomp.common.logging.PrefixLogger;
 import de.bwl.bwfla.emucomp.common.utils.ConfigHelpers;
 import de.bwl.bwfla.emucomp.components.AbstractEaasComponent;
+import de.bwl.bwfla.emucomp.components.BindingsResolver;
 import de.bwl.bwfla.emucomp.components.emulators.EmulatorBean;
 import de.bwl.bwfla.emucomp.components.network.NetworkSwitchBean;
 import de.bwl.bwfla.emucomp.components.network.NodeTcpBean;
@@ -102,6 +103,8 @@ public class NodeManager {
                     if (is == null) {
                         throw new FileNotFoundException("Resource not found: " + componentDefaultConfigInitUri);
                     }
+                    BindingsResolver.providedConfigurationPath = componentDefaultConfigInitUri;
+
                     String data = new String(is.readAllBytes(), StandardCharsets.UTF_8);
 
                     loadedComponentConfiguration.set(objectMapper.readValue(data, ComponentConfiguration.class));

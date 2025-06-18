@@ -135,15 +135,14 @@ public class EmulationEnvironmentHelper {
 				continue;
 			}
 
-//			if (r instanceof ImageArchiveBinding)
-//			{
-//
-//				if(env.checkpointBindingId == null || env.checkpointBindingId.isEmpty()) {
-//					ImageArchiveBinding iab = (ImageArchiveBinding) r;
-//					if (iab.getId().equals("emucon-rootfs"))
-//						it.remove();
-//				}
-//			}
+			if (r instanceof ImageArchiveBinding)
+			{
+				if(env.checkpointBindingId == null || env.checkpointBindingId.isEmpty()) {
+					ImageArchiveBinding iab = (ImageArchiveBinding) r;
+					if (iab.getId().equals("emucon-rootfs"))
+						it.remove();
+				}
+			}
 
 			// resource was volatile (but not in use by a drive), remove it, too
 			for (AbstractDataResource origRes : original.getAbstractDataResource()) {
@@ -180,26 +179,6 @@ public class EmulationEnvironmentHelper {
 			return null;
 		}
 	}
-
-//	/**
-//	 * Drives capable to accept ready made images.
-//	 * 
-//	 * @return
-//	 */
-//	public static List<String> getImageDrives(MachineConfiguration env) {
-//		List<String> emptyDrives = new ArrayList<>();
-//		Iterator<Drive> iterator = env.getDrive().iterator();
-//
-//		while (iterator.hasNext()) {
-//			Drive d = iterator.next();
-//			if (d.getData() == null || d.getData().isEmpty()) {
-//				Drive.DriveType type = d.getType();
-//				emptyDrives.add(type.name());
-//			}
-//		}
-//
-//		return emptyDrives;
-//	}
 
 	/**
 	 * Drives require a file system helper (FS annotation is required)

@@ -1,0 +1,57 @@
+#!/bin/sh
+
+export __cmd_name=$(basename $0)
+
+
+# ========== Helper Functions ==========
+
+__print_usage()
+{
+	cat <<- EOT
+	USAGE:
+	    ${__cmd_name} <command> [<args>...]
+
+	DESCRIPTION:
+	    Builds the specified tools or container layers.
+
+	ARGUMENTS:
+	    <command>
+	        Name of the command to execute:
+	            layer - Build a container layer
+	            tool - Build an OCI tool
+
+	EOT
+}
+
+
+# ========== Script's Begin ==========
+
+. emucon-init.sh
+
+if [ $# -eq 0 ]; then
+	__print_usage
+	emucon_exit
+fi
+
+# Parse script's command line arguments
+case "$1" in
+	-h|--help)
+		__print_usage
+		emucon_exit ;;
+	layer|tool)
+		cmd="$1"
+		shift 1 ;;
+	-*)
+		emucon_print_error "${__cmd_name}: unrecognized option '$1'"
+		emucon_print_cmdargs_parsing_error
+		emucon_abort -v ;;
+	*)
+		emucon_print_error "${__cmd_name}: invalid command -- '$1'"
+		emucon_print_cmdargs_parsing_error
+		emucon_abort -v ;;
+esac
+
+# Running subcommand
+cd "commands/${cmd}"
+./run.sh "$@"
+
