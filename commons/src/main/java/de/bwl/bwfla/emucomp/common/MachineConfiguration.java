@@ -48,6 +48,7 @@ import java.util.logging.Logger;
         "drive",
         "nic",
         "abstractDataResource",
+        "attachedFiles",
         "nativeConfig",
         "outputBindingId",
         "isLinuxRuntime"
@@ -78,7 +79,7 @@ public class MachineConfiguration
             @XmlElementRef(name = "binding", type = Binding.class, namespace = "http://bwfla.bwl.de/common/datatypes"),
             @XmlElementRef(name = "objectArchiveBinding", type = ObjectArchiveBinding.class, namespace = "http://bwfla.bwl.de/common/datatypes")})
     protected List<AbstractDataResource> abstractDataResource;
-
+    @XmlElement(namespace = "http://bwfla.bwl.de/common/datatypes")
     protected List<FileCollection> attachedFiles;
 
     @XmlElement(namespace = "http://bwfla.bwl.de/common/datatypes")

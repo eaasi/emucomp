@@ -21,6 +21,9 @@ public class XpraUtils {
         runner.addArgument("--bind-tcp=localhost:" + port);
         runner.addArgument("--daemon=no");
         runner.addArgument("--html=on");
+        // Enable audio support for Xpra native audio
+        runner.addArgument("--speaker=on");
+        runner.addArgument("--microphone=on");
         runner.addArgument("--start-child=");
         if (isGpuEnabled)
             runner.addArgValue("vglrun ");
@@ -39,6 +42,9 @@ public class XpraUtils {
         runner.addArgument("--bind-tcp=localhost:" + port);
         runner.addArgument("--daemon=no");
         runner.addArgument("--html=on");
+        // Enable audio support for Xpra native audio
+        runner.addArgument("--speaker=on");
+        runner.addArgument("--microphone=on");
         // temporary hotfix
         runner.addEnvVariable("XDG_RUNTIME_DIR", "/tmp/" + port);
         return runner.start();

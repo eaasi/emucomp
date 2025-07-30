@@ -1,10 +1,7 @@
 package de.bwl.bwfla.emucomp.components;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.bwl.bwfla.emucomp.common.ComponentConfiguration;
-import de.bwl.bwfla.emucomp.common.FileCollection;
-import de.bwl.bwfla.emucomp.common.ImageArchiveBinding;
-import de.bwl.bwfla.emucomp.common.MachineConfiguration;
+import de.bwl.bwfla.emucomp.common.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -134,9 +131,9 @@ public class BindingsResolver {
             String data = new String(is.readAllBytes(), StandardCharsets.UTF_8);
             extractedConfigurationHolder = new StringBuffer(data);
 
-            extractedComponentConfiguration = mapperThreadLocal.get().readValue(data, ComponentConfiguration.class);
+            extractedComponentConfiguration = mapperThreadLocal.get().readValue(data, MachineConfiguration.class);
         } catch (IOException e) {
-            log.error("Cannot load configuration from {}", path);
+            log.error("Cannot load configuration from {}", path, e);
         }
     }
 }

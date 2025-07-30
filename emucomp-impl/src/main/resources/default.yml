@@ -49,7 +49,7 @@ components:
 emucomp:
   blobstore_soap: ${EMUCOMP_BLOBSTORE_SOAP:http://eaas:8080}
   inactivitytimeout: ${EMUCOMP_INACTIVITY_TIMEOUT:0}
-  enable_pulseaudio: ${EMUCOMP_ENABLE_PULSEAUDIO:false}
+  enable_pulseaudio: ${EMUCOMP_ENABLE_PULSEAUDIO:true}
   enable_screenshooter: ${EMUCOMP_ENABLE_SCREENSHOOTER:false}
   debug_bean_enabled: ${EMUCOMP_DEBUG_BEAN_ENABLED:false}
   libfaketime: ${EMUCOMP_LIBFAKETIME:/usr/lib/x86_64-linux-gnu/faketime/libfaketime.so.1}

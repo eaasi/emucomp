@@ -50,6 +50,7 @@ import de.bwl.bwfla.emucomp.template.BlobDescription;
 import de.bwl.bwfla.emucomp.template.BlobHandle;
 import de.bwl.bwfla.emucomp.xpra.IAudioStreamer;
 import de.bwl.bwfla.emucomp.xpra.PulseAudioStreamer;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.microprofile.config.ConfigProvider;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -85,6 +86,7 @@ import java.util.stream.Stream;
 /**
  * @author iv1004
  */
+@Slf4j
 public abstract class EmulatorBean extends EaasComponentBean implements EmulatorComponent {
     private EmulatorBeanMode emuBeanMode;
 
@@ -103,7 +105,7 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
     // allow beans to disable the fake clock preload
     protected boolean disableFakeClock = false;
 
-    private boolean isPulseAudioEnabled = false;
+    private boolean isPulseAudioEnabled = ConfigProvider.getConfig().getValue("emucomp.enable_pulseaudio", Boolean.class);
 
     @Inject
     protected ThreadFactory workerThreadFactory;
@@ -1567,11 +1569,9 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
 
             UiOptions uiOptions = emuEnvironment.getUiOptions();
             if (uiOptions != null) {
-                this.isPulseAudioEnabled = false;
-                if (uiOptions.getAudio_system() != null
-                        && !uiOptions.getAudio_system().isEmpty()
-                        && uiOptions.getAudio_system().equalsIgnoreCase("webrtc")) {
-                    this.isPulseAudioEnabled = true;
+                if (uiOptions.getAudio_system() == null || uiOptions.getAudio_system().isEmpty()) {
+                    this.isPulseAudioEnabled = false;
+                    LOG.info("PulseAudio cannot be enabled, audio system is not initialized.");
                 }
             }
 
