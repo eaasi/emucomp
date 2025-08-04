@@ -50,8 +50,10 @@ import de.bwl.bwfla.emucomp.template.BlobDescription;
 import de.bwl.bwfla.emucomp.template.BlobHandle;
 import de.bwl.bwfla.emucomp.xpra.IAudioStreamer;
 import de.bwl.bwfla.emucomp.xpra.PulseAudioStreamer;
+import de.bwl.bwfla.emucomp.xpra.XpraUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+import org.eclipse.microprofile.config.Config;
 import org.eclipse.microprofile.config.ConfigProvider;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.glyptodon.guacamole.GuacamoleException;
@@ -582,10 +584,27 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
             emuRunner.addEnvVariable("LD_PRELOAD", "/usr/local/lib/LD_PRELOAD_clock_gettime.so");
         }
         if (this.isXpraBackendEnabled()) {
-            // TODO: implement this, if needed!
             if (!this.isContainerModeEnabled()) {
-                throw new BWFLAException("Non-containerized XPRA sessions are not supported!")
-                        .setId(this.getComponentId());
+                try {
+                    final Config config = ConfigProvider.getConfig();
+                    final String portsRange = config.getValue("components.xpra.ports", String.class);
+                    final int xpraPort = XpraUtils.allocateXpraPort(portsRange);
+
+                    ProcessRunner xpraRunner = new ProcessRunner();
+                    String emulatorCommand = String.join(" ", emuRunner.getCommand());
+
+                    boolean started = XpraUtils.startXpraSession(xpraRunner, emulatorCommand, xpraPort, LOG);
+                    if (!started) {
+                        throw new BWFLAException("Failed to start Xpra session on port " + xpraPort)
+                                .setId(this.getComponentId());
+                    }
+
+                    LOG.info("Xpra session started on port " + xpraPort);
+
+                } catch (IOException e) {
+                    throw new BWFLAException("Failed to start Xpra session: " + e.getMessage(), e)
+                            .setId(this.getComponentId());
+                }
             }
 
             final boolean isGpuEnabled = ConfigProvider.getConfig()

@@ -11,6 +11,24 @@ import java.util.logging.Logger;
 
 
 public class XpraUtils {
+    public static int allocateXpraPort(String portsRange) {
+        String[] range = portsRange.trim().split("-");
+        int startPort = Integer.parseInt(range[0]);
+        int endPort = Integer.parseInt(range[1]);
+
+        for (int port = startPort; port <= endPort; port++) {
+            try {
+                if (!XpraUtils.isReachable("localhost", port)) {
+                    return port;
+                }
+            } catch (IOException e) {
+                // Continue to next port
+            }
+        }
+
+        throw new RuntimeException("No available ports in range " + portsRange);
+    }
+
     public static boolean startXpraSession(ProcessRunner runner, String command, int port, Logger log)
             throws IOException {
         final Config config = ConfigProvider.getConfig();
@@ -21,32 +39,29 @@ public class XpraUtils {
         runner.addArgument("--bind-tcp=localhost:" + port);
         runner.addArgument("--daemon=no");
         runner.addArgument("--html=on");
-        // Enable audio support for Xpra native audio
+
         runner.addArgument("--speaker=on");
-        runner.addArgument("--microphone=on");
+
+        // PulseAudio
+        runner.addArgument("--pulseaudio=yes");
+        runner.addArgument("--pulseaudio-server=unix:/tmp/" + port + "/pulse-socket");
+        runner.addArgument("--speaker-codec=opus");
+        runner.addArgument("--audio-source=pulse");
+
+        runner.addEnvVariable("PULSE_RUNTIME_PATH", "/tmp/" + port);
+        runner.addEnvVariable("PULSE_STATE_PATH", "/tmp/" + port);
+
         runner.addArgument("--start-child=");
         if (isGpuEnabled)
             runner.addArgValue("vglrun ");
-        runner.addArgValue(command);
-        // temporary hotfix
-        runner.addEnvVariable("XDG_RUNTIME_DIR", "/tmp/" + port);
-        return runner.start();
-    }
 
-    public static boolean startXpraSession(ProcessRunner runner, int port, Logger log) {
-        runner.setCommand("xpra");
-        runner.addArgument("start");
-        runner.addArgument(":" + port);
-        runner.addArgument("--socket-dir=/tmp");
-        runner.addArgument("--socket-dirs=/tmp");
-        runner.addArgument("--bind-tcp=localhost:" + port);
-        runner.addArgument("--daemon=no");
-        runner.addArgument("--html=on");
-        // Enable audio support for Xpra native audio
-        runner.addArgument("--speaker=on");
-        runner.addArgument("--microphone=on");
+        if (command != null && !command.isBlank()) {
+            runner.addArgValue(command);
+        }
+
         // temporary hotfix
         runner.addEnvVariable("XDG_RUNTIME_DIR", "/tmp/" + port);
+
         return runner.start();
     }
 
