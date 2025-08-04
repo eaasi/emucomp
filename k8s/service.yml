@@ -1,24 +1,17 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: emucomp-headless
+  name: emucomp-service
 spec:
-  clusterIP: None
+  type: ClusterIP
   selector:
     app: emucomp
   ports:
     - name: http
       port: 8080
       targetPort: 8080
+      protocol: TCP
     - name: grpc
       port: 9000
       targetPort: 9000
-    - name: guacamole
-      port: 8080
-      targetPort: 8080
-    - name: webrtc-base
-      port: 7000
-      targetPort: 7000
-    - name: webrtc-max
-      port: 7015
-      targetPort: 7015
+      protocol: TCP
