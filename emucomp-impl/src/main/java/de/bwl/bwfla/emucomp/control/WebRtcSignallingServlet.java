@@ -28,6 +28,7 @@ import java.util.logging.Logger;
 /**
  * WebRTC Signalling Servlet - DISABLED
  */
+@Deprecated
 //@WebServlet(name = WebRtcSignallingServlet.SERVLET_NAME)
 public class WebRtcSignallingServlet extends HttpServlet {
     public static final String SERVLET_NAME = "WebRtcSignallingServlet";
