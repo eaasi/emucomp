@@ -19,7 +19,6 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
-            - containerPort: 9000
 ---
 apiVersion: batch/v1
 kind: Job
@@ -36,5 +35,4 @@ spec:
           image: emucomp:latest
           ports:
             - containerPort: 8080
-            - containerPort: 9000
       restartPolicy: Never

@@ -58,26 +58,3 @@ spec:
       allowHeaders:
       - "*"
       allowCredentials: true
----
-apiVersion: networking.istio.io/v1beta1
-kind: VirtualService
-metadata:
-  name: emucomp-grpc-vs
-  namespace: default
-spec:
-  hosts:
-  - "emucomp-grpc.local"
-  - "*"
-  gateways:
-  - emucomp-gateway
-  http:
-  - match:
-    - headers:
-        content-type:
-          regex: "application/grpc.*"
-    route:
-    - destination:
-        host: emucomp-service
-        port:
-          number: 9000
-    timeout: 300s 
