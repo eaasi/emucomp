@@ -1,0 +1,83 @@
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: emucomp-gateway
+  namespace: default
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "emucomp.local"
+    - "*"
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      credentialName: emucomp-tls-secret
+    hosts:
+    - "emucomp.local"
+    - "*"
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: emucomp-vs
+  namespace: default
+spec:
+  hosts:
+  - "emucomp.local"
+  - "*"
+  gateways:
+  - emucomp-gateway
+  http:
+  - match:
+    - uri:
+        prefix: "/"
+    route:
+    - destination:
+        host: emucomp-service
+        port:
+          number: 8080
+    timeout: 300s
+    corsPolicy:
+      allowOrigins:
+      - exact: "*"
+      allowMethods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - OPTIONS
+      allowHeaders:
+      - "*"
+      allowCredentials: true
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: emucomp-grpc-vs
+  namespace: default
+spec:
+  hosts:
+  - "emucomp-grpc.local"
+  - "*"
+  gateways:
+  - emucomp-gateway
+  http:
+  - match:
+    - headers:
+        content-type:
+          regex: "application/grpc.*"
+    route:
+    - destination:
+        host: emucomp-service
+        port:
+          number: 9000
+    timeout: 300s 

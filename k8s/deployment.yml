@@ -18,10 +18,8 @@ spec:
           image: emucomp:latest
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 8080  # HTTP / Guacamole
-            - containerPort: 9000  # GRPC
-            - containerPort: 7000  # WebRTC start
-            - containerPort: 7015  # WebRTC end
+            - containerPort: 8080
+            - containerPort: 9000
 ---
 apiVersion: batch/v1
 kind: Job
@@ -39,6 +37,4 @@ spec:
           ports:
             - containerPort: 8080
             - containerPort: 9000
-            - containerPort: 7000
-            - containerPort: 7015
       restartPolicy: Never
