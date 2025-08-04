@@ -586,9 +586,7 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
         if (this.isXpraBackendEnabled()) {
             if (!this.isContainerModeEnabled()) {
                 try {
-                    final Config config = ConfigProvider.getConfig();
-                    final String portsRange = config.getValue("components.xpra.ports", String.class);
-                    final int xpraPort = XpraUtils.allocateXpraPort(portsRange);
+                    final int xpraPort = XpraUtils.allocateXpraPort();
 
                     ProcessRunner xpraRunner = new ProcessRunner();
                     String emulatorCommand = String.join(" ", emuRunner.getCommand());

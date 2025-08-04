@@ -27,7 +27,7 @@ components:
     runc: ${COMPONENTS_BINARY_RUNC:runc}
     vdeplug: ${COMPONENTS_BINARY_VDEPLUG:/usr/bin/vde_plug}
   xpra:
-    ports: ${COMPONENTS_XPRA_PORTS:7000-7100}
+    ports: ${COMPONENTS_XPRA_PORTS:7000}
     enable_gpu: ${COMPONENTS_XPRA_ENABLE_GPU:false}
   vice_defaults_dir: ${COMPONENTS_VICE_DEFAULTS_DIR:/home/bwfla/server-data/vice-defaults}
   emulator_containers:

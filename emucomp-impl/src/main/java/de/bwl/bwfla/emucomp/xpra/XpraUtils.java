@@ -11,22 +11,20 @@ import java.util.logging.Logger;
 
 
 public class XpraUtils {
-    public static int allocateXpraPort(String portsRange) {
-        String[] range = portsRange.trim().split("-");
-        int startPort = Integer.parseInt(range[0]);
-        int endPort = Integer.parseInt(range[1]);
-
-        for (int port = startPort; port <= endPort; port++) {
-            try {
-                if (!XpraUtils.isReachable("localhost", port)) {
-                    return port;
-                }
-            } catch (IOException e) {
-                // Continue to next port
+    public static int allocateXpraPort() {
+        final Config config = ConfigProvider.getConfig();
+        final int xpraPort = config.getValue("components.xpra.ports", Integer.class);
+        
+        try {
+            if (!XpraUtils.isReachable("localhost", xpraPort)) {
+                return xpraPort;
             }
+        } catch (IOException e) {
+            // Port is not reachable, so it's available
+            return xpraPort;
         }
-
-        throw new RuntimeException("No available ports in range " + portsRange);
+        
+        throw new RuntimeException("Xpra port " + xpraPort + " is already in use");
     }
 
     public static boolean startXpraSession(ProcessRunner runner, String command, int port, Logger log)
