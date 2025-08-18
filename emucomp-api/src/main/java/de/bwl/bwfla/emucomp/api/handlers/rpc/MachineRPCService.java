@@ -278,36 +278,4 @@ public class MachineRPCService extends MachineServiceGrpc.MachineServiceImplBase
             responseObserver.onError(e);
         }
     }
-
-    @Override
-    public void takeScreenshot(EmptyRequest request, StreamObserver<EmptyResponse> responseObserver) {
-        final EmulatorComponent emul;
-        try {
-            emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
-            emul.takeScreenshot();
-
-            responseObserver.onNext(EmptyResponse.getDefaultInstance());
-            responseObserver.onCompleted();
-        } catch (BWFLAException e) {
-            responseObserver.onError(e);
-        }
-    }
-
-    @Override
-    public void nextScreenshot(EmptyRequest request, StreamObserver<GenericResponse> responseObserver) {
-        final EmulatorComponent emul;
-        try {
-            emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
-            DataHandler nextScreenshot = emul.getNextScreenshot();
-
-            responseObserver.onNext(
-                    GenericResponse.newBuilder()
-                            .setMessage(mapper.writeValueAsString(nextScreenshot))
-                            .build()
-            );
-            responseObserver.onCompleted();
-        } catch (BWFLAException | JsonProcessingException e) {
-            responseObserver.onError(e);
-        }
-    }
 }

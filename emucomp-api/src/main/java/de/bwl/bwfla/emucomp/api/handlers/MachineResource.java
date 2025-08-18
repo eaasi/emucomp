@@ -175,21 +175,4 @@ public class MachineResource {
         final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
         return emul.getPrintJobs();
     }
-
-    /* ==================== Screenshot API ==================== */
-
-    @POST
-    @Path("/screenshot")
-    public void takeScreenshot() throws BWFLAException {
-        final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
-        emul.takeScreenshot();
-    }
-
-    @GET
-    @Path("/screenshot")
-    @Produces(MediaType.APPLICATION_JSON)
-    public DataHandler getNextScreenshot() throws BWFLAException {
-        final EmulatorComponent emul = nodeManager.getComponentTransformed(EmulatorComponent.class);
-        return emul.getNextScreenshot();
-    }
 }

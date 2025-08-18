@@ -59,10 +59,4 @@ public interface EmulatorComponent extends ClusterComponent, PrinterModule, Moni
     /* ==================== EmuCon API ==================== */
 
     public DataHandler checkpoint() throws BWFLAException;
-
-    /* ==================== Screenshot API ==================== */
-
-    public void takeScreenshot() throws BWFLAException;
-
-    public DataHandler getNextScreenshot() throws BWFLAException;
 }

@@ -28,7 +28,6 @@ import de.bwl.bwfla.emucomp.common.datatypes.ProcessMonitorVID;
 import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
 import de.bwl.bwfla.emucomp.common.exceptions.IllegalEmulatorStateException;
 import de.bwl.bwfla.emucomp.common.services.guacplay.GuacDefs;
-import de.bwl.bwfla.emucomp.common.services.guacplay.capture.ScreenShooter;
 import de.bwl.bwfla.emucomp.common.services.guacplay.net.GuacInterceptorChain;
 import de.bwl.bwfla.emucomp.common.services.guacplay.net.GuacTunnel;
 import de.bwl.bwfla.emucomp.common.services.guacplay.net.TunnelConfig;
@@ -147,11 +146,6 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
      * Is a client attached to the emulator?
      */
     private final AtomicBoolean isClientAttachedFlag = new AtomicBoolean(false);
-
-    /**
-     * Tool for capturing of screenshots.
-     */
-    private ScreenShooter scrshooter = null;
 
     final boolean isScreenshotEnabled = ConfigProvider.getConfig().getValue("emucomp.enable_screenshooter", Boolean.class);
 
@@ -494,10 +488,6 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
         }
 
         this.unmountBindings();
-
-        // Stop screenshot-tool
-        if (scrshooter != null)
-            scrshooter.finish();
 
         // Cleanup the control sockets
         try {
@@ -1829,24 +1819,6 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
             return null;
 
         return printer.getPrintJobs();
-    }
-
-    /* ==================== Screenshot API ==================== */
-
-    public void takeScreenshot() {
-        if (scrshooter != null)
-            scrshooter.takeScreenshot();
-    }
-
-    public DataHandler getNextScreenshot() {
-        if (scrshooter == null)
-            return null;
-
-        byte[] data = scrshooter.getNextScreenshot();
-        if (data == null)
-            return null;
-
-        return new DataHandler(data, "application/octet-stream");
     }
 
 
