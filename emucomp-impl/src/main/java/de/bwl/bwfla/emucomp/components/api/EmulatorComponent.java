@@ -35,7 +35,7 @@ import java.util.Set;
 /**
  * @author iv1004
  */
-public interface EmulatorComponent extends ClusterComponent {
+public interface EmulatorComponent extends ClusterComponent, PrinterModule, MonitorModule {
     public void start() throws BWFLAException;
 
     public String stop() throws BWFLAException;
@@ -59,50 +59,6 @@ public interface EmulatorComponent extends ClusterComponent {
     /* ==================== EmuCon API ==================== */
 
     public DataHandler checkpoint() throws BWFLAException;
-
-
-    /* =============== Session recording API =============== */
-
-    public boolean prepareSessionRecorder() throws BWFLAException;
-
-    public void startSessionRecording() throws BWFLAException;
-
-    public void stopSessionRecording() throws BWFLAException;
-
-    public boolean isRecordModeEnabled() throws BWFLAException;
-
-    public void addActionFinishedMark() throws BWFLAException;
-
-    public void defineTraceMetadataChunk(String tag, String comment) throws BWFLAException;
-
-    public void addTraceMetadataEntry(String ctag, String key, String value) throws BWFLAException;
-
-    public String getSessionTrace() throws BWFLAException;
-
-
-    /* =============== Session replay API =============== */
-
-    public boolean prepareSessionPlayer(String trace, boolean headless) throws BWFLAException;
-
-    public int getSessionPlayerProgress() throws BWFLAException;
-
-    public boolean isReplayModeEnabled() throws BWFLAException;
-
-
-    /* ==================== Monitoring API ==================== */
-
-    public boolean updateMonitorValues() throws BWFLAException;
-
-    public String getMonitorValue(ProcessMonitorVID id) throws BWFLAException;
-
-    public List<String> getMonitorValues(Collection<ProcessMonitorVID> ids) throws BWFLAException;
-
-    public List<String> getAllMonitorValues() throws BWFLAException;
-
-
-    /* ==================== Print  API ==================== */
-    public List<PrintJob> getPrintJobs() throws BWFLAException;
-
 
     /* ==================== Screenshot API ==================== */
 
