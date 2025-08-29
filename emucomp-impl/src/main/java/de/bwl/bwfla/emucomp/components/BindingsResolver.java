@@ -24,11 +24,11 @@ public class BindingsResolver {
 
     private static final String _classpath_DEFAULT_CONFIGURATION_PATH = "/config";
 
-    public static volatile String providedConfigurationPath;
+    public static String providedConfigurationPath;
     private static StringBuffer extractedConfigurationHolder;
     private static ComponentConfiguration extractedComponentConfiguration;
 
-    private static final ThreadLocal<ObjectMapper> mapperThreadLocal = ThreadLocal.withInitial(ObjectMapper::new);
+    private static final ObjectMapper obj = new ObjectMapper();
 
     public static Optional<FileCollection> findFileCollectionDeclaration(String objectArchive, String id) {
         tryExtractConfiguration();
@@ -134,7 +134,7 @@ public class BindingsResolver {
             String data = new String(is.readAllBytes(), StandardCharsets.UTF_8);
             extractedConfigurationHolder = new StringBuffer(data);
 
-            extractedComponentConfiguration = mapperThreadLocal.get().readValue(data, ComponentConfiguration.class);
+            extractedComponentConfiguration = obj.readValue(data, ComponentConfiguration.class);
         } catch (IOException e) {
             log.error("Cannot load configuration from {}", path);
         }
