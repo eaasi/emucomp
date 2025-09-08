@@ -9,7 +9,6 @@ RUN unzip /tmp/emucon-tools-master.zip -d /tmp/ && \
     cp -vrp /tmp/emucon-tools-master/runtime/bin /usr/local && \
     cp -vrp /tmp/emucon-tools-master/runtime/lib /usr/local && \
     cp -vrp /tmp/emucon-tools-master/runtime/share /usr/local &&  \
-    mkdir -p /tmp/nics/nic1 &&  \
     install -v -m 'a=rx' /tmp/emucon-tools-master/builder/commands/layer/layers/base/scripts/emucon-init /usr/bin/emucon-init &&  \
     chmod +x /usr/bin/emucon-init && \
      . /tmp/emucon-tools-master/bootstrap.sh
