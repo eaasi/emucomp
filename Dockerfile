@@ -11,6 +11,9 @@ RUN unzip /tmp/emucon-tools-master.zip -d /tmp/ && \
     cp -vrp /tmp/emucon-tools-master/runtime/share /usr/local &&  \
     install -v -m 'a=rx' /tmp/emucon-tools-master/builder/commands/layer/layers/base/scripts/emucon-init /usr/bin/emucon-init &&  \
     chmod +x /usr/bin/emucon-init && \
+    sed -i '/--html=off/a\\t    --speaker=on \\\n\t    --pulseaudio=yes \\\n\t  \
+      --pulseaudio-server=unix:\/tmp\/${display#:}\/pulse-socket \\\n\t   \
+     --speaker-codec=opus \\\n\t    --audio-source=pulse' /usr/bin/emucon-init && \
      . /tmp/emucon-tools-master/bootstrap.sh
 
 RUN sed -i '$s/$/ -nolisten local/' /etc/xpra/conf.d/55_server_x11.conf
