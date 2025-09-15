@@ -44,11 +44,6 @@ import de.bwl.bwfla.emucomp.control.connectors.*;
 import de.bwl.bwfla.emucomp.template.BlobDescription;
 import de.bwl.bwfla.emucomp.template.BlobHandle;
 import de.bwl.bwfla.emucomp.xpra.IAudioStreamer;
-import de.bwl.bwfla.emucomp.xpra.PulseAudioStreamer;
-import de.bwl.bwfla.emucomp.xpra.XpraUtils;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
-import org.eclipse.microprofile.config.Config;
 import org.eclipse.microprofile.config.ConfigProvider;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.glyptodon.guacamole.GuacamoleException;
@@ -83,7 +78,6 @@ import java.util.stream.Stream;
 /**
  * @author iv1004
  */
-@Slf4j
 public abstract class EmulatorBean extends EaasComponentBean implements EmulatorComponent {
     private EmulatorBeanMode emuBeanMode;
 
@@ -823,12 +817,6 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
 
         if (this.isXpraBackendEnabled()) {
             this.addControlConnector(new XpraConnector(this.getXpraSocketPath()));
-        }
-
-        if (this.isPulseAudioEnabled()) {
-            final String cid = this.getComponentId();
-            final Path pulsesock = this.getPulseAudioSocketPath();
-            this.addControlConnector(new AudioConnector(() -> new PulseAudioStreamer(cid, pulsesock)));
         }
 
         this.addControlConnector(new StdoutLogConnector(emuRunner.getStdOutPath()));
