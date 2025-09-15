@@ -74,7 +74,7 @@ public class NodeManager {
     @Getter
     protected AbstractEaasComponent currentComponent;
 
-    private final ThreadLocal<ComponentConfiguration> loadedComponentConfiguration = ThreadLocal.withInitial(() -> null);
+    private ComponentConfiguration loadedComponentConfiguration = null;
 
     @Inject
     @ConfigProperty(name = "components.warmup_timeout")
@@ -107,7 +107,7 @@ public class NodeManager {
 
                     String data = new String(is.readAllBytes(), StandardCharsets.UTF_8);
 
-                    loadedComponentConfiguration.set(objectMapper.readValue(data, ComponentConfiguration.class));
+                    loadedComponentConfiguration = objectMapper.readValue(data, ComponentConfiguration.class);
                     configurationLoadedOnInit.getAndSet(true);
 
                     currentComponent = createComponentInstance();
@@ -199,7 +199,7 @@ public class NodeManager {
         try {
             AbstractEaasComponent component;
             String componentId = UUID.randomUUID().toString();
-            ComponentConfiguration configuration = loadedComponentConfiguration.get();
+            ComponentConfiguration configuration = loadedComponentConfiguration;
 
             if (configuration instanceof MachineConfiguration) {
                 component = EmulatorBean.createEmulatorBean((MachineConfiguration) configuration);
