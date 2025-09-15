@@ -20,50 +20,49 @@
 package de.bwl.bwfla.emucomp.xpra;
 
 import de.bwl.bwfla.emucomp.common.logging.PrefixLogger;
-import org.freedesktop.gstreamer.*;
-import org.freedesktop.gstreamer.webrtc.WebRTCBin;
-import org.freedesktop.gstreamer.webrtc.WebRTCBin.CREATE_OFFER;
-import org.freedesktop.gstreamer.webrtc.WebRTCBin.ON_ICE_CANDIDATE;
-import org.freedesktop.gstreamer.webrtc.WebRTCBin.ON_NEGOTIATION_NEEDED;
-import org.freedesktop.gstreamer.webrtc.WebRTCSDPType;
-import org.freedesktop.gstreamer.webrtc.WebRTCSessionDescription;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
-import java.io.StringReader;
-import java.lang.ref.WeakReference;
 import java.nio.file.Path;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
 /**
- * Code is based on GStreamer's WebRTC demos:
+ * PulseAudio streamer for Xpra - WebRTC functionality has been disabled.
+ * Audio is now handled natively by Xpra using PulseAudio.
+ * <p>
+ * Original WebRTC code was based on GStreamer's WebRTC demos:
  * https://github.com/centricular/gstwebrtc-demos
  */
-public class PulseAudioStreamer implements IAudioStreamer
-{
-	private final Logger log;
+public class PulseAudioStreamer implements IAudioStreamer {
+    private final Logger log;
+    private final Path pulsesock;
+    private final BlockingQueue<String> outqueue;
 
-	private final BlockingQueue<String> outqueue;
+    // WebRTC components commented out - using Xpra native audio instead
+	/*
 	private final Pipeline pipeline;
 	private final WebRTCBin webrtc;
 	private final Bin audio;
-	private boolean closed;
+	*/
 
-	private static final long OUTPUT_QUEUE_OFFER_TIMEOUT = 5L;
+    private boolean closed;
+    private boolean playing;
+
+    private static final long OUTPUT_QUEUE_OFFER_TIMEOUT = 5L;
 
 
-	public PulseAudioStreamer(String cid, Path pulsesock)
-	{
-		final PrefixLogger logger = new PrefixLogger(PulseAudioStreamer.class.getName());
-		logger.getContext().add("cid", cid);
-		this.log = logger;
+    public PulseAudioStreamer(String cid, Path pulsesock) {
+        final PrefixLogger logger = new PrefixLogger(PulseAudioStreamer.class.getName());
+        logger.getContext().add("cid", cid);
+        this.log = logger;
+        this.pulsesock = pulsesock;
 
+        log.info("Initializing PulseAudioStreamer for Xpra native audio (WebRTC disabled)");
+
+        // WebRTC initialization commented out - not needed for Xpra
+		/*
 		try {
 			Gst.init(new Version(1, 14));
 		}
@@ -71,43 +70,62 @@ public class PulseAudioStreamer implements IAudioStreamer
 			log.log(Level.SEVERE, "Initializing GStreamer failed!", error);
 			throw error;
 		}
+		*/
 
-		this.outqueue = new ArrayBlockingQueue<>(16);
+        this.outqueue = new ArrayBlockingQueue<>(16);
+
+        // WebRTC pipeline creation commented out - Xpra handles audio natively
+		/*
 		this.pipeline = PulseAudioStreamer.createPipeline(log);
 		this.audio = PulseAudioStreamer.createAudioBin(pulsesock.toString());
 		this.webrtc= PulseAudioStreamer.createWebRtcBin(pipeline, outqueue, log);
-		this.closed = false;
+		*/
 
+        this.closed = false;
+        this.playing = false;
+
+        // WebRTC pipeline setup commented out - not needed for Xpra
+		/*
 		pipeline.addMany(webrtc, audio);
 		audio.link(webrtc);
-	}
+		*/
 
-	@Override
-	public String pollServerControlMessage(long timeout, TimeUnit unit)
-	{
+        log.info("PulseAudioStreamer initialized for Xpra native audio at: " + pulsesock);
+    }
+
+    @Override
+    public String pollServerControlMessage(long timeout, TimeUnit unit) {
+        // WebRTC control messages not needed for Xpra native audio
+        // Return null to indicate no WebRTC signaling messages
+        log.fine("pollServerControlMessage called - WebRTC disabled, returning null for Xpra");
+        return null;
+		
+		/* WebRTC implementation commented out:
 		try {
 			return outqueue.poll(timeout, unit);
 		}
 		catch (InterruptedException error) {
 			return null;  // Ignore it!
 		}
-	}
+		*/
+    }
 
-	@Override
-	public void postClientControlMessage(char[] payload) throws IllegalArgumentException
-	{
-		this.postClientControlMessage(payload, 0, payload.length);
-	}
+    @Override
+    public void postClientControlMessage(char[] payload) throws IllegalArgumentException {
+        this.postClientControlMessage(payload, 0, payload.length);
+    }
 
-	@Override
-	public void postClientControlMessage(char[] payload, int offset, int length) throws IllegalArgumentException
-	{
-		this.postClientControlMessage(new String(payload, offset, length));
-	}
+    @Override
+    public void postClientControlMessage(char[] payload, int offset, int length) throws IllegalArgumentException {
+        this.postClientControlMessage(new String(payload, offset, length));
+    }
 
-	@Override
-	public void postClientControlMessage(String payload) throws IllegalArgumentException
-	{
+    @Override
+    public void postClientControlMessage(String payload) throws IllegalArgumentException {
+        // WebRTC control message handling commented out - not needed for Xpra native audio
+        log.fine("postClientControlMessage called with WebRTC disabled, using Xpra: " + payload);
+		
+		/* WebRTC implementation commented out:
 		final ControlMessage message = ControlMessage.parse(payload);
 		final String msgtype = message.getType();
 		switch (msgtype) {
@@ -128,29 +146,46 @@ public class PulseAudioStreamer implements IAudioStreamer
 			default:
 				throw new IllegalArgumentException("Unknown message type: " + msgtype);
 		}
-	}
+		*/
+    }
 
-	@Override
-	public void play()
-	{
-		log.info("Starting audio streamer...");
+    @Override
+    public void play() {
+        log.info("Starting PulseAudioStreamer for Xpra native audio...");
+        playing = true;
+
+        // WebRTC pipeline start commented out - Xpra handles audio natively
+		/*
 		pipeline.play();
-	}
+		*/
 
-	@Override
-	public void stop()
-	{
-		log.info("Stopping audio streamer...");
+        log.info("PulseAudioStreamer started - audio handled natively by Xpra");
+    }
+
+    @Override
+    public void stop() {
+        log.info("Stopping PulseAudioStreamer...");
+        playing = false;
+
+        // WebRTC pipeline stop commented out - not needed for Xpra
+		/*
 		pipeline.stop();
 
 		final ControlMessage<EosData> eosmessage = ControlMessage.wrap(new EosData());
 		outqueue.offer(eosmessage.toString());
-	}
+		*/
 
-	@Override
-	public void close()
-	{
-		log.info("Closing audio streamer...");
+        log.info("PulseAudioStreamer stopped - Xpra native audio");
+    }
+
+    @Override
+    public void close() {
+        log.info("Closing PulseAudioStreamer...");
+        playing = false;
+        closed = true;
+
+        // WebRTC cleanup commented out - not needed for Xpra
+		/*
 		try {
 			audio.unlink(webrtc);
 			pipeline.remove(webrtc);
@@ -164,17 +199,29 @@ public class PulseAudioStreamer implements IAudioStreamer
 		finally {
 			Gst.quit();
 		}
-	}
+		*/
 
-	@Override
-	public boolean isClosed()
-	{
-		return closed;
-	}
+        log.info("PulseAudioStreamer closed - Xpra native audio");
+    }
+
+    @Override
+    public boolean isClosed() {
+        return closed;
+    }
+
+    public boolean isPlaying() {
+        return playing;
+    }
+
+    public Path getPulseSocketPath() {
+        return pulsesock;
+    }
 
 
-	// ========== Internal Helpers ==============================
+    // ========== WebRTC Internal Helpers - ALL COMMENTED OUT ==============================
 
+	/* WebRTC pipeline creation commented out - not needed for Xpra:
+	
 	private static Pipeline createPipeline(Logger log)
 	{
 		final Bus.STATE_CHANGED onStateChanged = (source, old, current, pending) -> {
@@ -285,8 +332,14 @@ public class PulseAudioStreamer implements IAudioStreamer
 
 		return Gst.parseBinFromDescription(description, true);
 	}
+	
+	*/
 }
 
+
+// ========== WebRTC Control Message Classes - ALL COMMENTED OUT ==============================
+
+/* WebRTC control message classes commented out - not needed for Xpra:
 
 interface JsonSerializable
 {
@@ -526,3 +579,5 @@ class EosData implements JsonSerializable
 		return this.toJson().toString();
 	}
 }
+
+*/

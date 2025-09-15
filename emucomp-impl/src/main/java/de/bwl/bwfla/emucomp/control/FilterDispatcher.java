@@ -86,8 +86,8 @@ public class FilterDispatcher implements Filter
                     }
 
                     case AudioConnector.PROTOCOL: {
-                        // use the custom signalling servlet for incoming requests
-                        servletName = WebRtcSignallingServlet.SERVLET_NAME;
+                        // WebRTC signalling servlet commented out - using Xpra native audio instead
+                        // servletName = WebRtcSignallingServlet.SERVLET_NAME;
                         break;
                     }
                 }

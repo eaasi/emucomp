@@ -14,8 +14,6 @@ RUN useradd -ms /bin/bash --uid 1000 --gid bwfla bwfla && for grp in fuse disk a
 
 RUN chown bwfla:bwfla /home/bwfla
 
-USER bwfla
-
 RUN mkdir -p /home/bwfla/.bwFLA  \
 /home/bwfla/demo-ui              \
 /home/bwfla/image-archive        \
@@ -26,11 +24,16 @@ RUN mkdir -p /home/bwfla/.bwFLA  \
 /home/bwfla/export		 \
 /home/bwfla/defaults
 
-RUN cd /tmp/emucon-tools-master && \
-    . ./bootstrap.sh && \
+
+WORKDIR /tmp/emucon-tools-master
+RUN . ./bootstrap.sh && \
+    mkdir -p /bin/builder && \
+    ln -sf /tmp/emucon-tools-master/builder/ /bin/builder/ && \
+    mkdir -p /bin/installer && \
+    ln -sf /tmp/emucon-tools-master/installer/install-oci-tools.sh /bin/installer/install-oci-tools.sh && \
     . ./install.sh --destination /usr/local -u bwfla && \
-    ./installer/install-oci-tools.sh --destination /tmp/oci-tools && \
     ./installer/install-deps.sh
+
 
 FROM maven:3.8.6-eclipse-temurin-11 AS build
 
@@ -49,7 +52,7 @@ FROM eclipse-temurin:11-jdk-jammy
 RUN echo "locales locales/default_environment_locale string en_US.UTF-8" | debconf-set-selections
 RUN echo "keyboard-configuration keyboard-configuration/layoutcode string us" | debconf-set-selections
 RUN DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && apt-get install -y xpra socat vde2 qemu-utils qemu-system ntfs-3g util-linux sudo unzip
+RUN apt-get update && apt-get install -y xpra socat vde2 qemu-utils qemu-system ntfs-3g util-linux sudo unzip pulseaudio pulseaudio-utils
 RUN rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /linapple-pie /minivmac /usr/local/bin

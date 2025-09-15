@@ -1,0 +1,154 @@
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: emucomp-session-gateway
+  namespace: default
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - port:
+        number: 80
+        name: http-session
+        protocol: HTTP
+      hosts:
+        - "session.emucomp.local"
+    - port:
+        number: 443
+        name: https-session
+        protocol: HTTPS
+      tls:
+        mode: SIMPLE
+        credentialName: emucomp-session-tls-secret
+      hosts:
+        - "session.emucomp.local"
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: emucomp-session-vs
+  namespace: default
+spec:
+  hosts:
+    - "session.emucomp.local"
+  gateways:
+    - emucomp-session-gateway
+  http:
+    - match:
+        - uri:
+            prefix: "/components/"
+        - headers:
+            upgrade:
+              exact: "websocket"
+      route:
+        - destination:
+            host: emucomp-service
+            port:
+              number: 8080
+      timeout: 0s
+      websocketUpgrade: true
+
+    - match:
+        - uri:
+            regex: "^/components/[^/]+/xpra$"
+      route:
+        - destination:
+            host: emucomp-service
+            port:
+              number: 8080
+      timeout: 0s
+      websocketUpgrade: true
+
+    - match:
+        - uri:
+            regex: "^/components/[^/]+/websocket$"
+      route:
+        - destination:
+            host: emucomp-service
+            port:
+              number: 8080
+      timeout: 0s
+      websocketUpgrade: true
+
+    - match:
+        - uri:
+            regex: "^/components/[^/]+/webemulator$"
+      route:
+        - destination:
+            host: emucomp-service
+            port:
+              number: 8080
+      timeout: 0s
+      websocketUpgrade: true
+
+    - match:
+        - uri:
+            regex: "^/components/[^/]+/ws\\+ethernet/[^/]+$"
+      route:
+        - destination:
+            host: emucomp-service
+            port:
+              number: 8080
+      timeout: 0s
+      websocketUpgrade: true
+
+    - match:
+        - uri:
+            prefix: "/session/"
+      route:
+        - destination:
+            host: emucomp-service
+            port:
+              number: 8080
+      timeout: 60s
+
+    - match:
+        - uri:
+            prefix: "/session-recorder/"
+        - uri:
+            prefix: "/session-player/"
+      route:
+        - destination:
+            host: emucomp-service
+            port:
+              number: 8080
+      timeout: 300s
+
+    - match:
+        - uri:
+            prefix: "/ComponentService/"
+      route:
+        - destination:
+            host: emucomp-service
+            port:
+              number: 8080
+      timeout: 120s
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: emucomp-session-destination
+  namespace: default
+spec:
+  host: emucomp-service
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: 100
+        keepAlive:
+          time: 7200s
+          timeout: 60s
+          interval: 60s
+      http:
+        http1MaxPendingRequests: 50
+        http2MaxRequests: 100
+        maxRequestsPerConnection: 1
+        h2UpgradePolicy: UPGRADE
+        useClientProtocol: true
+    loadBalancer:
+      consistentHash:
+        httpHeaderName: "X-Component-ID"
+    outlierDetection:
+      consecutive5xxErrors: 10
+      interval: 60s
+      baseEjectionTime: 60s
