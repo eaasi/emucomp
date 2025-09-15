@@ -20,43 +20,25 @@
 package de.bwl.bwfla.emucomp.components.api;
 
 
-import de.bwl.bwfla.emucomp.common.BindingDataHandler;
 import de.bwl.bwfla.emucomp.common.PrintJob;
-import de.bwl.bwfla.emucomp.common.datatypes.EmuCompState;
 import de.bwl.bwfla.emucomp.common.datatypes.ProcessMonitorVID;
 import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
 
-import javax.activation.DataHandler;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 
 /**
  * @author iv1004
  */
-public interface EmulatorComponent extends ClusterComponent, PrinterModule, MonitorModule {
-    public void start() throws BWFLAException;
+public interface MonitorModule {
+    /* ==================== Monitoring API ==================== */
 
-    public String stop() throws BWFLAException;
+    public boolean updateMonitorValues() throws BWFLAException;
 
-    public List<BindingDataHandler> snapshot() throws BWFLAException;
+    public String getMonitorValue(ProcessMonitorVID id) throws BWFLAException;
 
-    public int changeMedium(int containerId, String objReference) throws BWFLAException;
+    public List<String> getMonitorValues(Collection<ProcessMonitorVID> ids) throws BWFLAException;
 
-    public int attachMedium(DataHandler data, String mediumType) throws BWFLAException;
-
-    public DataHandler detachMedium(int containerId) throws BWFLAException;
-
-    public String getRuntimeConfiguration() throws BWFLAException;
-
-    public Set<String> getColdplugableDrives();
-
-    public Set<String> getHotplugableDrives();
-
-    public EmuCompState getEmulatorState();
-
-    /* ==================== EmuCon API ==================== */
-
-    public DataHandler checkpoint() throws BWFLAException;
+    public List<String> getAllMonitorValues() throws BWFLAException;
 }

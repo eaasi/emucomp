@@ -28,14 +28,9 @@ import de.bwl.bwfla.emucomp.common.datatypes.ProcessMonitorVID;
 import de.bwl.bwfla.emucomp.common.exceptions.BWFLAException;
 import de.bwl.bwfla.emucomp.common.exceptions.IllegalEmulatorStateException;
 import de.bwl.bwfla.emucomp.common.services.guacplay.GuacDefs;
-import de.bwl.bwfla.emucomp.common.services.guacplay.GuacDefs.ExtOpCode;
-import de.bwl.bwfla.emucomp.common.services.guacplay.GuacDefs.SourceType;
-import de.bwl.bwfla.emucomp.common.services.guacplay.capture.ScreenShooter;
 import de.bwl.bwfla.emucomp.common.services.guacplay.net.GuacInterceptorChain;
 import de.bwl.bwfla.emucomp.common.services.guacplay.net.GuacTunnel;
 import de.bwl.bwfla.emucomp.common.services.guacplay.net.TunnelConfig;
-import de.bwl.bwfla.emucomp.common.services.guacplay.protocol.InstructionBuilder;
-import de.bwl.bwfla.emucomp.common.services.guacplay.record.SessionRecorder;
 import de.bwl.bwfla.emucomp.common.utils.*;
 import de.bwl.bwfla.emucomp.components.BindingsManager;
 import de.bwl.bwfla.emucomp.components.BindingsResolver;
@@ -156,15 +151,6 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
      * Is a client attached to the emulator?
      */
     private final AtomicBoolean isClientAttachedFlag = new AtomicBoolean(false);
-
-    /* Session recording + replay members */
-    private SessionRecorder recorder = null;
-    private SessionPlayerWrapper player = null;
-
-    /**
-     * Tool for capturing of screenshots.
-     */
-    private ScreenShooter scrshooter = null;
 
     final boolean isScreenshotEnabled = ConfigProvider.getConfig().getValue("emucomp.enable_screenshooter", Boolean.class);
 
@@ -508,19 +494,6 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
 
         this.unmountBindings();
 
-        // Stop screenshot-tool
-        if (scrshooter != null)
-            scrshooter.finish();
-
-        // Stop and finalize session-recording
-        if (recorder != null && !recorder.isFinished()) {
-            try {
-                recorder.finish();
-            } catch (IOException e) {
-                LOG.log(Level.SEVERE, e.getMessage(), e);
-            }
-        }
-
         // Cleanup the control sockets
         try {
             if (ctlSocket != null)
@@ -584,25 +557,10 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
             emuRunner.addEnvVariable("LD_PRELOAD", "/usr/local/lib/LD_PRELOAD_clock_gettime.so");
         }
         if (this.isXpraBackendEnabled()) {
+            // TODO: implement this, if needed!
             if (!this.isContainerModeEnabled()) {
-                try {
-                    final int xpraPort = XpraUtils.allocateXpraPort();
-
-                    ProcessRunner xpraRunner = new ProcessRunner();
-                    String emulatorCommand = String.join(" ", emuRunner.getCommand());
-
-                    boolean started = XpraUtils.startXpraSession(xpraRunner, emulatorCommand, xpraPort, LOG);
-                    if (!started) {
-                        throw new BWFLAException("Failed to start Xpra session on port " + xpraPort)
-                                .setId(this.getComponentId());
-                    }
-
-                    LOG.info("Xpra session started on port " + xpraPort);
-
-                } catch (IOException e) {
-                    throw new BWFLAException("Failed to start Xpra session: " + e.getMessage(), e)
-                            .setId(this.getComponentId());
-                }
+                throw new BWFLAException("Non-containerized XPRA sessions are not supported!")
+                        .setId(this.getComponentId());
             }
 
             final boolean isGpuEnabled = ConfigProvider.getConfig()
@@ -863,51 +821,7 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
             worker.start();
         }
 
-        if (this.isSdlBackendEnabled()) {
-            // Not in local mode?
-            if (!this.isLocalModeEnabled()) {
-                // Initialize the screenshot-tool
-                if (this.isScreenshotEnabled) {
-                    scrshooter = new ScreenShooter(this.getComponentId(), 256);
-                    scrshooter.prepare();
-
-                    // Register the screenshot-tool
-                    interceptors.addInterceptor(scrshooter);
-                }
-            }
-
-            // Prepare the connector for guacamole connections
-            {
-                final IThrowingSupplier<GuacTunnel> clientTunnelCtor = () -> {
-                    if (emuBeanState.fetch() == EmuCompState.EMULATOR_STOPPED) {
-                        final var message = "Attaching client to stopped emulator failed!";
-                        LOG.warning(message);
-                        throw new IllegalStateException(message);
-                    }
-
-                    final Runnable waitTask = () -> {
-                        try {
-                            EmulatorBean.this.attachClientToEmulator();
-                            EmulatorBean.this.waitForAttachedClient();
-                        } catch (Exception exception) {
-                            emuBeanState.update(EmuCompState.EMULATOR_FAILED);
-                            LOG.log(Level.SEVERE, "Attaching client to emulator failed!", exception);
-                        }
-                    };
-
-                    executor.execute(waitTask);
-
-                    // Construct the tunnel
-                    final GuacTunnel tunnel = GuacTunnel.construct(tunnelConfig);
-                    if (!this.isLocalModeEnabled() && (player != null))
-                        player.start(tunnel, this.getComponentId(), emuRunner.getProcessMonitor());
-
-                    return (player != null) ? player.getPlayerTunnel() : tunnel;
-                };
-
-                this.addControlConnector(new GuacamoleConnector(clientTunnelCtor, emuConfig.isRelativeMouse()));
-            }
-        } else if (this.isXpraBackendEnabled()) {
+        if (this.isXpraBackendEnabled()) {
             this.addControlConnector(new XpraConnector(this.getXpraSocketPath()));
         }
 
@@ -1154,9 +1068,6 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
     }
 
     void stopInternal() {
-        if (player != null)
-            player.stop();
-
         this.closeAllConnectors();
 
         if (emuRunner.isProcessRunning())
@@ -1863,153 +1774,6 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
         return new DataHandler(new FileDataSource(checkpoint.toFile()));
     }
 
-
-    /* ==================== Session Recording Helpers ==================== */
-
-    public boolean prepareSessionRecorder() throws BWFLAException {
-        if (recorder != null) {
-            LOG.info("SessionRecorder already prepared.");
-            return true;
-        }
-
-        if (player != null) {
-            String message = "Initialization of SessionRecorder failed, "
-                    + "because SessionReplayer is already running. "
-                    + "Using both at the same time is not supported!";
-
-            throw new BWFLAException(message)
-                    .setId(this.getComponentId());
-        }
-
-        // Create and initialize the recorder
-        recorder = new SessionRecorder(this.getComponentId(), MESSAGE_BUFFER_CAPACITY);
-        try {
-            // Create and setup a temp-file for the recording
-            Path tmpfile = this.getDataDir().resolve(TRACE_FILE);
-            recorder.prepare(tmpfile);
-        } catch (IOException exception) {
-            LOG.severe("Creation of output file for session-recording failed!");
-            LOG.log(Level.SEVERE, exception.getMessage(), exception);
-            recorder = null;
-            return false;
-        }
-
-        // Register the recorder as interceptor
-        interceptors.addInterceptor(recorder);
-
-        return true;
-    }
-
-    public void startSessionRecording() throws BWFLAException {
-        this.ensureRecorderIsInitialized();
-        recorder.start();
-    }
-
-    public void stopSessionRecording() throws BWFLAException {
-        this.ensureRecorderIsInitialized();
-        recorder.stop();
-    }
-
-    public boolean isRecordModeEnabled() throws BWFLAException {
-        if (recorder == null)
-            return false;
-
-        return recorder.isRecording();
-    }
-
-    public void addActionFinishedMark() {
-        //		this.ensureRecorderIsInitialized();
-
-        InstructionBuilder ibuilder = new InstructionBuilder(16);
-        ibuilder.start(ExtOpCode.ACTION_FINISHED);
-        ibuilder.finish();
-
-        recorder.postMessage(SourceType.INTERNAL, ibuilder.array(), 0, ibuilder.length());
-    }
-
-    /**
-     * Add a new metadata chunk to the trace-file.
-     */
-    public void defineTraceMetadataChunk(String tag, String comment) throws BWFLAException {
-        this.ensureRecorderIsInitialized();
-        recorder.defineMetadataChunk(tag, comment);
-    }
-
-    /**
-     * Add a key/value pair as metadata to the trace-file.
-     */
-    public void addTraceMetadataEntry(String ctag, String key, String value) throws BWFLAException {
-        this.ensureRecorderIsInitialized();
-        recorder.addMetadataEntry(ctag, key, value);
-    }
-
-    public String getSessionTrace() throws BWFLAException {
-        this.ensureRecorderIsInitialized();
-
-        try {
-            recorder.finish();
-        } catch (IOException exception) {
-            LOG.severe("Finishing session-recording failed!");
-            LOG.log(Level.SEVERE, exception.getMessage(), exception);
-            return null;
-        }
-
-        return recorder.toString();
-    }
-
-    private void ensureRecorderIsInitialized() throws BWFLAException {
-        if (recorder == null) {
-            throw new BWFLAException("SessionRecorder is not initialized!")
-                    .setId(this.getComponentId());
-        }
-    }
-
-
-    /* ==================== Session Replay Helpers ==================== */
-
-    public boolean prepareSessionPlayer(String trace, boolean headless) throws BWFLAException {
-        if (player != null) {
-            LOG.info("SessionPlayer already prepared.");
-            return true;
-        }
-
-        if (recorder != null) {
-            String message = "Initialization of SessionPlayer failed, "
-                    + "because SessionRecorder is already running. "
-                    + "Using both at the same time is not supported!";
-
-            throw new BWFLAException(message)
-                    .setId(this.getComponentId());
-        }
-
-        Path file = this.getDataDir().resolve(TRACE_FILE);
-        try {
-            FileUtils.writeStringToFile(file.toFile(), trace);
-        } catch (IOException exception) {
-            LOG.severe("An error occured while writing temporary session-trace!");
-            LOG.log(Level.SEVERE, exception.getMessage(), exception);
-            return false;
-        }
-
-        player = new SessionPlayerWrapper(file, headless);
-
-        return true;
-    }
-
-    public int getSessionPlayerProgress() {
-        if (player == null)
-            return 0;
-
-        return player.getProgress();
-    }
-
-    public boolean isReplayModeEnabled() {
-        if (player == null)
-            return false;
-
-        return player.isPlaying();
-    }
-
     /* ==================== Monitoring API ==================== */
 
     @Override
@@ -2064,24 +1828,6 @@ public abstract class EmulatorBean extends EaasComponentBean implements Emulator
             return null;
 
         return printer.getPrintJobs();
-    }
-
-    /* ==================== Screenshot API ==================== */
-
-    public void takeScreenshot() {
-        if (scrshooter != null)
-            scrshooter.takeScreenshot();
-    }
-
-    public DataHandler getNextScreenshot() {
-        if (scrshooter == null)
-            return null;
-
-        byte[] data = scrshooter.getNextScreenshot();
-        if (data == null)
-            return null;
-
-        return new DataHandler(data, "application/octet-stream");
     }
 
 
