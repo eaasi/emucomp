@@ -1,4 +1,4 @@
-FROM ubuntu:20.04 AS main
+FROM ubuntu:20.04 AS build
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     wget unzip sudo coreutils xpra python3-pip sed runc && rm -rf /var/lib/apt/lists/*
@@ -13,14 +13,13 @@ RUN unzip /tmp/emucon-tools-master.zip -d /tmp/ && \
     chmod +x /usr/bin/emucon-init && \
     sed -i '/--html=off/a\\t    --speaker=on \\\n\t    --pulseaudio=yes \\\n\t  \
       --pulseaudio-server=unix:\/tmp\/${display#:}\/pulse-socket \\\n\t   \
-     --speaker-codec=opus \\\n\t    --audio-source=pulse' /usr/bin/emucon-init && \
-     . /tmp/emucon-tools-master/bootstrap.sh
+     --speaker-codec=opus \\\n\t    --audio-source=pulse' /usr/bin/emucon-init
 
 RUN sed -i '$s/$/ -nolisten local/' /etc/xpra/conf.d/55_server_x11.conf
 RUN sed -i '$s/-auth *[^ ]*//' /etc/xpra/conf.d/55_server_x11.conf
 
 
-FROM maven:3.8.6-eclipse-temurin-11 AS build
+FROM maven:3.8.6-eclipse-temurin-11 AS maven
 
 WORKDIR /app
 
@@ -44,16 +43,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends runc xpra socat
 RUN mkdir -p /linapple-pie /minivmac /usr/local/bin
 
 WORKDIR /app
-COPY --from=build /app/emucomp-api/target/quarkus-app/quarkus-run.jar ./quarkus-run.jar
-COPY --from=build /app/emucomp-api/target/quarkus-app/lib/ ./lib/
-COPY --from=build /app/emucomp-api/target/quarkus-app/app/ ./app/
-COPY --from=build /app/emucomp-api/target/quarkus-app/quarkus/ ./quarkus/
+COPY --from=maven /app/emucomp-api/target/quarkus-app/quarkus-run.jar ./quarkus-run.jar
+COPY --from=maven /app/emucomp-api/target/quarkus-app/lib/ ./lib/
+COPY --from=maven /app/emucomp-api/target/quarkus-app/app/ ./app/
+COPY --from=maven /app/emucomp-api/target/quarkus-app/quarkus/ ./quarkus/
 
-COPY --from=main /etc/xpra/conf.d/55_server_x11.conf /etc/xpra/conf.d/55_server_x11.conf
-
-COPY --from=main /usr/bin/emucon-init /usr/bin/
-COPY --from=main /usr/local /usr/local
+COPY --from=build /etc/xpra/conf.d/55_server_x11.conf /etc/xpra/conf.d/55_server_x11.conf
+COPY --from=build /usr/bin/emucon-init /usr/bin/
+COPY --from=build /usr/local /usr/local
 
 EXPOSE 8080
 
-CMD ["/bin/bash", "-c", "/usr/bin/emucon-init --networks-dir=/tmp/nics --xpra-socket=/tmp/xpra-socket -- java -jar ./quarkus-run.jar"]
+CMD ["java", "-jar", "./quarkus-run.jar"]
