@@ -11,6 +11,22 @@ import java.util.logging.Logger;
 
 
 public class XpraUtils {
+    public static int allocateXpraPort() {
+        final Config config = ConfigProvider.getConfig();
+        final int xpraPort = config.getValue("components.xpra.ports", Integer.class);
+        
+        try {
+            if (!XpraUtils.isReachable("localhost", xpraPort)) {
+                return xpraPort;
+            }
+        } catch (IOException e) {
+            // Port is not reachable, so it's available
+            return xpraPort;
+        }
+        
+        throw new RuntimeException("Xpra port " + xpraPort + " is already in use");
+    }
+
     public static boolean startXpraSession(ProcessRunner runner, String command, int port, Logger log)
             throws IOException {
         final Config config = ConfigProvider.getConfig();
@@ -21,26 +37,29 @@ public class XpraUtils {
         runner.addArgument("--bind-tcp=localhost:" + port);
         runner.addArgument("--daemon=no");
         runner.addArgument("--html=on");
+
+        runner.addArgument("--speaker=on");
+
+        // PulseAudio
+        runner.addArgument("--pulseaudio=yes");
+        runner.addArgument("--pulseaudio-server=unix:/tmp/" + port + "/pulse-socket");
+        runner.addArgument("--speaker-codec=opus");
+        runner.addArgument("--audio-source=pulse");
+
+        runner.addEnvVariable("PULSE_RUNTIME_PATH", "/tmp/" + port);
+        runner.addEnvVariable("PULSE_STATE_PATH", "/tmp/" + port);
+
         runner.addArgument("--start-child=");
         if (isGpuEnabled)
             runner.addArgValue("vglrun ");
-        runner.addArgValue(command);
-        // temporary hotfix
-        runner.addEnvVariable("XDG_RUNTIME_DIR", "/tmp/" + port);
-        return runner.start();
-    }
 
-    public static boolean startXpraSession(ProcessRunner runner, int port, Logger log) {
-        runner.setCommand("xpra");
-        runner.addArgument("start");
-        runner.addArgument(":" + port);
-        runner.addArgument("--socket-dir=/tmp");
-        runner.addArgument("--socket-dirs=/tmp");
-        runner.addArgument("--bind-tcp=localhost:" + port);
-        runner.addArgument("--daemon=no");
-        runner.addArgument("--html=on");
+        if (command != null && !command.isBlank()) {
+            runner.addArgValue(command);
+        }
+
         // temporary hotfix
         runner.addEnvVariable("XDG_RUNTIME_DIR", "/tmp/" + port);
+
         return runner.start();
     }
 

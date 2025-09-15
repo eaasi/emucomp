@@ -10,7 +10,12 @@ import java.util.List;
 
 @Getter
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "fileCollection", namespace = "http://bwfla.bwl.de/common/datatypes")
+@XmlType(name = "fileCollection", namespace = "http://bwfla.bwl.de/common/datatypes", propOrder = {
+        "id",
+        "files",
+        "archive",
+        "label"
+})
 @XmlRootElement(namespace = "http://bwfla.bwl.de/common/datatypes")
 public class FileCollection extends JaxbType {
     @XmlElement(name = "file", namespace = "http://bwfla.bwl.de/common/datatypes")

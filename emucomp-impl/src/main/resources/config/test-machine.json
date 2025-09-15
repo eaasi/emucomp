@@ -13,7 +13,7 @@
       "clientKbdLayout": "us",
       "required": false
     },
-    "audio_system": "webRTC",
+    "audio_system": "xpra",
     "disableGhostCursor": false
   },
   "operatingSystemId": "os:linux:ubuntu",
